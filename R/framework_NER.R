@@ -3,18 +3,31 @@
 # The function notation defines the notational framework for NER_Trafo
 
 
-framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_domains,
-                          smp_data, smp_domains) {
+framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
+                          pop_domains, smp_data, smp_domains) {
 
   # Reduction of number of variables
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
-  smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains, weights)
+  smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains)
   pop_vars <- c(mod_vars, pop_domains)
   smp_data <- smp_data[, smp_vars]
 
-# weiter
-  pop_data <- pop_data[, pop_vars]
+  if (!is.null(pop_data)) {
+    fw_check1_pop(
+      pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains,
+      smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
+      )
+    pop_data <- pop_data[, pop_vars]
+  } else {
+    fw_check1_agg(
+      pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
+      mod_vars = mod_vars, pop_domains = pop_domains, smp_data = smp_data,
+      fixed = fixed, smp_domains = smp_domains
+      )
+    # Means and Covariances aufarbeiten
+  }
+
 
 
   # Deletion of NA
