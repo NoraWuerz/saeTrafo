@@ -13,7 +13,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
   smp_data <- smp_data[, smp_vars]
 
   if (!is.null(pop_data)) {
-
     fw_check_pop(
       pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
@@ -26,7 +25,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     pop_data <- pop_data[order(pop_data[[pop_domains]]), ]
     pop_data[[pop_domains]] <- factor(pop_data[[pop_domains]],
       levels = unique(pop_data[[pop_domains]])
-     )
+    )
     pop_domains_vec <- pop_data[[pop_domains]]
 
     smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
@@ -46,14 +45,12 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     # Indicator variables that indicate if domain is in- or out-of-sample
     obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
     dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
-
   } else {
-
     fw_check_agg(
-       pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
-       mod_vars = mod_vars, smp_data = smp_data, fixed = fixed,
-       smp_domains = smp_domains
-     )
+      pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
+      mod_vars = mod_vars, smp_data = smp_data, fixed = fixed,
+      smp_domains = smp_domains
+    )
 
     lapply(pop_mean, only.mod_vars, mod_vars)
     pop_mean.mat <- matrix(unlist(lapply(pop_mean, c_1)), ncol = length(mod_vars) + 1, byrow = TRUE)
@@ -62,13 +59,14 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
 
     lapply(pop_cov, only.mod_vars, mod_vars)
     pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
-                          ncol = (length(mod_vars) + 1)^2, byrow = TRUE)
+      ncol = (length(mod_vars) + 1)^2, byrow = TRUE
+    )
     row.names(pop_cov.mat) <- names(pop_cov)
     colnames(pop_cov.mat) <- cov_names(c("intercept", mod_vars))
 
     smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
     smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
-                                      levels = names(pop_area_size)
+      levels = names(pop_area_size)
     )
     smp_domains_vec <- smp_data[[smp_domains]]
     smp_domains_vec <- droplevels(smp_domains_vec)
@@ -83,7 +81,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     # Indicator variables that indicate if domain is in- or out-of-sample
     obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
     dist_obs_dom <- unique(names(pop_area_size)) %in% unique(smp_domains_vec)
-
   }
 
 
@@ -100,24 +97,24 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
   n_smp <- as.vector(table(smp_domains_vec_tmp))
 
 
-  if(!is.null(pop_data)) {
-      return(list(
-    pop_data = pop_data,
-    pop_domains_vec = pop_domains_vec,
-    smp_data = smp_data,
-    smp_domains_vec = smp_domains_vec,
-    smp_domains = smp_domains,
-    N_pop = N_pop,
-    N_smp = N_smp,
-    N_unobs = N_unobs,
-    N_dom_pop = N_dom_pop,
-    N_dom_smp = N_dom_smp,
-    N_dom_unobs = N_dom_unobs,
-    n_pop = n_pop,
-    n_smp = n_smp,
-    obs_dom = obs_dom,
-    dist_obs_dom = dist_obs_dom
-  ))
+  if (!is.null(pop_data)) {
+    return(list(
+      pop_data = pop_data,
+      pop_domains_vec = pop_domains_vec,
+      smp_data = smp_data,
+      smp_domains_vec = smp_domains_vec,
+      smp_domains = smp_domains,
+      N_pop = N_pop,
+      N_smp = N_smp,
+      N_unobs = N_unobs,
+      N_dom_pop = N_dom_pop,
+      N_dom_smp = N_dom_smp,
+      N_dom_unobs = N_dom_unobs,
+      n_pop = n_pop,
+      n_smp = n_smp,
+      obs_dom = obs_dom,
+      dist_obs_dom = dist_obs_dom
+    ))
   } else {
     return(list(
       pop_area_size = pop_area_size,
@@ -138,5 +135,4 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       dist_obs_dom = dist_obs_dom
     ))
   }
-
 }

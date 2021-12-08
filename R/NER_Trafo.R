@@ -14,8 +14,8 @@ NER_Trafo <- function(fixed,
                       transformation = "log.shift",
                       MSE = FALSE,
                       seed = 123) {
-  #NER_check1()
-  #NER_check2()
+  # NER_check1()
+  # NER_check2()
 
   # Save function call ---------------------------------------------------------
 

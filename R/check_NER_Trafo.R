@@ -1,7 +1,6 @@
 # Functions called in framework_NER
 fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
-                          fixed, smp_domains) {
-
+                         fixed, smp_domains) {
   if (!all(mod_vars %in% colnames(pop_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in pop_data.
                 Please provide valid variable names for the explanatory variables."))
@@ -42,17 +41,16 @@ fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
 
 fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
                          smp_data, fixed, smp_domains) {
-
-  if(!all(names(pop_area_size) %in% names(pop_mean))) {
+  if (!all(names(pop_area_size) %in% names(pop_mean))) {
     stop(paste0("Domains in pop_area_size not equal to domains in pop_mean."))
   }
 
-  if(!all(names(pop_area_size) %in% names(pop_cov))) {
+  if (!all(names(pop_area_size) %in% names(pop_cov))) {
     stop(paste0("Domains in pop_area_size not equal to domains in pop_cov."))
   }
 
   # check: mod_vars includes in pop_cov and pop_mean
-    # alle gleich benannt?
+  # alle gleich benannt?
 
   if (!all(mod_vars %in% colnames(smp_data))) {
     stop(paste0("Variable ", mod_vars[which(!(mod_vars %in% colnames(smp_data)))], " is not contained in smp_data.
@@ -62,7 +60,7 @@ fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
     stop(paste0("The domain variable ", smp_domains, " is not contained in smp_data.
                  Please provide valid variable name for smp_domains."))
   }
-  if(!all(smp_data[smp_domains][,1] %in% names(pop_area_size))){
+  if (!all(smp_data[smp_domains][, 1] %in% names(pop_area_size))) {
     stop(paste0("More than one sample domain is not inclueded in the population data."))
   }
   if (!((as.character(fixed[2])) %in% colnames(smp_data))) {
