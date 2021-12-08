@@ -10,34 +10,44 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
   smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains)
-  pop_vars <- c(mod_vars, pop_domains)
   smp_data <- smp_data[, smp_vars]
 
   if (!is.null(pop_data)) {
-    fw_check1_pop(
+
+    fw_check_pop(
       pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
     )
+
+    pop_vars <- c(mod_vars, pop_domains)
     pop_data <- pop_data[, pop_vars]
+
   } else {
-    # fw_check1_agg(
-    #   pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
-    #   mod_vars = mod_vars, pop_domains = pop_domains, smp_data = smp_data,
-    #   fixed = fixed, smp_domains = smp_domains
-    # )
-    # Means and Covariances aufarbeiten
+
+    fw_check_agg(
+       pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
+       mod_vars = mod_vars, smp_data = smp_data, fixed = fixed,
+       smp_domains = smp_domains
+     )
+
+    # hier weiter !!!
+    # Means aufarbeiten
+    # 1. means ordnen mod_vars und nur die aus mod_vars verwenden
+    #lapply
+
+    # matrix erstellen
+    pop_mean.mat <- matrix(unlist(lapply(pop_mean, c_1)), ncol = length(mod_vars), byrow = TRUE)
+    row.names(pop_mean.mat) <- names(pop_mean)
+    colnames(pop_mean.mat) <- c("intercept", mod_vars)
+
+    # Cov aufbereiten
+    pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
+                          ncol = (length(mod_vars) + 1)^2, byrow = TRUE)
+    row.names(pop_cov.mat) <- names(pop_cov)
+    colnames(pop_cov.mat) <- cov_names(c("intercept", mod_vars))
+
   }
 
-
-
-  # Deletion of NA
-  if (na.rm == TRUE) {
-    pop_data <- na.omit(pop_data)
-    smp_data <- na.omit(smp_data)
-  } else if (any(is.na(pop_data)) || any(is.na(smp_data))) {
-    stop("EBP does not work with missing values. Set na.rm = TRUE in function
-          ebp.")
-  }
 
 
   # Order of domains
@@ -95,10 +105,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     n_pop = n_pop,
     n_smp = n_smp,
     obs_dom = obs_dom,
-    dist_obs_dom = dist_obs_dom,
-    indicator_list = indicator_list,
-    indicator_names = indicator_names,
-    threshold = threshold,
-    weights = weights
+    dist_obs_dom = dist_obs_dom
   ))
 }
