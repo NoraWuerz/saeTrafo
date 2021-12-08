@@ -11,3 +11,7 @@ cov_names <- function(x){
                t(matrix(x, nrow = length(x), ncol = length(x)))))
 }
 
+only.mod_vars <- function (x, var) {
+  if(!is.matrix(x))return(x[var])
+  else(return(x[var,var]))
+}

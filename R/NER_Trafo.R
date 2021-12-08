@@ -42,6 +42,9 @@ NER_Trafo <- function(fixed,
     smp_domains = smp_domains,
     fixed = fixed
   )
+
+  # DONE
+  # PRUEFEN: Ordnung der areas !!!
   NER_out <- framework
 
 
