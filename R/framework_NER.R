@@ -45,6 +45,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     # Indicator variables that indicate if domain is in- or out-of-sample
     obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
     dist_obs_dom <- unique(pop_domains_vec) %in% unique(smp_domains_vec)
+
   } else {
     fw_check_agg(
       pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
@@ -52,12 +53,12 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_domains = smp_domains
     )
 
-    lapply(pop_mean, only.mod_vars, mod_vars)
+    pop_mean <- lapply(pop_mean, only.mod_vars, mod_vars)
     pop_mean.mat <- matrix(unlist(lapply(pop_mean, c_1)), ncol = length(mod_vars) + 1, byrow = TRUE)
     row.names(pop_mean.mat) <- names(pop_mean)
     colnames(pop_mean.mat) <- c("intercept", mod_vars)
 
-    lapply(pop_cov, only.mod_vars, mod_vars)
+    pop_cov <- lapply(pop_cov, only.mod_vars, mod_vars)
     pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
       ncol = (length(mod_vars) + 1)^2, byrow = TRUE
     )
@@ -79,7 +80,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     n_pop <- as.vector(pop_area_size)
 
     # Indicator variables that indicate if domain is in- or out-of-sample
-    obs_dom <- pop_domains_vec %in% unique(smp_domains_vec)
+    obs_dom <- names(pop_area_size) %in% unique(smp_domains_vec)
     dist_obs_dom <- unique(names(pop_area_size)) %in% unique(smp_domains_vec)
   }
 

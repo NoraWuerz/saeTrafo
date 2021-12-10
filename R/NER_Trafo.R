@@ -10,8 +10,10 @@ NER_Trafo <- function(fixed,
                       pop_domains,
                       smp_data,
                       smp_domains,
+                      threshold = 30,
                       B = 50,
                       transformation = "log.shift",
+                      interval = 'default',
                       MSE = FALSE,
                       seed = 123) {
   # NER_check1()
@@ -43,20 +45,19 @@ NER_Trafo <- function(fixed,
     fixed = fixed
   )
 
-  # DONE
-  # PRUEFEN: Ordnung der areas !!!
   NER_out <- framework
 
 
   # Point Estimation -----------------------------------------------------------
   # The function point_estim can be found in script point_estimation.R
-  # point_estim <- point_estim(
-  #   framework = framework,
-  #   fixed = fixed,
-  #   transformation = transformation,
-  #   interval = interval,
-  #   keep_data = TRUE
-  # )
+  point_estim <- point_estim(
+     framework = framework,
+     fixed = fixed,
+     transformation = transformation,
+     threshold = threshold,
+     interval = interval,
+     keep_data = TRUE
+  )
 
 
 
