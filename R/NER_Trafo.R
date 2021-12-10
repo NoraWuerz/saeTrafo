@@ -20,7 +20,6 @@ NER_Trafo <- function(fixed,
   # NER_check2()
 
   # Save function call ---------------------------------------------------------
-
   call <- match.call()
   if (inherits(call$fixed, "name")) {
     call$fixed <- fixed
