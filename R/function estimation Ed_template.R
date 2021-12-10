@@ -5,11 +5,11 @@ syn_est <- function(data_pop = NULL ,
                           gewichtete_den_grenze, gewichtete_den_grenze_u){
 
 
-
+  num_area <- framework$N_dom_pop
 
   area_smp <- c()
   for(i in 1:num_area){
-    area_smp[i] <- sum(data_smp$idD == area_size_names[i])
+    area_smp[i] <- sum(data_smp$domain == area_size_names[i])
   }
 
 
@@ -67,7 +67,7 @@ syn_est <- function(data_pop = NULL ,
       gewichte_tmp <- rep(1/nrow(data_smp), nrow(data_smp))
     }
 
-    #print(x_tmp)
+    print(x_tmp)
 
     density_xy_mod_kor_pop     <- density(x_tmp, bw = bw.SJ(x_tmp, method = "dpi"),
                                           kernel = "epanechnikov", weights = gewichte_tmp )
