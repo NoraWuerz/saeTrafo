@@ -1,25 +1,14 @@
 
-syn_est <- function(framework, est_par, threshold) {
-  data_smp <- data.frame(
-    y_est = model.matrix(
-      fixed,
-      framework$smp_data
-    )
-    %*% est_par$betas,
-    domain = framework$smp_domains_vec
-  )
-  domains <- framework$smp_domains
-  area_size_names <- names(framework$pop_area_size)
-  area_size <- framework$pop_area_size
+syn_est <- function(framework, est_par, fixed, threshold) {
+
+  y_est <- model.matrix(fixed, framework$smp_data)  %*% est_par$betas
+
   x_mean_d <- framework$pop_mean.mat %*% est_par$betas
   x_sd_d <- sqrt(framework$pop_cov.mat %*%
     as.numeric(est_par$betas %*% t(est_par$betas)))
-  ###################
 
-
-  area_smp <- c()
+  area_smp <- rep(0, framework$N_dom_pop)
   area_smp[framework$obs_dom] <- framework$n_smp
-  area_smp[!framework$obs_dom] <- 0
 
 
   # 1. Transformation der Dichte -----
@@ -27,12 +16,14 @@ syn_est <- function(framework, est_par, threshold) {
   data_smp_z <- NA
 
   for (i in 1:framework$N_dom_pop) {
-    if (length(which(data_smp$domain == area_size_names[i])) > 1) {
-      data_smp_z[which(data_smp$domain == area_size_names[i])] <-
-        (data_smp$y_est[which(data_smp$domain == area_size_names[i])] - mean(data_smp$y_est[which(data_smp$domain == area_size_names[i])])) / sd(data_smp$y_est[which(data_smp$domain == area_size_names[i])])
+    if (length(which(framework$smp_domains_vec == names(framework$pop_area_size)[i])) > 1) {
+      data_smp_z[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] <-
+        (y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] -
+           mean(y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])])) /
+        sd(y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])])
     }
-    if (length(which(data_smp$domain == area_size_names[i])) == 1) {
-      data_smp_z[which(data_smp$domain == area_size_names[i])] <- 0
+    if (length(which(framework$smp_domains_vec == names(framework$pop_area_size)[i])) == 1) {
+      data_smp_z[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] <- 0
     }
   }
 
@@ -48,7 +39,7 @@ syn_est <- function(framework, est_par, threshold) {
 
   for (i in 1:framework$N_dom_pop) {
     if (area_smp[i] > threshold) {
-      x_tmp <- data_smp$y_est[data_smp$domain == area_size_names[i]]
+      x_tmp <- y_est[framework$smp_domains_vec == names(framework$pop_area_size)[i]]
       x_tmp <- (x_tmp - mean(x_tmp)) / sd(x_tmp)
       x_tmp <- x_tmp * x_sd_d[i] + x_mean_d[i]
     } else {
@@ -64,7 +55,7 @@ syn_est <- function(framework, est_par, threshold) {
 
   # 4. Berechnen des Totalwerts ----
 
-  E_d_density_est_kor_pop_2 <- area_size * expectation_mod_kor_pop_2
+  E_d_density_est_kor_pop_2 <- framework$pop_area_size * expectation_mod_kor_pop_2
 
   # Ergebnisse ----
 

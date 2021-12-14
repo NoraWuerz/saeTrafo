@@ -65,14 +65,58 @@ point_estim <- function (framework,
                        transformation_par = transformation_par
   )
 
-  # WEITER !!!
-  # Schätzen von Ed schoener schreiben
-  Res <- syn_est(framework = framework,
-                 est_par = est_par,
-                 threshold = threshold
-  )
+
+  # Data.frame mit Schaetzern erstellen und fuellen.
+  ind <- data.frame(Domain = names(framework$pop_area_size),
+                    naive = NA,
+                    bc_agg = NA)
+
+  # 1. naive BHF
+  # out-of-sample noch nicht implementier und Fehler (!!!!!!!!!!)
+  ind$naive[framework$dist_obs_dom] <-
+    back_transformation(y =  tapply(model.matrix(fixed, framework$smp_data)  %*% est_par$betas, INDEX = framework$smp_domains_vec, FUN = mean)+
+                                 est_par$rand_eff[framework$dist_obs_dom],
+                               transformation = transformation,
+                               lambda = optimal_lambda,
+                               shift = shift_par)
+  ind$naive[!framework$dist_obs_dom] <-
+    back_transformation(y = (framework$pop_mean.mat[!framework$dist_obs_dom,] %*% est_par$betas),
+                        transformation = transformation,
+                        lambda = optimal_lambda,
+                        shift = shift_par)
+
+  # 2. bc-agg
+  ## Schätzen von Ed schoener schreiben
+
+  if(transformation == "log" | transformation == "log.shift"){
+
+    synthetic <- syn_est(framework = framework,
+                        est_par = est_par,
+                        fixed = fixed,
+                        threshold = threshold
+                        )
+
+    n_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
+    rand_eff <- include_dom_unobs(est_par$rand_eff[framework$obs_dom], framework$obs_dom)
+
+    gamma_est_d <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / n_smp)
+    bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est)/2
+
+    if(transformation == "log") {
+        ind$bc_agg <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - shift_par
+    }
+    if(transformation == "log.shift"){
+      ind$bc_agg <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
+    }
+  }
+
+  out <- ind
+  return(ind)
+
 
 }
+
+
 
 
 # All following functions are only internal ------------------------------------

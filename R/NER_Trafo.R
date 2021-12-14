@@ -44,10 +44,8 @@ NER_Trafo <- function(fixed,
     fixed = fixed
   )
 
-  NER_out <- framework
 
-
-  # Point Estimation -----------------------------------------------------------
+   # Point Estimation -----------------------------------------------------------
   # The function point_estim can be found in script point_estimation.R
   point_estim <- point_estim(
      framework = framework,
@@ -58,7 +56,7 @@ NER_Trafo <- function(fixed,
      keep_data = TRUE
   )
 
-
+  NER_out <- point_estim
 
   # MSE Estimation -------------------------------------------------------------
 

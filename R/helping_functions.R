@@ -20,3 +20,9 @@ only.mod_vars <- function(x, var) {
     (return(x[var, var]))
   }
 }
+
+include_dom_unobs <- function(x, obs_dom) {
+  vector <- rep(0, length(obs_dom))
+  vector[obs_dom] <- x
+  return(vector)
+}
