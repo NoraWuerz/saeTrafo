@@ -176,8 +176,7 @@ model_par <- function(framework,
                       mixed_model,
                       fixed,
                       transformation_par) {
-  # browser()
-  if (is.null(framework$weights)) {
+
     # fixed parametersn
     betas <- nlme::fixed.effects(mixed_model)
     # Estimated error variance
@@ -185,84 +184,74 @@ model_par <- function(framework,
     # VarCorr(fit2) is the estimated random error variance
     sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1, 1])
     # Random effect: vector with zeros for all domains, filled with
-    # browser()
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (obs_dom)
     rand_eff[framework$obs_dom] <- (random.effects(mixed_model)[[1]])
 
-    return(list(
-      betas = betas,
-      sigmae2est = sigmae2est,
-      sigmau2est = sigmau2est,
-      rand_eff = rand_eff
+    return(list(betas      = betas,
+                sigmae2est = sigmae2est,
+                sigmau2est = sigmau2est,
+                rand_eff   = rand_eff
     ))
-  } else {
-    # fixed parameters
-    betas <- nlme::fixed.effects(mixed_model)
-    # Estimated error variance
-    sigmae2est <- mixed_model$sigma^2
-    # VarCorr(fit2) is the estimated random error variance
-    sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1, 1])
+}
 
-    # Calculations needed for pseudo EB
+# Function for synthetic part estimation ---------------------------------------
 
-    weight_sum <- rep(0, framework$N_dom_smp)
-    mean_dep <- rep(0, framework$N_dom_smp)
-    mean_indep <- matrix(0, nrow = framework$N_dom_smp, ncol = length(betas))
-    delta2 <- rep(0, framework$N_dom_smp)
-    gamma_weight <- rep(0, framework$N_dom_smp)
-    num <- matrix(0, nrow = length(betas), ncol = 1)
-    den <- matrix(0, nrow = length(betas), ncol = length(betas))
+# Function for small area estimation specific kernel-density estimation
+# method for the synthetic part
 
-    for (d in 1:framework$N_dom_smp) {
-      domain <- as.character(unique(framework$smp_domains_vec)[d])
+syn_est <- function(framework,
+                    est_par,
+                    fixed,
+                    threshold) {
 
-      # Domain means of of the dependent variable
-      dep_smp <- transformation_par$transformed_data[[as.character(mixed_model$terms[[2]])]][
-        framework$smp_domains_vec == domain
-      ]
-      weight_smp <- transformation_par$transformed_data[[as.character(framework$weights)]][
-        framework$smp_domains_vec == domain
-      ]
-      weight_sum[d] <- sum(weight_smp)
-      indep_smp <- model.matrix(fixed, framework$smp_data)[framework$smp_domains_vec == domain, ]
+  y_est <- model.matrix(fixed, framework$smp_data) %*% est_par$betas
 
-      # weighted mean of the dependent variable
-      mean_dep[d] <- sum(weight_smp * dep_smp) / weight_sum[d]
+  x_mean_d <- framework$pop_mean.mat %*% est_par$betas
+  x_sd_d <- sqrt(framework$pop_cov.mat %*%
+                   as.numeric(est_par$betas %*% t(est_par$betas)))
 
-      # weighted means of the auxiliary information
-      for (k in 1:length(betas)) {
-        mean_indep[d, k] <- sum(weight_smp * indep_smp[, k]) / weight_sum[d]
-      }
+  area_smp <- include_dom_unobs(x       = framework$n_smp,
+                                obs_dom = framework$obs_dom
+  )
 
-      delta2[d] <- sum(weight_smp^2) / (weight_sum[d]^2)
-      gamma_weight[d] <- sigmau2est / (sigmau2est + sigmae2est * delta2[d])
-      weight_smp_diag <- diag(weight_smp)
-      dep_var_ast <- dep_smp - gamma_weight[d] * mean_dep[d]
-      indep_weight <- t(indep_smp) %*% weight_smp_diag
-      indep_var_ast <- indep_smp - matrix(rep(gamma_weight[d] * mean_indep[d, ], framework$n_smp[d]),
-        nrow = framework$n_smp[d], byrow = TRUE
-      )
+  # get the standardised predicted values
+  data_smp_z <- rep(NA, framework$N_smp)
 
-      num <- num + (indep_weight %*% dep_var_ast)
-      den <- den + (indep_weight %*% indep_var_ast)
+  for (i in 1:framework$N_dom_pop) {
+    pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
+    if (sum(pos) > 1) {
+      data_smp_z[pos] <- (y_est[pos] - mean(y_est[pos])) / sd(y_est[pos])
+    }
+    if (sum(pos) == 1) {
+      data_smp_z[pos] <- 0
+    }
+  }
+
+  # adjuste all standardised predicted values and use all or only the data from
+  # one area according to the respective sample size
+  est_synthetic <- c()
+
+  for (i in 1:framework$N_dom_pop) {
+    if (area_smp[i] > threshold) {
+      pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
+      input <- data_smp_z[pos] * x_sd_d[i] + x_mean_d[i]
+    } else {
+      input <- data_smp_z * x_sd_d[i] + x_mean_d[i]
     }
 
+    est_synthetic_density <- stats::density(x      = input,
+                                            bw     = bw.SJ(x      = input,
+                                                           method = "dpi"),
+                                            kernel = "epanechnikov"
+    )
 
-    betas <- solve(den) %*% num
-    # Random effect: vector with zeros for all domains, filled with
-    rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
-    # random effect for in-sample domains (obs_dom)
-    rand_eff[framework$obs_dom] <- gamma_weight * (mean_dep - mean_indep %*% betas)
-
-
-    return(list(
-      betas = betas,
-      sigmae2est = sigmae2est,
-      sigmau2est = sigmau2est,
-      rand_eff = rand_eff,
-      gammaw = gamma_weight,
-      delta2 = delta2
-    ))
+    est_synthetic[i] <- sfsmisc::integrate.xy(x  = est_synthetic_density$x,
+                                              fx = est_synthetic_density$y *
+                                                exp(est_synthetic_density$x)
+    )
   }
-} # End model_par
+
+  # compute and return the estimated total
+  return(framework$pop_area_size * est_synthetic)
+}
