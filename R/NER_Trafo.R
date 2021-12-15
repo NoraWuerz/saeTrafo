@@ -25,8 +25,6 @@ NER_Trafo <- function(fixed,
     call$fixed <- fixed
   }
 
-
-
   # Data manipulation and notational framework ---------------------------------
   if (!is.null(seed)) {
     set.seed(seed)

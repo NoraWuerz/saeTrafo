@@ -34,7 +34,7 @@ point_estim <- function (framework,
   # Data_transformation function returns transformed data and shift parameter.
   # The function can be found in the script transformation_functions.R
   # browser()
-  transformation_par <- data_transformation(fixed          = fixed,
+  transformation_par <- emdi::data_transformation(fixed          = fixed,
                                             smp_data       = framework$smp_data,
                                             transformation = transformation,
                                             lambda         = optimal_lambda
@@ -66,38 +66,33 @@ point_estim <- function (framework,
   )
 
 
-  # Data.frame mit Schaetzern erstellen und fuellen.
-  ind <- data.frame(Domain = names(framework$pop_area_size),
-                    naive = NA,
-                    bc_agg = NA,
-                    BHF = NA)
+  # Data.frame for Mean
+  ind <- data.frame(Domain = names(framework$pop_area_size), Mean = NA)
 
-  # 1. BHF
-  # funktioniert nur bei trafo = "no" (!!!!!!!!!!)
-  value_in_sample <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
+  # if transformation == "no" compute the BHF
+  if(transformation == "no"){
 
-  gamma_est_in <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
+      value_in_sample <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
+      gamma_est_in <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
 
-  ind$BHF[framework$obs_dom] <-
-    gamma_est_in * (value_in_sample +
-       (framework$pop_mean.mat[framework$obs_dom,]%*% est_par$betas)[,1] -
-          tapply((model.matrix(fixed, framework$smp_data)%*% est_par$betas)[,1], FUN = mean, INDEX = framework$smp_domains_vec)) +
-    (1 - gamma_est_in) * (framework$pop_mean.mat[framework$obs_dom,] %*% est_par$betas)[,1]
+      ind$Mean[framework$obs_dom] <-
+        gamma_est_in * (value_in_sample +
+           (framework$pop_mean.mat[framework$obs_dom,]%*% est_par$betas)[,1] -
+              tapply((model.matrix(fixed, framework$smp_data)%*% est_par$betas)[,1], FUN = mean, INDEX = framework$smp_domains_vec)) +
+        (1 - gamma_est_in) * (framework$pop_mean.mat[framework$obs_dom,] %*% est_par$betas)[,1]
 
-  ind$BHF[!framework$obs_dom] <- framework$pop_mean.mat[!framework$obs_dom,] %*% est_par$betas
+      ind$Mean[!framework$obs_dom] <- framework$pop_mean.mat[!framework$obs_dom,] %*% est_par$betas
 
-  # naive
+  }
 
-  # 2. bc-agg
+  # if transformation == "log" or "log.shift" and pop_cov is available
+  # compute bc-agg
   ## Schätzen von Ed schoener schreiben
 
-  if(transformation == "log" | transformation == "log.shift"){
+  if((transformation == "log" | transformation == "log.shift") & !is.null(pop_cov)){
 
-    synthetic <- syn_est(framework = framework,
-                        est_par = est_par,
-                        fixed = fixed,
-                        threshold = threshold
-                        )
+    synthetic <- syn_est(framework = framework, est_par = est_par,
+                         fixed = fixed, threshold = threshold)
 
     n_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
     rand_eff <- include_dom_unobs(est_par$rand_eff[framework$obs_dom], framework$obs_dom)
@@ -111,27 +106,42 @@ point_estim <- function (framework,
     if(transformation == "log.shift"){
       ind$bc_agg <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
     }
+
   }
+
+  # if transformation == "log" or "log.shift" and pop_cov is not available
+  # compute bc-naive-agg
+
+  if((transformation == "log" | transformation == "log.shift") & is.null(pop_cov)) {
+
+    w_est_ohnebc_dri_trafo <- NULL
+
+    for(j in 1: length(area_size)){
+      if(n_smp[j] != 0){
+        w_est_ohnebc_dri_trafo[j] <- x_mean_d[j,] %*% beta + u_est_d[row.names(u_est_d) == j, ] + alpha_est_d[j]
+      }else{
+        w_est_ohnebc_dri_trafo[j] <- x_mean_d[j,] %*% beta + alpha_est_d[j]
+      }
+    }
+
+    tau_est_ohnebc_d <- NULL
+
+    w_est_ohnebc_dr <- transformation(optpar, w_est_ohnebc_dri_trafo, inv = TRUE, m = 0)$y
+
+    for(j in 1: length(area_size)){
+      w_ds_ <- data_smp[data_smp[, domains] == (1:length(area_size))[j],]
+      w_ds  <- as.matrix(w_ds_[paste(formel[2])])
+      w_est_ohnebc_dr_total <- w_est_ohnebc_dr[j] * (area_size[j] - length(w_ds))
+
+      tau_est_ohnebc_d[j] <- 1 / (area_size[j]) * (sum(w_ds) + w_est_ohnebc_dr_total)
+    }
+  }
+
 
   out <- ind
   return(ind)
 
-  # WEITER !!!
-  # Schätzen von Ed
-  # einfach framework reingeben (!!!)
-  Res <- syn_est(data_smp = data.frame(y_est = model.matrix(fixed,
-                                                            framework$smp_data)
-                                       %*% est_par$betas,
-                                       domain = framework$smp_domains_vec),
-                 domains = framework$smp_domains,
-                 area_size_names = names(framework$pop_area_size),
-                 gewichtete_den_grenze = threshold,
-                 gewichtete_den_grenze_u = threshold,
-                 area_size = framework$pop_area_size,
-                 x_mean_d = framework$pop_mean.mat %*% est_par$betas,
-                 x_sd_d = sqrt(framework$pop_cov.mat %*%
-                                 as.numeric(est_par$betas %*% t(est_par$betas)))
-  )
+
 
 }
 

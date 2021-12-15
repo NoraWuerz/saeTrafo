@@ -45,9 +45,10 @@ fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
     stop(paste0("Domains in pop_area_size not equal to domains in pop_mean."))
   }
 
-  if (!all(names(pop_area_size) %in% names(pop_cov))) {
-    stop(paste0("Domains in pop_area_size not equal to domains in pop_cov."))
-  }
+  # pop-cov kann lehr sein (!)
+  # if (!all(names(pop_area_size) %in% names(pop_cov))) {
+  #   stop(paste0("Domains in pop_area_size not equal to domains in pop_cov."))
+  # }
 
   # check: mod_vars includes in pop_cov and pop_mean
   # alle gleich benannt?

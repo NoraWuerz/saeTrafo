@@ -27,7 +27,8 @@ syn_est <- function(framework, est_par, fixed, threshold) {
   for (i in 1:framework$N_dom_pop) {
     data_smp_kor_pop_x_kor_sd[[i]] <- data_smp_z * x_sd_d[i] + x_mean_d[i]
   }
-  # 3. Bestimmen der geschätzen Dichten (aus sample) und E-Wert Berechnung ----
+
+  # 3. Bestimmen der gesch?tzen Dichten (aus sample) und E-Wert Berechnung ----
   expectation_mod_kor_pop_2 <- c()
   for (i in 1:framework$N_dom_pop) {
     if (area_smp[i] > threshold) {
