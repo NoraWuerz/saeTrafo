@@ -116,6 +116,22 @@ point_estim <- function (framework,
   out <- ind
   return(ind)
 
+  # WEITER !!!
+  # Schätzen von Ed
+  # einfach framework reingeben (!!!)
+  Res <- syn_est(data_smp = data.frame(y_est = model.matrix(fixed,
+                                                            framework$smp_data)
+                                       %*% est_par$betas,
+                                       domain = framework$smp_domains_vec),
+                 domains = framework$smp_domains,
+                 area_size_names = names(framework$pop_area_size),
+                 gewichtete_den_grenze = threshold,
+                 gewichtete_den_grenze_u = threshold,
+                 area_size = framework$pop_area_size,
+                 x_mean_d = framework$pop_mean.mat %*% est_par$betas,
+                 x_sd_d = sqrt(framework$pop_cov.mat %*%
+                                 as.numeric(est_par$betas %*% t(est_par$betas)))
+  )
 
 }
 

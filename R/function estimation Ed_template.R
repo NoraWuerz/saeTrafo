@@ -9,6 +9,16 @@ syn_est <- function(framework, est_par, fixed, threshold) {
 
   area_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
 
+  num_area <- framework$N_dom_pop
+
+  area_smp <- c()
+  for(i in 1:num_area){
+    area_smp[i] <- sum(data_smp$domain == area_size_names[i])
+  }
+
+
+  # Schätzung-----
+
   # 1. Transformation der Dichte -----
 
   data_smp_z <- NA
@@ -44,7 +54,27 @@ syn_est <- function(framework, est_par, fixed, threshold) {
       x_tmp <- data_smp_kor_pop_x_kor_sd[[i]]
     }
 
+
     density_xy_mod_kor_pop <- density(x_tmp, bw = bw.SJ(x_tmp, method = "dpi"), kernel = "epanechnikov")
+
+    if(area_smp[i] <= gewichtete_den_grenze & area_smp[i] > gewichtete_den_grenze_u){
+      #print("withd different weights")
+      gew_k <- ((1/length(which(data_smp$idD == area_size_names[i])) - 1/nrow(data_smp))/
+                  (gewichtete_den_grenze - gewichtete_den_grenze_u))
+      gewichte_tmp <- rep(1/nrow(data_smp),nrow(data_smp))
+      gewichte_tmp[which(data_smp$idD == area_size_names[i])] <- gew_k * (area_smp[i] - gewichtete_den_grenze_u)+
+        1/nrow(data_smp)
+      gewichte_tmp <- gewichte_tmp / sum(gewichte_tmp)
+    }else if(area_smp[i] > gewichtete_den_grenze){
+      gewichte_tmp <- rep(1/nrow(data_smp[data_smp$idD == area_size_names[i],]), nrow(data_smp[data_smp$idD == area_size_names[i],]))
+    }else{
+      gewichte_tmp <- rep(1/nrow(data_smp), nrow(data_smp))
+    }
+
+    print(x_tmp)
+
+    density_xy_mod_kor_pop     <- density(x_tmp, bw = bw.SJ(x_tmp, method = "dpi"),
+                                          kernel = "epanechnikov", weights = gewichte_tmp )
 
 
     expectation_mod_kor_pop_2[i] <- sfsmisc::integrate.xy(density_xy_mod_kor_pop$x, density_xy_mod_kor_pop$y * exp(density_xy_mod_kor_pop$x))
