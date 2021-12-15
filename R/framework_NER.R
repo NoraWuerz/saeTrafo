@@ -81,7 +81,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
 
     # Indicator variables that indicate if domain is in- or out-of-sample
     obs_dom <- names(pop_area_size) %in% unique(smp_domains_vec)
-    dist_obs_dom <- unique(names(pop_area_size)) %in% unique(smp_domains_vec)
   }
 
 
@@ -132,8 +131,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       N_dom_unobs = N_dom_unobs,
       n_pop = n_pop,
       n_smp = n_smp,
-      obs_dom = obs_dom,
-      dist_obs_dom = dist_obs_dom
+      obs_dom = obs_dom
     ))
   }
 }

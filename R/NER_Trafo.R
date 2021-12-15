@@ -33,6 +33,7 @@ NER_Trafo <- function(fixed,
   }
 
   # The function framework_NER can be found in script framework_NER.R
+  # !!!!!! Idee gleiche Framework bei pop_data mit ausgeben!
   framework <- framework_NER(
     pop_area_size = pop_area_size,
     pop_mean = pop_mean,
@@ -45,7 +46,7 @@ NER_Trafo <- function(fixed,
   )
 
 
-   # Point Estimation -----------------------------------------------------------
+  # Point Estimation -----------------------------------------------------------
   # The function point_estim can be found in script point_estimation.R
   point_estim <- point_estim(
      framework = framework,

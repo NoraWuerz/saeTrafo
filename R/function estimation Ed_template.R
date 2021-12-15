@@ -7,9 +7,7 @@ syn_est <- function(framework, est_par, fixed, threshold) {
   x_sd_d <- sqrt(framework$pop_cov.mat %*%
     as.numeric(est_par$betas %*% t(est_par$betas)))
 
-  area_smp <- rep(0, framework$N_dom_pop)
-  area_smp[framework$obs_dom] <- framework$n_smp
-
+  area_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
 
   # 1. Transformation der Dichte -----
 

@@ -69,21 +69,24 @@ point_estim <- function (framework,
   # Data.frame mit Schaetzern erstellen und fuellen.
   ind <- data.frame(Domain = names(framework$pop_area_size),
                     naive = NA,
-                    bc_agg = NA)
+                    bc_agg = NA,
+                    BHF = NA)
 
-  # 1. naive BHF
-  # out-of-sample noch nicht implementier und Fehler (!!!!!!!!!!)
-  ind$naive[framework$dist_obs_dom] <-
-    back_transformation(y =  tapply(model.matrix(fixed, framework$smp_data)  %*% est_par$betas, INDEX = framework$smp_domains_vec, FUN = mean)+
-                                 est_par$rand_eff[framework$dist_obs_dom],
-                               transformation = transformation,
-                               lambda = optimal_lambda,
-                               shift = shift_par)
-  ind$naive[!framework$dist_obs_dom] <-
-    back_transformation(y = (framework$pop_mean.mat[!framework$dist_obs_dom,] %*% est_par$betas),
-                        transformation = transformation,
-                        lambda = optimal_lambda,
-                        shift = shift_par)
+  # 1. BHF
+  # funktioniert nur bei trafo = "no" (!!!!!!!!!!)
+  value_in_sample <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
+
+  gamma_est_in <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
+
+  ind$BHF[framework$obs_dom] <-
+    gamma_est_in * (value_in_sample +
+       (framework$pop_mean.mat[framework$obs_dom,]%*% est_par$betas)[,1] -
+          tapply((model.matrix(fixed, framework$smp_data)%*% est_par$betas)[,1], FUN = mean, INDEX = framework$smp_domains_vec)) +
+    (1 - gamma_est_in) * (framework$pop_mean.mat[framework$obs_dom,] %*% est_par$betas)[,1]
+
+  ind$BHF[!framework$obs_dom] <- framework$pop_mean.mat[!framework$obs_dom,] %*% est_par$betas
+
+  # naive
 
   # 2. bc-agg
   ## Schätzen von Ed schoener schreiben
@@ -142,8 +145,8 @@ model_par <- function(framework,
     # Random effect: vector with zeros for all domains, filled with
     # browser()
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
-    # random effect for in-sample domains (dist_obs_dom)
-    rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
+    # random effect for in-sample domains (obs_dom)
+    rand_eff[framework$obs_dom] <- (random.effects(mixed_model)[[1]])
 
     return(list(betas      = betas,
                 sigmae2est = sigmae2est,
@@ -205,8 +208,8 @@ model_par <- function(framework,
     betas    <- solve(den) %*% num
     # Random effect: vector with zeros for all domains, filled with
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
-    # random effect for in-sample domains (dist_obs_dom)
-    rand_eff[framework$dist_obs_dom] <- gamma_weight * (mean_dep - mean_indep %*% betas)
+    # random effect for in-sample domains (obs_dom)
+    rand_eff[framework$obs_dom] <- gamma_weight * (mean_dep - mean_indep %*% betas)
 
 
     return(list(betas      = betas,
