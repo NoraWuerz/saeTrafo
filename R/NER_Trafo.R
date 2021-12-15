@@ -7,7 +7,7 @@ NER_Trafo <- function(fixed,
                       pop_mean = NULL,
                       pop_cov = NULL,
                       pop_data = NULL,
-                      pop_domains,
+                      pop_domains = NULL,
                       smp_data,
                       smp_domains,
                       threshold = 30,
@@ -32,6 +32,8 @@ NER_Trafo <- function(fixed,
 
   # The function framework_NER can be found in script framework_NER.R
   # !!!!!! Idee gleiche Framework bei pop_data mit ausgeben!
+  # !!!!!! ausserdem Framework bearbeiten sodass aus pop_data Agregate erstellt
+  # !!!!!! werden
   framework <- framework_NER(
     pop_area_size = pop_area_size,
     pop_mean = pop_mean,

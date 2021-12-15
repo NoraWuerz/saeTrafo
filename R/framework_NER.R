@@ -58,12 +58,16 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     row.names(pop_mean.mat) <- names(pop_mean)
     colnames(pop_mean.mat) <- c("intercept", mod_vars)
 
-    pop_cov <- lapply(pop_cov, only.mod_vars, mod_vars)
-    pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
-      ncol = (length(mod_vars) + 1)^2, byrow = TRUE
-    )
-    row.names(pop_cov.mat) <- names(pop_cov)
-    colnames(pop_cov.mat) <- cov_names(c("intercept", mod_vars))
+    if(!is.null(pop_cov)) {
+      pop_cov <- lapply(pop_cov, only.mod_vars, mod_vars)
+      pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
+        ncol = (length(mod_vars) + 1)^2, byrow = TRUE
+      )
+      row.names(pop_cov.mat) <- names(pop_cov)
+      colnames(pop_cov.mat) <- cov_names(c("intercept", mod_vars))
+    }else{
+      pop_cov.mat <- NULL
+    }
 
     smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
     smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
@@ -82,7 +86,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     # Indicator variables that indicate if domain is in- or out-of-sample
     obs_dom <- names(pop_area_size) %in% unique(smp_domains_vec)
   }
-
 
   # Number of households in sample
   N_smp <- length(smp_domains_vec)

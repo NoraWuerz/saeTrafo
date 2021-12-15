@@ -85,55 +85,47 @@ point_estim <- function (framework,
 
   }
 
-  # if transformation == "log" or "log.shift" and pop_cov is available
-  # compute bc-agg
-  ## Schätzen von Ed schoener schreiben
 
-  if((transformation == "log" | transformation == "log.shift") & !is.null(pop_cov)){
+  if(transformation == "log" | transformation == "log.shift"){
 
-    synthetic <- syn_est(framework = framework, est_par = est_par,
-                         fixed = fixed, threshold = threshold)
+    n_smp_long <- include_dom_unobs(framework$n_smp, framework$obs_dom)
+    rand_eff_long <- include_dom_unobs(est_par$rand_eff[framework$obs_dom], framework$obs_dom)
 
-    n_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
-    rand_eff <- include_dom_unobs(est_par$rand_eff[framework$obs_dom], framework$obs_dom)
-
-    gamma_est_d <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / n_smp)
+    gamma_est_d <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / n_smp_long)
     bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est)/2
 
-    if(transformation == "log") {
-        ind$bc_agg <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - shift_par
-    }
-    if(transformation == "log.shift"){
-      ind$bc_agg <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
-    }
+    if(!is.null(framework$pop_cov)){
 
-  }
+      # if transformation == "log" or "log.shift" and pop_cov is available
+      # compute bc-agg
+      ## Schätzen von Ed schoener schreiben
 
-  # if transformation == "log" or "log.shift" and pop_cov is not available
-  # compute bc-naive-agg
+      synthetic <- syn_est(framework = framework, est_par = est_par,
+                           fixed = fixed, threshold = threshold)
 
-  if((transformation == "log" | transformation == "log.shift") & is.null(pop_cov)) {
-
-    w_est_ohnebc_dri_trafo <- NULL
-
-    for(j in 1: length(area_size)){
-      if(n_smp[j] != 0){
-        w_est_ohnebc_dri_trafo[j] <- x_mean_d[j,] %*% beta + u_est_d[row.names(u_est_d) == j, ] + alpha_est_d[j]
-      }else{
-        w_est_ohnebc_dri_trafo[j] <- x_mean_d[j,] %*% beta + alpha_est_d[j]
+      if(transformation == "log") {
+          ind$Mean <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - shift_par
       }
-    }
+      if(transformation == "log.shift"){
+        ind$Mean <- 1/framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
+      }
 
-    tau_est_ohnebc_d <- NULL
+    }else{
 
-    w_est_ohnebc_dr <- transformation(optpar, w_est_ohnebc_dri_trafo, inv = TRUE, m = 0)$y
+      # if transformation == "log" or "log.shift" and pop_cov is not available
+      # compute bc-naive-agg
 
-    for(j in 1: length(area_size)){
-      w_ds_ <- data_smp[data_smp[, domains] == (1:length(area_size))[j],]
-      w_ds  <- as.matrix(w_ds_[paste(formel[2])])
-      w_est_ohnebc_dr_total <- w_est_ohnebc_dr[j] * (area_size[j] - length(w_ds))
+      print("bc-naive-agg")
 
-      tau_est_ohnebc_d[j] <- 1 / (area_size[j]) * (sum(w_ds) + w_est_ohnebc_dr_total)
+      est_dr <- (framework$pop_mean.mat %*% est_par$betas)[,1] + rand_eff_long + bc_d
+      est_ds <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
+
+      ind$Mean <- 1/framework$n_pop *
+        (n_smp_long * est_ds +
+           (framework$n_pop - n_smp_long) *
+           back_transformation(est_dr, transformation = transformation,
+                               shift = shift_par, lambda = optimal_lambda))
+
     }
   }
 
