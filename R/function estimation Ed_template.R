@@ -2,7 +2,7 @@
 
 syn_est <- function(framework, est_par, fixed, threshold) {
 
-  y_est <- model.matrix(fixed, framework$smp_data)  %*% est_par$betas
+  y_est <- model.matrix(fixed, framework$smp_data) %*% est_par$betas
 
   x_mean_d <- framework$pop_mean.mat %*% est_par$betas
   x_sd_d <- sqrt(framework$pop_cov.mat %*%
@@ -12,41 +12,43 @@ syn_est <- function(framework, est_par, fixed, threshold) {
                                 obs_dom = framework$obs_dom
   )
 
-  # 1. Transformation der Dichte -----
+  # get the standardised predicted values
+  data_smp_z <- rep(NA, framework$N_smp)
 
-  data_smp_z <- NA
   for (i in 1:framework$N_dom_pop) {
-    if (names(framework$pop_area_size)[i] %in% framework$smp_domains_vec) {
-      data_smp_z[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] <-
-        (y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] -
-           mean(y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])])) /
-        sd(y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])])
+    pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
+    if (sum(pos) > 1) {
+      data_smp_z[pos] <- (y_est[pos] - mean(y_est[pos])) / sd(y_est[pos])
     }
-    if (length(which(framework$smp_domains_vec == names(framework$pop_area_size)[i])) == 1) {
-      data_smp_z[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] <- 0
+    if (sum(pos) == 1) {
+      data_smp_z[pos] <- 0
     }
   }
-  data_smp_kor_pop_x_kor_sd <- list()
-  for (i in 1:framework$N_dom_pop) {
-    data_smp_kor_pop_x_kor_sd[[i]] <- data_smp_z * x_sd_d[i] + x_mean_d[i]
-  }
 
-  # 3. Bestimmen der gesch?tzen Dichten (aus sample) und E-Wert Berechnung ----
-  expectation_mod_kor_pop_2 <- c()
+  # adjuste all standardised predicted values and use all or only the data from
+  # one area according to the respective sample size
+  est_synthetic <- c()
+
   for (i in 1:framework$N_dom_pop) {
     if (area_smp[i] > threshold) {
-      x_tmp <- y_est[framework$smp_domains_vec == names(framework$pop_area_size)[i]]
-      x_tmp <- (x_tmp - mean(x_tmp)) / sd(x_tmp)
-      x_tmp <- x_tmp * x_sd_d[i] + x_mean_d[i]
+      pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
+      input <- data_smp_z[pos] * x_sd_d[i] + x_mean_d[i]
     } else {
-      x_tmp <- data_smp_kor_pop_x_kor_sd[[i]]
+      input <- data_smp_z * x_sd_d[i] + x_mean_d[i]
     }
-    density_xy_mod_kor_pop <- density(x_tmp, bw = bw.SJ(x_tmp, method = "dpi"), kernel = "epanechnikov")
-    expectation_mod_kor_pop_2[i] <- sfsmisc::integrate.xy(density_xy_mod_kor_pop$x, density_xy_mod_kor_pop$y * exp(density_xy_mod_kor_pop$x))
-    rm(x_tmp)
+
+    est_synthetic_density <- density(x      = input,
+                                     bw     = bw.SJ(input, method = "dpi"),
+                                     kernel = "epanechnikov"
+    )
+
+    est_synthetic[i] <-
+      sfsmisc::integrate.xy(x  = est_synthetic_density$x,
+                            fx = est_synthetic_density$y * exp(est_synthetic_density$x)
+    )
   }
-  # 4. Berechnen des Totalwerts ----
-  E_d_density_est_kor_pop_2 <- framework$pop_area_size * expectation_mod_kor_pop_2
-  # Ergebnisse ----
-  return(E_d_density_est_kor_pop_2)
+
+  # compute and return the estimated total
+  return(framework$pop_area_size * est_synthetic)
+
 }

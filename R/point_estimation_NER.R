@@ -107,7 +107,7 @@ point_estim <- function(framework,
     )
 
     rand_eff_long <- include_dom_unobs(x       = est_par$rand_eff[framework$obs_dom],
-                                       obx_dom = framework$obs_dom
+                                       obs_dom = framework$obs_dom
     )
 
     gamma_est_d <- est_par$sigmau2est /
@@ -124,26 +124,26 @@ point_estim <- function(framework,
 
       if (transformation == "log") {
         ind$Mean <- 1 / framework$pop_area_size *
-          (synthetic * exp(rand_eff + bc_d)) - shift_par
+          (synthetic * exp(rand_eff_long + bc_d)) - shift_par
       }
       if (transformation == "log.shift") {
         ind$Mean <- 1 / framework$pop_area_size *
-          (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
+          (synthetic * exp(rand_eff_long + bc_d)) - optimal_lambda
       }
     } else {
-      est_ir <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
+      est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
         rand_eff_long + bc_d
-      est_is <- include_dom_unobs(
-        x       = apply(X     = framework$smp_data[as.character(fixed[2])][, 1],
-                        INDEX = framework$smp_domains_vec,
-                        FUN   = mean
+      est_ds <- include_dom_unobs(
+        x       = tapply(X     = framework$smp_data[as.character(fixed[2])][, 1],
+                         INDEX = framework$smp_domains_vec,
+                         FUN   = mean
                   ),
         obs_dom = framework$obs_dom
       )
 
       ind$Mean <- 1 / framework$n_pop *
-        (n_smp_long * est_is + (framework$n_pop - n_smp_long) *
-            back_transformation(y              = est_ir,
+        (n_smp_long * est_ds + (framework$n_pop - n_smp_long) *
+            back_transformation(y              = est_dr,
                                 transformation = transformation,
                                 shift          = shift_par,
                                 lambda         = optimal_lambda
@@ -153,7 +153,7 @@ point_estim <- function(framework,
   }
 
 
-  return(list(ind            = indicator_prediction,
+  return(list(ind            = ind,
               optimal_lambda = optimal_lambda,
               shift_par      = shift_par,
               model_par      = est_par,
