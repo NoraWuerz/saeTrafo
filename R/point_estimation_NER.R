@@ -66,10 +66,12 @@ point_estim <- function (framework,
   )
 
 
-  # Data.frame for Mean
+  # Compute area-specific means ------------------------------------------------
+
   ind <- data.frame(Domain = names(framework$pop_area_size), Mean = NA)
 
   # if transformation == "no" compute the BHF
+
   if(transformation == "no"){
 
       value_in_sample <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
@@ -85,6 +87,10 @@ point_estim <- function (framework,
 
   }
 
+  # if transformation == "log" or "log.shift" and ...
+  # ... pop_cov is available compute bc-agg
+  # ... pop_cov is not available compute bc-naive-agg
+  ## Schätzen von Ed schoener schreiben
 
   if(transformation == "log" | transformation == "log.shift"){
 
@@ -95,10 +101,6 @@ point_estim <- function (framework,
     bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est)/2
 
     if(!is.null(framework$pop_cov)){
-
-      # if transformation == "log" or "log.shift" and pop_cov is available
-      # compute bc-agg
-      ## Schätzen von Ed schoener schreiben
 
       synthetic <- syn_est(framework = framework, est_par = est_par,
                            fixed = fixed, threshold = threshold)
@@ -112,13 +114,10 @@ point_estim <- function (framework,
 
     }else{
 
-      # if transformation == "log" or "log.shift" and pop_cov is not available
-      # compute bc-naive-agg
-
-      print("bc-naive-agg")
-
       est_dr <- (framework$pop_mean.mat %*% est_par$betas)[,1] + rand_eff_long + bc_d
-      est_ds <- tapply(framework$smp_data[as.character(fixed[2])][,1], INDEX = framework$smp_domains_vec, FUN = mean)
+      est_ds <- include_dom_unobs(
+        tapply(framework$smp_data[as.character(fixed[2])][,1],
+               INDEX = framework$smp_domains_vec, FUN = mean), framework$obs_dom)
 
       ind$Mean <- 1/framework$n_pop *
         (n_smp_long * est_ds +
@@ -130,11 +129,12 @@ point_estim <- function (framework,
   }
 
 
-  out <- ind
-  return(ind)
-
-
-
+  return(list(ind            = indicator_prediction,
+              optimal_lambda = optimal_lambda,
+              shift_par      = shift_par,
+              model_par      = est_par,
+              model          = mixed_model)
+         )
 }
 
 
