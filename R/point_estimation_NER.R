@@ -14,31 +14,27 @@ point_estim <- function(framework,
                         L,
                         keep_data = FALSE) {
 
-  # Transformation of data -------------------------------------------------------
+  # Transformation of data -----------------------------------------------------
 
   # Estimating the optimal parameter by optimization
-  # browser()
   # Optimal parameter function returns the minimum of the optimization
   # functions from generic_opt; the minimum is the optimal lambda.
   # The function can be found in the script optimal_parameter.R
-
-  optimal_lambda <- optimal_parameter(
-    generic_opt = generic_opt,
-    fixed = fixed,
-    smp_data = framework$smp_data,
-    smp_domains = framework$smp_domains,
-    transformation = transformation,
-    interval = interval
+  optimal_lambda <- optimal_parameter(generic_opt    = generic_opt,
+                                      fixed          = fixed,
+                                      smp_data       = framework$smp_data,
+                                      smp_domains    = framework$smp_domains,
+                                      transformation = transformation,
+                                      interval       = interval
   )
 
   # Data_transformation function returns transformed data and shift parameter.
-  # The function can be found in the script transformation_functions.R
-  # browser()
-  transformation_par <- emdi::data_transformation(
-    fixed = fixed,
-    smp_data = framework$smp_data,
-    transformation = transformation,
-    lambda = optimal_lambda
+  # The data_transformation is in the package emdi which is imported.
+  transformation_par <-
+    emdi::data_transformation(fixed          = fixed,
+                              smp_data       = framework$smp_data,
+                              transformation = transformation,
+                              lambda         = optimal_lambda
   )
   shift_par <- transformation_par$shift
 
@@ -47,28 +43,22 @@ point_estim <- function(framework,
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
-
-  mixed_model <- nlme::lme(
-    fixed = fixed,
-    data = transformation_par$transformed_data,
-    random = as.formula(paste0(
-      "~ 1 | as.factor(",
-      framework$smp_domains, ")"
-    )),
-    method = "REML",
-    keep.data = keep_data
+  mixed_model <- nlme::lme(fixed     = fixed,
+                           data      = transformation_par$transformed_data,
+                           random    = as.formula(paste0(
+                             "~ 1 | as.factor(",framework$smp_domains, ")")),
+                           method    = "REML",
+                           keep.data = keep_data
   )
 
 
   # Function model_par extracts the needed parameters theta from the nested
   # error linear regression model. It returns the beta coefficients (betas),
   # sigmae2est, sigmau2est and the random effect (rand_eff).
-
-  est_par <- model_par(
-    mixed_model = mixed_model,
-    framework = framework,
-    fixed = fixed,
-    transformation_par = transformation_par
+  est_par <- model_par(mixed_model        = mixed_model,
+                       framework          = framework,
+                       fixed              = fixed,
+                       transformation_par = transformation_par
   )
 
 
@@ -76,70 +66,98 @@ point_estim <- function(framework,
 
   ind <- data.frame(Domain = names(framework$pop_area_size), Mean = NA)
 
-  # if transformation == "no" compute the BHF
-
+  # if transformation == "no" compute the BHF (Battese et al., 1988)
   if (transformation == "no") {
-    value_in_sample <- tapply(framework$smp_data[as.character(fixed[2])][, 1], INDEX = framework$smp_domains_vec, FUN = mean)
-    gamma_est_in <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
+
+    value_in_sample <-
+      tapply(X     = framework$smp_data[as.character(fixed[2])][, 1],
+             INDEX = framework$smp_domains_vec,
+             FUN   = mean
+    )
+
+    gamma_est_in <- est_par$sigmau2est /
+      (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
 
     ind$Mean[framework$obs_dom] <-
-      gamma_est_in * (value_in_sample +
-        (framework$pop_mean.mat[framework$obs_dom, ] %*% est_par$betas)[, 1] -
-        tapply((model.matrix(fixed, framework$smp_data) %*% est_par$betas)[, 1], FUN = mean, INDEX = framework$smp_domains_vec)) +
-      (1 - gamma_est_in) * (framework$pop_mean.mat[framework$obs_dom, ] %*% est_par$betas)[, 1]
+      gamma_est_in *
+      (value_in_sample + (framework$pop_mean.mat[framework$obs_dom, ]
+                          %*% est_par$betas)[, 1] -
+        tapply(X     = (model.matrix(fixed, framework$smp_data) %*%
+                          est_par$betas)[, 1],
+               FUN   = mean,
+               INDEX = framework$smp_domains_vec
+        )) +
+      (1 - gamma_est_in) *
+      (framework$pop_mean.mat[framework$obs_dom, ] %*% est_par$betas)[, 1]
 
-    ind$Mean[!framework$obs_dom] <- framework$pop_mean.mat[!framework$obs_dom, ] %*% est_par$betas
+    ind$Mean[!framework$obs_dom] <-
+      framework$pop_mean.mat[!framework$obs_dom, ] %*% est_par$betas
+
   }
 
   # if transformation == "log" or "log.shift" and ...
-  # ... pop_cov is available compute bc-agg
+  # ... pop_cov is available compute bc-agg (!!!Zitieren!!!)
   # ... pop_cov is not available compute bc-naive-agg
-  ## Schätzen von Ed schoener schreiben
+  ## Schätzen von Ed schoener schreiben (!!!!!)
 
   if (transformation == "log" | transformation == "log.shift") {
-    n_smp_long <- include_dom_unobs(framework$n_smp, framework$obs_dom)
-    rand_eff_long <- include_dom_unobs(est_par$rand_eff[framework$obs_dom], framework$obs_dom)
 
-    gamma_est_d <- est_par$sigmau2est / (est_par$sigmau2est + est_par$sigmae2est / n_smp_long)
+    n_smp_long <- include_dom_unobs(x       = framework$n_smp,
+                                    obs_dom = framework$obs_dom
+    )
+
+    rand_eff_long <- include_dom_unobs(x       = est_par$rand_eff[framework$obs_dom],
+                                       obx_dom = framework$obs_dom
+    )
+
+    gamma_est_d <- est_par$sigmau2est /
+      (est_par$sigmau2est + est_par$sigmae2est / n_smp_long)
     bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est) / 2
 
     if (!is.null(framework$pop_cov)) {
-      synthetic <- syn_est(
-        framework = framework, est_par = est_par,
-        fixed = fixed, threshold = threshold
+
+      synthetic <- syn_est(framework = framework,
+                           est_par   = est_par,
+                           fixed     = fixed,
+                           threshold = threshold
       )
 
       if (transformation == "log") {
-        ind$Mean <- 1 / framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - shift_par
+        ind$Mean <- 1 / framework$pop_area_size *
+          (synthetic * exp(rand_eff + bc_d)) - shift_par
       }
       if (transformation == "log.shift") {
-        ind$Mean <- 1 / framework$pop_area_size * (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
+        ind$Mean <- 1 / framework$pop_area_size *
+          (synthetic * exp(rand_eff + bc_d)) - optimal_lambda
       }
     } else {
-      est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] + rand_eff_long + bc_d
-      est_ds <- include_dom_unobs(
-        tapply(framework$smp_data[as.character(fixed[2])][, 1],
-          INDEX = framework$smp_domains_vec, FUN = mean
-        ), framework$obs_dom
+      est_ir <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
+        rand_eff_long + bc_d
+      est_is <- include_dom_unobs(
+        x       = apply(X     = framework$smp_data[as.character(fixed[2])][, 1],
+                        INDEX = framework$smp_domains_vec,
+                        FUN   = mean
+                  ),
+        obs_dom = framework$obs_dom
       )
 
       ind$Mean <- 1 / framework$n_pop *
-        (n_smp_long * est_ds +
-          (framework$n_pop - n_smp_long) *
-            back_transformation(est_dr,
-              transformation = transformation,
-              shift = shift_par, lambda = optimal_lambda
-            ))
+        (n_smp_long * est_is + (framework$n_pop - n_smp_long) *
+            back_transformation(y              = est_ir,
+                                transformation = transformation,
+                                shift          = shift_par,
+                                lambda         = optimal_lambda
+            )
+         )
     }
   }
 
 
-  return(list(
-    ind = indicator_prediction,
-    optimal_lambda = optimal_lambda,
-    shift_par = shift_par,
-    model_par = est_par,
-    model = mixed_model
+  return(list(ind            = indicator_prediction,
+              optimal_lambda = optimal_lambda,
+              shift_par      = shift_par,
+              model_par      = est_par,
+              model          = mixed_model
   ))
 }
 

@@ -1,3 +1,4 @@
+# Name
 
 syn_est <- function(framework, est_par, fixed, threshold) {
 
@@ -5,15 +6,17 @@ syn_est <- function(framework, est_par, fixed, threshold) {
 
   x_mean_d <- framework$pop_mean.mat %*% est_par$betas
   x_sd_d <- sqrt(framework$pop_cov.mat %*%
-    as.numeric(est_par$betas %*% t(est_par$betas)))
+                   as.numeric(est_par$betas %*% t(est_par$betas)))
 
-  area_smp <- include_dom_unobs(framework$n_smp, framework$obs_dom)
+  area_smp <- include_dom_unobs(x       = framework$n_smp,
+                                obs_dom = framework$obs_dom
+  )
 
   # 1. Transformation der Dichte -----
 
   data_smp_z <- NA
   for (i in 1:framework$N_dom_pop) {
-    if (length(which(framework$smp_domains_vec == names(framework$pop_area_size)[i])) > 1) {
+    if (names(framework$pop_area_size)[i] %in% framework$smp_domains_vec) {
       data_smp_z[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] <-
         (y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])] -
            mean(y_est[which(framework$smp_domains_vec == names(framework$pop_area_size)[i])])) /
