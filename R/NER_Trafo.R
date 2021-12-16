@@ -34,27 +34,25 @@ NER_Trafo <- function(fixed,
   # !!!!!! Idee gleiche Framework bei pop_data mit ausgeben!
   # !!!!!! ausserdem Framework bearbeiten sodass aus pop_data Agregate erstellt
   # !!!!!! werden
-  framework <- framework_NER(
-    pop_area_size = pop_area_size,
-    pop_mean = pop_mean,
-    pop_cov = pop_cov,
-    pop_data = pop_data,
-    pop_domains = pop_domains,
-    smp_data = smp_data,
-    smp_domains = smp_domains,
-    fixed = fixed
+  framework <- framework_NER(pop_area_size = pop_area_size,
+                             pop_mean      = pop_mean,
+                             pop_cov       = pop_cov,
+                             pop_data      = pop_data,
+                             pop_domains   = pop_domains,
+                             smp_data      = smp_data,
+                             smp_domains   = smp_domains,
+                             fixed         = fixed
   )
 
 
   # Point Estimation -----------------------------------------------------------
   # The function point_estim can be found in script point_estimation.R
-  point_estim <- point_estim(
-     framework = framework,
-     fixed = fixed,
-     transformation = transformation,
-     threshold = threshold,
-     interval = interval,
-     keep_data = TRUE
+  point_estim <- point_estim(framework      = framework,
+                             fixed          = fixed,
+                             transformation = transformation,
+                             threshold      = threshold,
+                             interval       = interval,
+                             keep_data      = TRUE
   )
 
   NER_out <- point_estim

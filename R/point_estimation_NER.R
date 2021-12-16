@@ -98,7 +98,6 @@ point_estim <- function(framework,
   # if transformation == "log" or "log.shift" and ...
   # ... pop_cov is available compute bc-agg (!!!Zitieren!!!)
   # ... pop_cov is not available compute bc-naive-agg
-  ## Schätzen von Ed schoener schreiben (!!!!!)
 
   if (transformation == "log" | transformation == "log.shift") {
 

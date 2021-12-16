@@ -36,7 +36,7 @@ fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
     stop("NER_Trafo does not work with missing values.")
   }
 
-  print("SAE methods for full population data and transformations are additionally provided in the R package emdi, which offers further functionalities")
+  print("Method bc-agg uses aggregates from the provided population data instead of using the full population data. SAE methods for full population data and transformations are additionally provided in the R package emdi which offers further functionalities")
 }
 
 fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
