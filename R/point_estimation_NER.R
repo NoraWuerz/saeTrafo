@@ -11,7 +11,6 @@ point_estim <- function(framework,
                         transformation,
                         threshold = threshold,
                         interval = interval,
-                        L,
                         keep_data = FALSE) {
 
   # Transformation of data -----------------------------------------------------
@@ -78,9 +77,9 @@ point_estim <- function(framework,
     gamma_est_in <- est_par$sigmau2est /
       (est_par$sigmau2est + est_par$sigmae2est / framework$n_smp)
 
-    ind$Mean[framework$obs_dom] <-
+    ind$Mean[framework$dist_obs_dom] <-
       gamma_est_in *
-      (value_in_sample + (framework$pop_mean.mat[framework$obs_dom, ]
+      (value_in_sample + (framework$pop_mean.mat[framework$dist_obs_dom, ]
                           %*% est_par$betas)[, 1] -
         tapply(X     = (model.matrix(fixed, framework$smp_data) %*%
                           est_par$betas)[, 1],
@@ -88,10 +87,10 @@ point_estim <- function(framework,
                INDEX = framework$smp_domains_vec
         )) +
       (1 - gamma_est_in) *
-      (framework$pop_mean.mat[framework$obs_dom, ] %*% est_par$betas)[, 1]
+      (framework$pop_mean.mat[framework$dist_obs_dom, ] %*% est_par$betas)[, 1]
 
-    ind$Mean[!framework$obs_dom] <-
-      framework$pop_mean.mat[!framework$obs_dom, ] %*% est_par$betas
+    ind$Mean[!framework$dist_obs_dom] <-
+      framework$pop_mean.mat[!framework$dist_obs_dom, ] %*% est_par$betas
 
   }
 
@@ -102,11 +101,12 @@ point_estim <- function(framework,
   if (transformation == "log" | transformation == "log.shift") {
 
     n_smp_long <- include_dom_unobs(x       = framework$n_smp,
-                                    obs_dom = framework$obs_dom
+                                    obs_dom = framework$dist_obs_dom
     )
 
-    rand_eff_long <- include_dom_unobs(x       = est_par$rand_eff[framework$obs_dom],
-                                       obs_dom = framework$obs_dom
+    rand_eff_long <- include_dom_unobs(
+      x       = est_par$rand_eff[framework$dist_obs_dom],
+      obs_dom = framework$dist_obs_dom
     )
 
     gamma_est_d <- est_par$sigmau2est /
@@ -137,7 +137,7 @@ point_estim <- function(framework,
                          INDEX = framework$smp_domains_vec,
                          FUN   = mean
                   ),
-        obs_dom = framework$obs_dom
+        obs_dom = framework$dist_obs_dom
       )
 
       ind$Mean <- 1 / framework$n_pop *
@@ -185,7 +185,7 @@ model_par <- function(framework,
     # Random effect: vector with zeros for all domains, filled with
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (obs_dom)
-    rand_eff[framework$obs_dom] <- (random.effects(mixed_model)[[1]])
+    rand_eff[framework$dist_obs_dom] <- (random.effects(mixed_model)[[1]])
 
     return(list(betas      = betas,
                 sigmae2est = sigmae2est,
@@ -211,7 +211,7 @@ syn_est <- function(framework,
                    as.numeric(est_par$betas %*% t(est_par$betas)))
 
   area_smp <- include_dom_unobs(x       = framework$n_smp,
-                                obs_dom = framework$obs_dom
+                                obs_dom = framework$dist_obs_dom
   )
 
   # get the standardised predicted values

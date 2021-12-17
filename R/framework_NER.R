@@ -18,6 +18,29 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
     )
 
+    pop_area_size <- table(pop_data[pop_domains])
+
+    # Number of domains in the population
+    N_dom_pop <- length(pop_area_size)
+
+    pop_mean.mat <- matrix(data     = NA,
+                           nrow     = length(area_size),
+                           ncol     = length(mod_vars) + 1,
+                           dimnames = list(names(pop_area_size),
+                                           c("intercept", mod_vars)))
+    pop_cov.mat <- matrix(data     = NA,
+                          nrow     = length(area_size),
+                          ncol     = (length(mod_vars) + 1)^2,
+                          dimnames = list(names(pop_area_size),
+                                          cov_names(c("intercept", mod_vars))))
+    for (i in 1:N_dom_pop) {
+      pos <- pop_data[pop_domains] == names(pop_area_size)[i]
+      pop_mean.mat[i, ] <- apply(model.matrix(fixed, pop_data[pos, ]), 2,
+                                 FUN = mean)
+      pop_cov.mat[i, ] <- c(cov(model.matrix(fixed, data_pop[pos, ]),
+                                model.matrix(fixed, data_pop[pos, ])))
+    }
+
     pop_vars <- c(mod_vars, pop_domains)
     pop_data <- pop_data[, pop_vars]
 
@@ -37,8 +60,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
 
     # Number of households in population
     N_pop <- length(pop_domains_vec)
-    # Number of domains in the population
-    N_dom_pop <- length(unique(pop_domains_vec))
     # Number of households in population per domain
     n_pop <- as.vector(table(pop_domains_vec))
 
@@ -84,7 +105,10 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     n_pop <- as.vector(pop_area_size)
 
     # Indicator variables that indicate if domain is in- or out-of-sample
-    obs_dom <- names(pop_area_size) %in% unique(smp_domains_vec)
+    dist_obs_dom <- unique(names(pop_area_size)) %in% unique(smp_domains_vec)
+
+    pop_domains_vec <- NULL
+    obs_dom <- NULL
   }
 
   # Number of households in sample
@@ -100,41 +124,24 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
   n_smp <- as.vector(table(smp_domains_vec_tmp))
 
 
-  if (!is.null(pop_data)) {
-    return(list(
-      pop_data = pop_data,
-      pop_domains_vec = pop_domains_vec,
-      smp_data = smp_data,
-      smp_domains_vec = smp_domains_vec,
-      smp_domains = smp_domains,
-      N_pop = N_pop,
-      N_smp = N_smp,
-      N_unobs = N_unobs,
-      N_dom_pop = N_dom_pop,
-      N_dom_smp = N_dom_smp,
-      N_dom_unobs = N_dom_unobs,
-      n_pop = n_pop,
-      n_smp = n_smp,
-      obs_dom = obs_dom,
-      dist_obs_dom = dist_obs_dom
-    ))
-  } else {
-    return(list(
-      pop_area_size = pop_area_size,
-      pop_mean.mat = pop_mean.mat,
-      pop_cov.mat = pop_cov.mat,
-      smp_data = smp_data,
-      smp_domains_vec = smp_domains_vec,
-      smp_domains = smp_domains,
-      N_pop = N_pop,
-      N_smp = N_smp,
-      N_unobs = N_unobs,
-      N_dom_pop = N_dom_pop,
-      N_dom_smp = N_dom_smp,
-      N_dom_unobs = N_dom_unobs,
-      n_pop = n_pop,
-      n_smp = n_smp,
-      obs_dom = obs_dom
-    ))
-  }
+
+  return(list(pop_data        = pop_data,
+              pop_domains_vec = pop_domains_vec,
+              pop_area_size   = pop_area_size,
+              pop_mean.mat    = pop_mean.mat,
+              pop_cov.mat     = pop_cov.mat,
+              smp_data        = smp_data,
+              smp_domains_vec = smp_domains_vec,
+              smp_domains     = smp_domains,
+              N_pop           = N_pop,
+              N_smp           = N_smp,
+              N_unobs         = N_unobs,
+              N_dom_pop       = N_dom_pop,
+              N_dom_smp       = N_dom_smp,
+              N_dom_unobs     = N_dom_unobs,
+              n_pop           = n_pop,
+              n_smp           = n_smp,
+              obs_dom         = obs_dom,
+              dist_obs_dom    = dist_obs_dom
+  ))
 }

@@ -55,21 +55,27 @@ NER_Trafo <- function(fixed,
                              keep_data      = TRUE
   )
 
-  NER_out <- point_estim
+
 
   # MSE Estimation -------------------------------------------------------------
 
-  # if (MSE == TRUE) {
-  #
-  #   # The function parametric_bootstrap can be found in script mse_estimation.R
-  #   mse_estimates <- parametric_bootstrap(
-  #     framework = framework,
-  #     point_estim = point_estim,
-  #     fixed = fixed,
-  #     transformation = transformation,
-  #     interval = interval,
-  #     B = B,
-  #   )
+  if (MSE == TRUE) {
+
+    # mse_wrapper schreiben, damit zwischen verschiedenen MSEs ausgewaehlt wird (!!!)
+
+    # The function parametric_bootstrap can be found in script mse_estimation.R
+    mse_estimates <- mse_boot(framework      = framework,
+                              point_estim    = point_estim,
+                              fixed          = fixed,
+                              transformation = transformation,
+                              interval       = interval,
+                              threshold      = threshold,
+                              B              = B
+    )
+    NER_out <- list(
+      point_estim, mse_estimates
+    )
+  }
   #
   #
   #

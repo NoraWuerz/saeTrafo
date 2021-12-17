@@ -26,3 +26,5 @@ include_dom_unobs <- function(x, obs_dom) {
   vector[obs_dom] <- x
   return(vector)
 }
+
+
