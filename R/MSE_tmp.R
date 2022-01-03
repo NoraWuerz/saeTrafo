@@ -24,7 +24,7 @@ mse <- function(framework,
 
     if (!is.null(framework$pop_cov)) {
 
-      mse_out <- mse_bc_agg(framework      = framework,
+      mse_out <- mse_bc_agg_schleife(framework      = framework,
                             point_estim    = point_estim,
                             fixed          = fixed,
                             transformation = transformation,
@@ -32,7 +32,7 @@ mse <- function(framework,
                             threshold      = threshold,
                             B              = B)
 
-    }else{
+    }else{ # hier ev. Formel ueberlegen (!!!!)
 
       mse_out <- NULL
 
@@ -41,8 +41,8 @@ mse <- function(framework,
 
 }
 
-
-mse_bc_agg <- function(framework,
+# mse estimation for bc-agg
+mse_bc_agg_schleife <- function(framework,
                      point_estim,
                      fixed,
                      transformation,
@@ -140,6 +140,8 @@ mse_bc_agg <- function(framework,
               successful_bootstraps = successful_bootstraps
   ))
 }
+
+
 
 
 

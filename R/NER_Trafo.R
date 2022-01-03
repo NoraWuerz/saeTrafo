@@ -15,6 +15,9 @@ NER_Trafo <- function(fixed,
                       transformation = "log.shift",
                       interval = 'default',
                       MSE = FALSE,
+                      parallel_mode = ifelse(grepl("windows",.Platform$OS.type),
+                                             "socket", "multicore"),
+                      cpus = 1,
                       seed = 123) {
   # NER_check1()
   # NER_check2()
