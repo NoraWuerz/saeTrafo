@@ -64,7 +64,7 @@ NER_Trafo <- function(fixed,
     # mse_wrapper schreiben, damit zwischen verschiedenen MSEs ausgewaehlt wird (!!!)
 
     # The function parametric_bootstrap can be found in script mse_estimation.R
-    mse_estimates <- mse_boot(framework      = framework,
+    mse_estimates <- mse(framework      = framework,
                               point_estim    = point_estim,
                               fixed          = fixed,
                               transformation = transformation,
@@ -72,58 +72,37 @@ NER_Trafo <- function(fixed,
                               threshold      = threshold,
                               B              = B
     )
+
     NER_out <- list(
-      point_estim, mse_estimates
+      ind                   = point_estim$ind,
+      MSE                   = mse_estimates$MSE,
+      transform_param       = point_estim[c("optimal_lambda", "shift_par")],
+      model                 = point_estim$model,
+      framework             = framework[c("N_dom_unobs", "N_dom_smp", "N_smp",
+                                          "N_pop", "smp_domains", "smp_data",
+                                          "smp_domains_vec", "pop_domains_vec")],
+      transformation        = transformation,
+      method                = "reml",
+      fixed                 = fixed,
+      call                  = call,
+      successful_bootstraps = mse_estimates$successful_bootstraps
+    )
+  } else {
+    NER_out <- list(
+      ind                   = point_estim$ind,
+      MSE                   = NULL,
+      transform_param       = point_estim[c("optimal_lambda", "shift_par")],
+      model                 = point_estim$model,
+      framework             = framework[c("N_dom_unobs", "N_dom_smp", "N_smp",
+                                          "N_pop", "smp_domains", "smp_data",
+                                          "smp_domains_vec", "pop_domains_vec")],
+      transformation        = transformation,
+      method                = "reml",
+      fixed                 = fixed,
+      call                  = call,
+      successful_bootstraps = NULL
     )
   }
-  #
-  #
-  #
-  #   ebp_out <- list(
-  #     ind = point_estim$ind,
-  #     MSE = mse_estimates,
-  #     transform_param = point_estim[c("optimal_lambda", "shift_par")],
-  #     model = point_estim$model,
-  #     framework = framework[c(
-  #       "N_dom_unobs",
-  #       "N_dom_smp",
-  #       "N_smp",
-  #       "N_pop",
-  #       "smp_domains",
-  #       "smp_data",
-  #       "smp_domains_vec",
-  #       "pop_domains_vec"
-  #     )],
-  #     transformation = transformation,
-  #     method = "reml",
-  #     fixed = fixed,
-  #     call = call,
-  #     successful_bootstraps = NULL
-  #   )
-  # } else {
-  #   ebp_out <- list(
-  #     ind = point_estim$ind,
-  #     MSE = NULL,
-  #     transform_param = point_estim[c("optimal_lambda", "shift_par")],
-  #     model = point_estim$model,
-  #     framework = framework[c(
-  #       "N_dom_unobs",
-  #       "N_dom_smp",
-  #       "N_smp",
-  #       "N_pop",
-  #       "smp_domains",
-  #       "smp_data",
-  #       "smp_domains_vec",
-  #       "pop_domains_vec",
-  #       "response"
-  #     )],
-  #     transformation = transformation,
-  #     method = "reml",
-  #     fixed = fixed,
-  #     call = call,
-  #     successful_bootstraps = NULL
-  #   )
-  # }
 
   class(NER_out) <- c("NER", "SAE_Trafo")
   return(NER_out)

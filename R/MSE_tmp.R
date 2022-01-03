@@ -1,16 +1,59 @@
+# wrapper-function
 
-mse_boot <- function(framework,
+mse <- function(framework,
+                point_estim,
+                fixed,
+                transformation,
+                interval = c(-1,2),
+                threshold,
+                B) {
+
+  if(transformation == "no") {
+
+    mse_out <- mse_prasad_rao(framework      = framework,
+                              point_estim    = point_estim,
+                              fixed          = fixed,
+                              transformation = transformation,
+                              interval       = interval,
+                              threshold      = threshold,
+                              B              = B)
+
+  }
+
+  if (transformation == "log" | transformation == "log.shift") {
+
+    if (!is.null(framework$pop_cov)) {
+
+      mse_out <- mse_bc_agg(framework      = framework,
+                            point_estim    = point_estim,
+                            fixed          = fixed,
+                            transformation = transformation,
+                            interval       = interval,
+                            threshold      = threshold,
+                            B              = B)
+
+    }else{
+
+      mse_out <- NULL
+
+    }
+  }
+
+}
+
+
+mse_bc_agg <- function(framework,
                      point_estim,
                      fixed,
                      transformation,
-                     interval,
+                     interval = c(-1,2),
                      threshold,
                      B) {
 
 
   message('\r', "Bootstrap started")
 
-  Y_mean_b_est <- matrix(NA, nrow = framework$N_dom_pop, ncol = B)
+  Y_estim_b <- matrix(NA, nrow = framework$N_dom_pop, ncol = B)
   Y_mean_b_orig <- matrix(NA, nrow = framework$N_dom_pop, ncol = B)
 
   # lapply statt for-Schleife (!!!!)
@@ -56,17 +99,17 @@ mse_boot <- function(framework,
     framework_b <- framework
     framework_b$smp_data <- smp_data_b
 
-    # step 5: calculate mean with proposed method
-    point_estim_b <- point_estim(framework      = framework_b,
+    # calculate mean with proposed method
+    try(
+    Y_estim_b[,b] <- point_estim(framework      = framework_b,
                                  fixed          = fixed,
                                  transformation = transformation,
                                  threshold      = threshold,
                                  interval       = interval
-    )
+    )$ind$Mean)
 
 
   }
-  # auserhalb der Funktion wird nur Y_mean_b_orig und Y_mean_b_est benoetigt
 
   # step 6: calculate MSE
   Y_mean_b_orig_korr <- matrix(NA, nrow = framework$N_dom_pop, ncol = B)
@@ -79,7 +122,7 @@ mse_boot <- function(framework,
         as.numeric(exp(0.5 * (framework$pop_cov.mat[i,] %*%
                                 as.numeric(point_estim$model_par$betas
                                            %*% t(point_estim$model_par$betas)) + point_estim$model_par$sigmae2est)))}
-    if(transfromation == "log.shift"){
+    if(transformation == "log.shift"){
       Y_mean_b_orig_korr[i,] <-
         (Y_mean_b_orig[i,] + point_estim$optimal_lambda) *
         as.numeric(exp(0.5 * (framework$pop_cov.mat[i,]
@@ -88,10 +131,16 @@ mse_boot <- function(framework,
         point_estim$optimal_lambda}
 
   }
-    # vorgeschlagene MSE wie in unserem Paper
-    MSE_korr <- apply((point_estim_b$ind$Mean - Y_mean_b_orig_korr)^2, MARGIN = 1, FUN = mean, na.rm = T)
-    return(MSE_korr)
-  }
+
+  successful_bootstraps <- sum(!is.na(Y_estim_b)) / framework$N_dom_pop
+
+  MSE <- apply((Y_estim_b - Y_mean_b_orig_korr)^2, MARGIN = 1, FUN = mean, na.rm = T)
+
+  return(list(MSE                   = MSE,
+              successful_bootstraps = successful_bootstraps
+  ))
+}
+
 
 
 
