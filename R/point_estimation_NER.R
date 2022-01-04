@@ -129,7 +129,9 @@ point_estim <- function(framework,
         ind$Mean <- 1 / framework$pop_area_size *
           (synthetic * exp(rand_eff_long + bc_d)) - optimal_lambda
       }
+
     } else {
+
       est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
         rand_eff_long + bc_d
       est_ds <- include_dom_unobs(

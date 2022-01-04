@@ -34,9 +34,6 @@ NER_Trafo <- function(fixed,
   }
 
   # The function framework_NER can be found in script framework_NER.R
-  # !!!!!! Idee gleiche Framework bei pop_data mit ausgeben!
-  # !!!!!! ausserdem Framework bearbeiten sodass aus pop_data Agregate erstellt
-  # !!!!!! werden
   framework <- framework_NER(pop_area_size = pop_area_size,
                              pop_mean      = pop_mean,
                              pop_cov       = pop_cov,
@@ -75,6 +72,17 @@ NER_Trafo <- function(fixed,
                               threshold      = threshold,
                               B              = B
     )
+    mse_estimates_2 <- mse_par(framework      = framework,
+                               point_estim    = point_estim,
+                               fixed          = fixed,
+                               transformation = transformation,
+                               interval       = interval,
+                               threshold      = threshold,
+                               B              = B,
+                               cpus           = cpus,
+                               parallel_mode  = parallel_mode
+    )
+    print(paste("mittlere relative Abweichung der lapply und schleifen implementierung", mean((mse_estimates$MSE -mse_estimates_2$MSE)/mse_estimates_2$MSE)))
 
     NER_out <- list(
       ind                   = point_estim$ind,

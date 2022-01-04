@@ -5,7 +5,9 @@ mse_par <- function(framework,
                 transformation,
                 interval = c(-1,2),
                 threshold,
-                B) {
+                B,
+                cpus,
+                parallel_mode) {
 
   if(transformation == "no") {
 
@@ -22,6 +24,7 @@ mse_par <- function(framework,
   if (transformation == "log" | transformation == "log.shift") {
 
     start_time = Sys.time()
+
     if (cpus > 1) {
 
       cpus <- min(cpus, parallel::detectCores())
@@ -35,7 +38,7 @@ mse_par <- function(framework,
 
       if (!is.null(framework$pop_cov)) {
 
-       mse_out <- simplify2array(parallelMap::parallelLapply(
+       mse_out_p <- simplify2array(parallelMap::parallelLapply(
          xs             = seq_len(B),
          fun            = mse_bc_agg_wrapper,
          B              = B,
@@ -49,21 +52,13 @@ mse_par <- function(framework,
 
        parallelMap::parallelStop()
 
-       # successful_bootstraps <- sum(!is.na(Y_estim_b)) / framework$N_dom_pop
-       #
-       # MSE <- apply((Y_estim_b - Y_mean_b_orig_korr)^2, MARGIN = 1, FUN = mean, na.rm = T)
-       #
-       #   return(list(MSE                   = MSE,
-       #               successful_bootstraps = successful_bootstraps
-       #   ))
-
      }else{ # hier ev. Formel ueberlegen (!!!!)
 
        mse_out <- NULL
 
      }
 
-    }else{
+    } else {
       if (!is.null(framework$pop_cov)) {
 
         mse_out <- simplify2array(lapply(
@@ -84,6 +79,14 @@ mse_par <- function(framework,
 
       }
     }
+
+    successful_bootstraps <- sum(!is.na(mse_out)) / framework$N_dom_pop
+    MSE <- apply(mse_out, MARGIN = 1, FUN = mean, na.rm = T)
+
+      return(list(MSE                   = MSE,
+                  successful_bootstraps = successful_bootstraps
+      ))
+
   }
 
   message('\r', "Bootstrap completed", "\n")
@@ -109,6 +112,7 @@ mse_bc_agg_wrapper <- function(i,
                                threshold,
                                start_time) {
 
+  print(i)
   tmp <- mse_bc_agg(framework      = framework,
                     point_estim    = point_estim,
                     fixed          = fixed,
@@ -204,6 +208,7 @@ mse_bc_agg <- function(framework,
   framework_b$smp_data <- smp_data_b
 
   # calculate mean with proposed method
+  Y_estim_b <- rep(NA, length = framework$N_dom_pop)
   try(
     Y_estim_b <- point_estim(framework      = framework_b,
                              fixed          = fixed,
@@ -212,8 +217,7 @@ mse_bc_agg <- function(framework,
                              interval       = interval
     )$ind$Mean)
 
-  return(list(Y_estim_b          = Y_estim_b,
-              Y_mean_b_orig_korr = Y_mean_b_orig_korr))
+  return((Y_estim_b - Y_mean_b_orig_korr)^2)
 }
 
 
