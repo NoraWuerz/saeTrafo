@@ -56,12 +56,9 @@ NER_Trafo <- function(fixed,
   )
 
 
-
   # MSE Estimation -------------------------------------------------------------
 
   if (MSE == TRUE) {
-
-    # mse_wrapper schreiben, damit zwischen verschiedenen MSEs ausgewaehlt wird (!!!)
 
     # The function parametric_bootstrap can be found in script mse_estimation.R
     mse_estimates <- mse(framework      = framework,
@@ -82,7 +79,8 @@ NER_Trafo <- function(fixed,
                                cpus           = cpus,
                                parallel_mode  = parallel_mode
     )
-    print(paste("mittlere relative Abweichung der lapply und schleifen implementierung", mean((mse_estimates$MSE -mse_estimates_2$MSE)/mse_estimates_2$MSE)))
+
+    print(paste("mittlere relative Abweichung der lapply und schleifen implementierung", mean((mse_estimates$MSE -mse_estimates_2$MSE$Mean)/mse_estimates_2$MSE$Mean)))
 
     NER_out <- list(
       ind                   = point_estim$ind,
@@ -91,7 +89,8 @@ NER_Trafo <- function(fixed,
       model                 = point_estim$model,
       framework             = framework[c("N_dom_unobs", "N_dom_smp", "N_smp",
                                           "N_pop", "smp_domains", "smp_data",
-                                          "smp_domains_vec", "pop_domains_vec")],
+                                          "smp_domains_vec", "pop_area_size",
+                                          "pop_mean.mat",  "pop_cov.mat")],
       transformation        = transformation,
       method                = "reml",
       fixed                 = fixed,
@@ -106,7 +105,8 @@ NER_Trafo <- function(fixed,
       model                 = point_estim$model,
       framework             = framework[c("N_dom_unobs", "N_dom_smp", "N_smp",
                                           "N_pop", "smp_domains", "smp_data",
-                                          "smp_domains_vec", "pop_domains_vec")],
+                                          "smp_domains_vec", "pop_area_size",
+                                          "pop_mean.mat",  "pop_cov.mat")],
       transformation        = transformation,
       method                = "reml",
       fixed                 = fixed,
