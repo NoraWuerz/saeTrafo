@@ -22,9 +22,16 @@ only.mod_vars <- function(x, var) {
 }
 
 include_dom_unobs <- function(x, obs_dom) {
-  vector <- rep(0, length(obs_dom))
-  vector[obs_dom] <- x
-  return(vector)
+  if(is.vector(x)){
+    tmp <- rep(0, length(obs_dom))
+    tmp[obs_dom] <- x
+    return(tmp)
+  }
+  if(is.matrix(x)){
+    tmp <- matrix(0, length(obs_dom), ncol(x))
+    tmp[obs_dom,] <- x
+    return(tmp)
+  }
 }
 
 

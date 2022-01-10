@@ -1,13 +1,13 @@
 
 mse_par <- function(framework,
-                point_estim,
-                fixed,
-                transformation,
-                interval = c(-1,2),
-                threshold,
-                B,
-                cpus,
-                parallel_mode) {
+                    point_estim,
+                    fixed,
+                    transformation,
+                    interval = c(-1,2),
+                    threshold,
+                    B,
+                    cpus,
+                    parallel_mode) {
 
   if(transformation == "no") {
 
@@ -222,78 +222,83 @@ mse_prasad_rao <- function(framework,
 
   # fuer out-of sample ist diese Komponeten 0, da dies die Unsicherheit der
   # Schaetzung von u abbildet
-  g1 <- function(sigmau2,
-                  sigmae2,
-                  n){
-    return(((sigmau2)/(sigmau2 + sigmae2/n)) * (sigmae2/n))
-  }
-
-  a1 <- g1(sigmau2 = point_estim$model_par$sigmau2est,
-           sigmae2 = point_estim$model_par$sigmae2est,
-           n       = include_dom_unobs(x       = framework$n_smp,
-                                       obs_dom = framework$dist_obs_dom))
 
 
+  out_g1 <- g1(sigmau2 = point_estim$model_par$sigmau2est,
+               sigmae2 = point_estim$model_par$sigmae2est,
+               n_smp   = include_dom_unobs(x       = framework$n_smp,
+                                           obs_dom = framework$dist_obs_dom)
+  )
 
-  ##################################
-  nd <- include_dom_unobs(x = framework$n_smp, obs_dom = framework$dist_obs_dom)
-  sig.u <- sqrt(point_estim$model_par$sigmau2est)
-  sig.e <- sqrt(point_estim$model_par$sigmae2est)
-  Xmean <- framework$pop_mean.mat # Unterschied mehrere x
-  x <- model.matrix(fixed, framework$smp_data)
-  saind <- framework$smp_domains_vec
-  ###
-  Xmean <- cbind(1,Xmean)
-  X <- cbind(1,x)
-  xmean <- cbind(1,tapply(x,saind, mean))
-  area <- saind
-  sigmae <- sig.e
-  sigmau <- sig.u
-  n <- nd
-
-  g2 <- function(Xmean,X,xmean,area,sigmae,sigmau,n){
-    UAREA<-unique(area)
-    Mitte <- matrix(0,ncol=ncol(Xmean),nrow=ncol(Xmean))
-    for(i in 1:nrow(Xmean)){ # Schleife geht alle Areas durch
-      Xtmp<-X[area==UAREA[i],] # suche nun alle in-sample in area i
-      Sig<-Vinv(nrow(Xtmp),sigmae,sigmau)
-      # Mitte + hier wierd dann summiert
-      Mitte<-Mitte+t(Xtmp)%*%(matrix(rep(Sig$nDiag * colSums(Xtmp),nrow(Xtmp)),byrow=TRUE,nrow=nrow(Xtmp),ncol=ncol(Xtmp)) + (Sig$Diag - Sig$nDiag) * Xtmp)
-    }
-    MitteInv<-solve(Mitte)
-    lambda <- sigmau^2 / (sigmau^2 + sigmae^2/n)
-    ret  <-numeric()
-    for(i in 1:nrow(Xmean)){
-      X1 <- Xmean[i,] - lambda[i] * xmean[i,]
-      ret[i]<-t(X1)%*%MitteInv%*%(X1)
-    }
-    return(ret)
-  }
-
-  Vinv<-function(p,sigmae,sigmau){
-    nDiagonale  <- - sigmau / (sigmae^2 + p * sigmau*sigmae)
-    Diagonale <-  (sigmae + (p-1)*sigmau ) / (sigmae^2 + p * sigmau * sigmae)
-    return(list(Diag=Diagonale,nDiag=nDiagonale))
-  }
-
-  g3 <- function(sigmae,sigmau,n){
-    w   <-sigmae^2 + n*sigmau^2
-    a   <-sum(n^2/w^2)*sum((n-1)/sigmae^4 + 1/w^2) - sum(n/w^2)^2
-    Iuu <- 2/a * sum((n-1)/sigmae^4+1/w^2)
-    Iee <- 2/a * sum(n^2/w^2)
-    Iue <- -2/a * sum(n/w^2)
-    1/n^2 * (sigmau^2+sigmae^2/n)^(-3 ) * (sigmae^4*Iuu + sigmae^4*Iee -2*sigmau^2*sigmae^2*Iue)
-  }
+  out_g2 <- g2(sigmau2 = point_estim$model_par$sigmau2est,
+               sigmae2 = point_estim$model_par$sigmae2est,
+               n_smp   = include_dom_unobs(x       = framework$n_smp,
+                                           obs_dom = framework$dist_obs_dom),
+               Xmean   = framework$pop_mean.mat,
+               X       = model.matrix(fixed, framework$smp_data),
+               area    = framework$smp_domains_vec
+  )
 
 
 
-  a2<-g2(cbind(1,Xmean),cbind(1,x),cbind(1,tapply(x,saind, mean)),saind,(sig.e),(sig.u),nd)
-  a3<-g3((sig.e),(sig.u),nd)
+
   mse1   <- a1+a2+2*a3
 }
 
 
+# Components mse_prasad_rao
+g1 <- function(sigmau2,
+               sigmae2,
+               n_smp){
+  tmp <- ((sigmau2)/(sigmau2 + sigmae2/n_smp)) * (sigmae2/n_smp)
+  tmp[is.nan(tmp)] <- 0
+  return(tmp)
+}
 
+g2 <- function(sigmau2,
+               sigmae2,
+               n_smp,
+               Xmean,
+               X,
+               xmean,
+               area){
+
+  gamma_d <- sigmau2 /(sigmau2 + (sigmae2/n_smp))
+
+  u_area <- row.names(Xmean)
+  p <- ncol(X)
+  m <- nrow(Xmean)
+  m_in <- length(unique(area))
+
+  xmean <- include_dom_unobs(matrix(unlist(nlme::gapply(object = data.frame(X),
+                                                        FUN    = colMeans,
+                                                        groups = area)),
+                                    nrow  = m_in,
+                                    ncol  = p,
+                                    byrow = TRUE),
+                             obs_dom = row.names(Xmean) %in% area)
+
+  X_vec <- Xmean - gamma_d * xmean
+
+  sum_Mitte <- matrix(0, p, p)
+
+  for(i in 1:m){
+    x_areawise <- X[area == u_area[i],]
+    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i]/n_smp[i]) * matrix(1, n_smp[i], n_smp[i]))
+
+    print(paste(dim(x_areawise), dim(V_inv)))
+
+    sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
+  }
+
+  g2_res <- rep(NA, m)
+
+  for(i in 1:m){
+    g2_res[i] <- t(X_vec[i,]) %*% solve(sum_Mitte) %*% X_vec[i,]
+  }
+  return(g2_res)
+
+}
 
 
 
