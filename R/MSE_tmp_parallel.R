@@ -11,12 +11,18 @@ mse_par <- function(framework,
 
   if(transformation == "no") {
 
+    # out of sample (!!!)
     mse_out <- mse_prasad_rao(framework      = framework,
                               point_estim    = point_estim,
-                              fixed          = fixed,
-                              transformation = transformation,
-                              interval       = interval,
-                              threshold      = threshold)
+                              fixed          = fixed)
+
+    successful_bootstraps <- NULL
+    MSE <- data.frame(Domain = names(framework$pop_area_size),
+                      Mean   = mse_out)
+
+    return(list(MSE                   = MSE,
+                successful_bootstraps = successful_bootstraps
+    ))
 
   }
 
@@ -239,14 +245,20 @@ mse_prasad_rao <- function(framework,
                area    = framework$smp_domains_vec
   )
 
+  out_g3 <- g3(sigmau2  = point_estim$model_par$sigmau2est,
+               sigmae2  = point_estim$model_par$sigmae2est,
+               n_smp    = include_dom_unobs(x       = framework$n_smp,
+                                            obs_dom = framework$dist_obs_dom),
+               X        = model.matrix(fixed, framework$smp_data),
+               area     = framework$smp_domains_vec,
+               pop_area = row.names(framework$pop_mean.mat))
 
+  mse1   <- out_g1 + out_g2 + 2*out_g3
 
-
-  mse1   <- a1+a2+2*a3
 }
 
 
-# Components mse_prasad_rao
+# Components g1, g2, g3 mse_prasad_rao
 g1 <- function(sigmau2,
                sigmae2,
                n_smp){
@@ -260,7 +272,6 @@ g2 <- function(sigmau2,
                n_smp,
                Xmean,
                X,
-               xmean,
                area){
 
   gamma_d <- sigmau2 /(sigmau2 + (sigmae2/n_smp))
@@ -284,9 +295,8 @@ g2 <- function(sigmau2,
 
   for(i in 1:m){
     x_areawise <- X[area == u_area[i],]
-    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i]/n_smp[i]) * matrix(1, n_smp[i], n_smp[i]))
-
-    print(paste(dim(x_areawise), dim(V_inv)))
+    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i]/n_smp[i]) *
+                               matrix(1, n_smp[i], n_smp[i]))
 
     sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
   }
@@ -298,6 +308,46 @@ g2 <- function(sigmau2,
   }
   return(g2_res)
 
+}
+
+g3 <- function(sigmau2,
+               sigmae2,
+               n_smp,
+               X,
+               area,
+               pop_area){
+
+  t <- length(n_smp)
+  k <- (ncol(X)-1)
+  term <- (sum(n_smp) - t - k + 1)^(-1)
+
+  sum_ni2_xi_xi <- matrix(0, k + 1, k + 1)
+
+  for(i in 1:t){
+    if(n_smp[i] != 0) {
+      x_areawise <- X[area == pop_area[i],]
+      smp_mean_xi <- apply(x_areawise, MARGIN = 2, FUN = mean)
+      sum_ni2_xi_xi <- sum_ni2_xi_xi + n_smp[i]^2 * smp_mean_xi %*% t(smp_mean_xi)
+    }
+  }
+
+  n_star <- sum(n_smp) - sum(diag(solve(t(X) %*% X) %*% sum_ni2_xi_xi))
+
+  M <- diag(nrow(X)) - X %*% solve(t(X) %*% X) %*% t(X)
+  n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
+
+  var_sig.e <- 2 * term * sigmae2^2
+  var_sig.u <- 2 * n_star^(-2) * (term * (t - 1) * (sum(n_smp) - k) * sigmae2^2 +
+                                    2 * n_star * sigmae2 * sigmau2 +
+                                    n_star_star * sigmau2^2)
+  cov_sig.e_sig.u <- -(t - 1) * n_star^(-1) * var_sig.e
+
+  res_g3 <- n_smp^(-2) * (sigmau2 + sigmae2/n_smp)^(-3) *
+    (sigmae2^2 * var_sig.u +
+       sigmau2^2 * var_sig.e -
+       2 * sigmae2 * sigmau2 * cov_sig.e_sig.u)
+  res_g3[is.nan(res_g3)] <- 0
+  return(res_g3)
 }
 
 
