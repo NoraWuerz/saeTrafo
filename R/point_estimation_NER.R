@@ -95,8 +95,8 @@ point_estim <- function(framework,
   }
 
   # if transformation == "log" or "log.shift" and ...
-  # ... pop_cov is available compute bc-agg (!!!Zitieren!!!)
-  # ... pop_cov is not available compute bc-naive-agg
+  # ... pop_cov is available compute bc-agg from Wuerz et. al.
+  # ... pop_cov is not available compute bc-naive-agg see Wuerz et. al.
 
   if (transformation == "log" | transformation == "log.shift") {
 
@@ -153,7 +153,6 @@ point_estim <- function(framework,
     }
   }
 
-
   return(list(ind            = ind,
               optimal_lambda = optimal_lambda,
               shift_par      = shift_par,
@@ -197,10 +196,8 @@ model_par <- function(framework,
 }
 
 # Function for synthetic part estimation ---------------------------------------
-
 # Function for small area estimation specific kernel-density estimation
-# method for the synthetic part
-
+# method for the synthetic part see Wuerz et. al.
 syn_est <- function(framework,
                     est_par,
                     fixed,

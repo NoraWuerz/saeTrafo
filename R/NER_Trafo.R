@@ -62,15 +62,15 @@ NER_Trafo <- function(fixed,
 
     # The function parametric_bootstrap can be found in script mse_estimation.R
 
-    mse_estimates <- mse_par(framework      = framework,
-                             point_estim    = point_estim,
-                             fixed          = fixed,
-                             transformation = transformation,
-                             interval       = interval,
-                             threshold      = threshold,
-                             B              = B,
-                             cpus           = cpus,
-                             parallel_mode  = parallel_mode
+    mse_estimates <- mse(framework      = framework,
+                         point_estim    = point_estim,
+                         fixed          = fixed,
+                         transformation = transformation,
+                         interval       = interval,
+                         threshold      = threshold,
+                         B              = B,
+                         cpus           = cpus,
+                         parallel_mode  = parallel_mode
     )
 
     NER_out <- list(
