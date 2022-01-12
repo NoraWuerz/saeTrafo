@@ -1,5 +1,98 @@
 #' Nested error regression Model (Battese) with transformations
 #'
+#' Function \code{NER_Trafo} estimates means ...
+#'
+#' @param fixed a two-sided linear formula object describing the
+#' fixed-effects part of the nested error linear regression model with the
+#' dependent variable on the left of a ~ operator and the explanatory
+#' variables on the right, separated by + operators. The argument corresponds
+#' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
+#' @param pop_area_size a vector containing the number of individuals within
+#' each domain. This numeric vector is named with the domain labels.
+#' (?ueberarbeiten?)
+#' @param pop_mean is a named list. Each element of the list contains the
+#' population means for the p covariates for a specicfic domain. The list is
+#' named with the respective domain name. The numeric vector within the list is
+#' named with the covariate names. The covarites right of the ~ operator in
+#' \code{fixed} need to comprise.
+#' @param pop_cov is a named list. Each element of the list contains the
+#' domain-specific covariance matrice for p covariates for a specicfic domain.
+#' The list is named with the respective domain name. The matrix within the list
+#' has row and column names with the respective covariate names. The covarites
+#' right of the ~ operator in \code{fixed} need to comprise.
+#' @param pop_data a data frame that needs to comprise the variables
+#' named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
+#' variables, and \code{pop_domains}.
+#' @param pop_domains a character string containing the name of a variable that
+#' indicates domains in the population data. The variable can be numeric or
+#' a factor but needs to be of the same class as the variable named in
+#' \code{smp_domains}.
+#' @param smp_data a data frame that needs to comprise all variables named in
+#' \code{fixed} and \code{smp_domains}.
+#' @param smp_domains a character string containing the name of a variable
+#' that indicates domains in the sample data. The variable can be numeric or a
+#' factor but needs to be of the same class as the variable named in
+#' \code{pop_domains}.
+#' @param threshold A threshold for the pooled or non pooled density for the
+#' adjustment.
+#' @param transformation a character string. Five different transformation
+#' types for the dependent variable can be chosen (i) no transformation ("no");
+#' (ii) log transformation ("log"); (iii) Log-Shift transformation ("log.shift").
+#' Defaults to \code{"log.shift"}.
+#' @param interval a string equal to 'default' or a numeric vector containing a
+#' lower and upper limit determining an interval for the estimation of the optimal
+#' parameter. The interval is passed to function \code{\link[stats]{optimize}} for
+#' the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox,
+#' c(0,2) for Dual and an interval based on the range of y for Log-Shift
+#' transformation. If the convergence fails, it is often advisable to choose a
+#' smaller more suitable interval. For right skewed distributions, the negative values may be excluded,
+#' also values larger than 1 are seldom observed.
+#' @param MSE if \code{TRUE}, MSE estimates are provided. Defaults
+#' to \code{FALSE}.
+#' @param B a number determining the number of bootstrap replications in the
+#' parametric bootstrap approach. The number must be greater than 1. Defaults to
+#' 50. For practical applications, values larger than 200 are recommended (see
+#' also \cite{Molina, I. and Rao, J.N.K. (2010)}).
+#' @param seed an integer to set the seed for the random number generator. For
+#' the usage of random number generation, see Details. If seed is set to
+#' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
+#' @param parallel_mode modus of parallelization, defaults to an automatic
+#' selection of a suitable mode, depending on the operating system, if the
+#' number of \code{cpus} is chosen higher than 1. For details, see
+#' \code{\link[parallelMap]{parallelStart}}.
+#' @param cpus number determining the kernels that are used for the
+#' parallelization. Defaults to 1. For details, see
+#' \code{\link[parallelMap]{parallelStart}}.
+#' @return An object of class "NER", "SAE_Trafo" that provides estimators for
+#' regional means optionally corresponding MSE estimates. Several generic
+#' functions have methods for the returned object. For a full list and
+#' descriptions of the components of objects of class "SAE_Trafo", see
+#' \code{\link{SAE_TrafoObject}}.
+#' @details For the parametric bootstrap and the density estimation
+#' approach random number generation is used. Thus, a seed is set by the
+#' argument \code{seed}. \cr \cr
+#' Since the sample observations often cannot be identified in practical
+#' applications, a modified approach by Guadarrama et al. (2016) called census EBP
+#' is implemented for the point estimation. For the MSE estimation, the bootstrap
+#' sample is not extracted from the superpopulation, but generated by the estimated
+#' model parameters. The lower the ratio between the sample and the population size,
+#' the closer are the results to the proposed approach by Molina and Rao (2010).
+#' @references
+#' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
+#' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
+#' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
+#' @seealso \code{\link{emdiObject}}, \code{\link[nlme]{lme}},
+#' \code{\link{estimators.emdi}},  \code{\link{plot.emdi}},
+#' \code{\link{emdi_summaries}}
+#' @examples
+#' @export
+#' @importFrom nlme fixed.effects VarCorr lme random.effects
+#' @importFrom parallelMap parallelStop parallelLapply parallelLibrary
+#' @importFrom parallel detectCores clusterSetRNGStream
+#' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize
+#' qnorm quantile residuals rnorm sd
+#' @importFrom utils flush.console
+#' @importFrom stats fitted
 
 
 NER_Trafo <- function(fixed,

@@ -2,19 +2,24 @@
 % Please edit documentation in R/NER_Trafo.R
 \name{NER_Trafo}
 \alias{NER_Trafo}
-\title{Empirical Best Prediction for disaggregated indicators}
+\title{Nested error regression Model (Battese) with transformations}
 \usage{
 NER_Trafo(
   fixed,
-  pop_area_size,
-  pop_mean,
-  pop_cov,
-  pop_domains,
+  pop_area_size = NULL,
+  pop_mean = NULL,
+  pop_cov = NULL,
+  pop_data = NULL,
+  pop_domains = NULL,
   smp_data,
   smp_domains,
+  threshold = 30,
   B = 50,
   transformation = "log.shift",
+  interval = "default",
   MSE = FALSE,
+  parallel_mode = ifelse(grepl("windows", .Platform$OS.type), "socket", "multicore"),
+  cpus = 1,
   seed = 123
 )
 }
@@ -24,6 +29,26 @@ fixed-effects part of the nested error linear regression model with the
 dependent variable on the left of a ~ operator and the explanatory
 variables on the right, separated by + operators. The argument corresponds
 to the argument \code{fixed} in function \code{\link[nlme]{lme}}.}
+
+\item{pop_area_size}{a vector containing the number of individuals within
+each domain. This numeric vector is named with the domain labels.
+(?ueberarbeiten?)}
+
+\item{pop_mean}{is a named list. Each element of the list contains the
+population means for the p covariates for a specicfic domain. The list is
+named with the respective domain name. The numeric vector within the list is
+named with the covariate names. The covarites right of the ~ operator in
+\code{fixed} need to comprise.}
+
+\item{pop_cov}{is a named list. Each element of the list contains the
+domain-specific covariance matrice for p covariates for a specicfic domain.
+The list is named with the respective domain name. The matrix within the list
+has row and column names with the respective covariate names. The covarites
+right of the ~ operator in \code{fixed} need to comprise.}
+
+\item{pop_data}{a data frame that needs to comprise the variables
+named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
+variables, and \code{pop_domains}.}
 
 \item{pop_domains}{a character string containing the name of a variable that
 indicates domains in the population data. The variable can be numeric or
@@ -38,39 +63,18 @@ that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
 
-\item{B}{a number determining the number of bootstrap populations in the
-parametric bootstrap approach (see also \cite{Gonzalez-Manteiga et al. (2008)})
-used in the MSE estimation. The number must be greater than 1. Defaults to 50.
-For practical applications, values larger than 200 are recommended (see also
-\cite{Molina, I. and Rao, J.N.K. (2010)}).}
+\item{threshold}{A threshold for the pooled or non pooled density for the
+adjustment.}
+
+\item{B}{a number determining the number of bootstrap replications in the
+parametric bootstrap approach. The number must be greater than 1. Defaults to
+50. For practical applications, values larger than 200 are recommended (see
+also \cite{Molina, I. and Rao, J.N.K. (2010)}).}
 
 \item{transformation}{a character string. Five different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
-(ii) log transformation ("log"); (iii) Box-Cox transformation ("box.cox");
-(iv) Dual transformation ("dual"); (v) Log-Shift transformation ("log.shift").
-Defaults to \code{"box.cox"}.}
-
-\item{MSE}{if \code{TRUE}, MSE estimates using a parametric bootstrap approach
-are calculated (see also \cite{Gonzalez-Manteiga et al. (2008)}). Defaults
-to \code{FALSE}.}
-
-\item{seed}{an integer to set the seed for the random number generator. For
-the usage of random number generation, see Details. If seed is set to
-\code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
-
-\item{pop_data}{a data frame that needs to comprise the variables
-named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
-variables, and \code{pop_domains}.}
-
-\item{threshold}{a number defining a threshold. Alternatively, a threshold may
-be defined as a \code{function} of \code{y} returning a numeric value. Such a
-function will be evaluated once for the point estimation and in each iteration
-of the parametric bootstrap. A threshold is needed for calculation e.g. of
-head count ratios and poverty gaps. The  argument defaults to \code{NULL}.
-In this case, the threshold is set to 60\\% of the median of the variable that
-is selected as dependent variable similary to the at-risk-of-poverty rate
-used in the EU (see also \cite{Social Protection Committee 2001}). However,
-any desired threshold can be chosen.}
+(ii) log transformation ("log"); (iii) Log-Shift transformation ("log.shift").
+Defaults to \code{"log.shift"}.}
 
 \item{interval}{a string equal to 'default' or a numeric vector containing a
 lower and upper limit determining an interval for the estimation of the optimal
@@ -81,37 +85,21 @@ transformation. If the convergence fails, it is often advisable to choose a
 smaller more suitable interval. For right skewed distributions, the negative values may be excluded,
 also values larger than 1 are seldom observed.}
 
-\item{L}{a number determining the number of Monte-Carlo simulations that
-must be at least 1. Defaults to 50. For practical applications, values
-larger than 200 are recommended (see also
-\cite{Molina, I. and Rao, J.N.K. (2010)}).}
+\item{MSE}{if \code{TRUE}, MSE estimates are provided. Defaults
+to \code{FALSE}.}
 
-\item{boot_type}{character string to choose between different MSE estimation
-procedures,currently a \code{"parametric"} and a semi-parametric \code{"wild"}
-bootstrap are possible. Defaults to \code{"parametric"}.}
-
-\item{parallel_mode}{modus of parallelization, defaults to an automatic selection
-of a suitable mode, depending on the operating system, if the number of
-\code{cpus} is chosen higher than 1. For details, see
+\item{parallel_mode}{modus of parallelization, defaults to an automatic
+selection of a suitable mode, depending on the operating system, if the
+number of \code{cpus} is chosen higher than 1. For details, see
 \code{\link[parallelMap]{parallelStart}}.}
 
 \item{cpus}{number determining the kernels that are used for the
 parallelization. Defaults to 1. For details, see
 \code{\link[parallelMap]{parallelStart}}.}
 
-\item{custom_indicator}{a list of functions containing the indicators to be
-calculated additionally. Such functions must and must only depend on the
-target variable \code{y} and the \code{threshold}.
-Defaults to \code{NULL}.}
-
-\item{na.rm}{if \code{TRUE}, observations with \code{NA} values are deleted
-from the population and sample data. For the EBP procedure complete observations
-are required. Defaults to \code{FALSE}.}
-
-\item{weights}{a character string containing the name of a variable that
-indicates weights in the sample data. If a character string is provided
-a weighted version of the ebp will be used.The variable has to be numeric.
-Defaults to \code{NULL}.}
+\item{seed}{an integer to set the seed for the random number generator. For
+the usage of random number generation, see Details. If seed is set to
+\code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
 }
 \value{
 An object of class "ebp", "emdi" that provides estimators for regional
@@ -121,26 +109,14 @@ returned object. For a full list and descriptions of the components of objects
 of class "emdi", see \code{\link{emdiObject}}.
 }
 \description{
-Function \code{ebp} estimates indicators using the Empirical Best Prediction
-approach by \cite{Molina and Rao (2010)}. Point predictions of indicators are
-obtained by Monte-Carlo approximations. Additionally, mean squared error (MSE)
-estimation can be conducted by using a parametric bootstrap approach (see
-also \cite{Gonzalez-Manteiga et al. (2008)}). The unit-level model of
-\cite{Battese, Harter and Fuller (1988)} is fitted by the restricted maximum
-likelihood (REML) method and one of
-five different transformation types for the dependent variable can be chosen.
-This approach can be extended to data under informative sampling using weights
-and is based on \cite{Guadarrama et al. (2018)}. Model  estimation combines
-the uni-level model of \cite{Battese, Harter and Fuller (1988)} and the approach
-of \cite{You and Rao (2002)} using survey weights. At the moment, only the log-
-transformation is supported for this method.
+Function \code{NER_Trafo} estimates means ...
 }
 \details{
 For Monte-Carlo approximations and in the parametric bootstrap
 approach random number generation is used. Thus, a seed is set by the
 argument \code{seed}. \cr \cr
 The set of predefined indicators includes the mean, median, four further quantiles
-(10\\%, 25\\%, 75\\% and 90\\%), head count ratio, poverty gap, Gini coefficient
+(10\%, 25\%, 75\% and 90\%), head count ratio, poverty gap, Gini coefficient
 and the quintile share ratio. \cr \cr
 Since the sample observations often cannot be identified in practical
 applications, a modified approach by Guadarrama et al. (2016) called census EBP
@@ -149,78 +125,10 @@ sample is not extracted from the superpopulation, but generated by the estimated
 model parameters. The lower the ratio between the sample and the population size,
 the closer are the results to the proposed approach by Molina and Rao (2010).
 }
-\examples{
-\donttest{
-# Loading data - population and sample data
-data("eusilcA_pop")
-data("eusilcA_smp")
-
-# Example 1: With default setting but na.rm=TRUE
-emdi_model <- ebp(
-  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  na.rm = TRUE
-)
-
-
-# Example 2: With MSE, two additional indicators and function as threshold -
-# Please note that the example runs for several minutes. For a short check
-# change L and B to lower values.
-emdi_model <- ebp(
-  fixed = eqIncome ~ gender + eqsize + cash +
-    self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-    fam_allow + house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  threshold = function(y) {
-    0.6 * median(y)
-  }, transformation = "log",
-  L = 50, MSE = TRUE, boot_type = "wild", B = 50, custom_indicator =
-    list(
-      my_max = function(y, threshold) {
-        max(y)
-      },
-      my_min = function(y, threshold) {
-        min(y)
-      }
-    ), na.rm = TRUE, cpus = 1
-)
-
-# Example 3: With default setting but na.rm=TRUE under informative sampling.
-emdi_model <- ebp(
-  fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow +
-    house_allow + cap_inv + tax_adj, pop_data = eusilcA_pop,
-  pop_domains = "district", smp_data = eusilcA_smp, smp_domains = "district",
-  weights = "weight", transformation = "log", na.rm = TRUE
-)
-}
-}
 \references{
 Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
-Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
-a small-area EBLUP. Journal of Statistical Computation and Simulation,
-78:5, 443-462. \cr \cr
-Guadarrama, M., Molina, I. and Rao, J.N.K. (2016). A comparison of small area
-estimation methods for poverty mapping. Joint Issue: Statistics in Transition
-New Series Survey Methodology, Vol.17, No. 1, 41–66. \cr \cr
-Guadarrama, M., Molina, I. and Rao, J.N.K. (2018). Small area estimation of
-general parameters under complex sampling designs. Computational Statistics &
-Data Analysis, Vol. 121, 20-40. \cr \cr
-Kreutzmann, A., Pannier, S., Rojas-Perilla, N., Schmid, T., Templ, M.
-and Tzavidis, N. (2019). The R Package emdi for Estimating and
-Mapping Regionally Disaggregated Indicators, Journal of Statistical Software,
-Vol. 91, No. 7, 1--33, \url{doi:10.18637/jss.v091.i07} \cr \cr
-Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
-indicators. The Canadian Journal of Statistics, Vol. 38, No.3, 369-385. \cr \cr
-Social Protection Committee (2001). Report on indicators in the field of
-poverty and social exclusions, Technical Report, European Union.
-You, Y., Rao, J.N.K. (2002).  A pseudo-empirical best linear unbiased prediction
-approach to small area estimation using survey weights. The  Canadian Journal
-of Statistics. Vol. 30, No. 3, 431–439.
 }
 \seealso{
 \code{\link{emdiObject}}, \code{\link[nlme]{lme}},

@@ -1,12 +1,23 @@
 Package: saeTrafo
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Transformations for unit-level small area models
+Version: 1.0.0
+Date: 2022-01-12
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Transformations for unit-level small area models
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Nora", "Würz", role=c("aut", "cre"), email = "nora.wuerz@fu-berlin.de")
+Description: Transformations for unit-level small area models (describe more). 
+    For the log and log-shift transformation methodology is made available which 
+    offer a estimation of small area means using only aggregated data.
+Depends: R (>= 3.5.0)
+License: GPL-2
+LazyData: true
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
+Copyright: inst/COPYRIGHTS
 RoxygenNote: 7.1.2
+Imports: nlme, emdi, stats, sfsmisc, parallelMap
+NeedsCompilation: no
+Packaged: 2021-07-07 10:35:53 UTC; span
+Author: Nora Würz [aut]
+Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
+Repository: CRAN
+Date/Publication: 2021-07-07 16:20:05 UTC
+
