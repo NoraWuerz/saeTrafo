@@ -88,8 +88,7 @@
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
 #' @importFrom stats fitted
-
-
+#' @importFrom emdi data_transformation estimators
 
 NER_Trafo <- function(fixed,
                       pop_area_size = NULL,
@@ -195,6 +194,6 @@ NER_Trafo <- function(fixed,
     )
   }
 
-  class(NER_out) <- c("NER", "SAE_Trafo")
+  class(NER_out) <- c("NER", "saeTrafo")
   return(NER_out)
 }

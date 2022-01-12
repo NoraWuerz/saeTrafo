@@ -7,7 +7,7 @@
 \usage{
 estimators(object, indicator, MSE, CV, ...)
 
-\method{estimators}{saeTrafo}(object, indicator = "all", MSE = FALSE, CV = FALSE, ...)
+\method{estimators}{saeTrafo}(object, indicator, MSE, CV, ...)
 }
 \arguments{
 \item{object}{an object of type "emdi", representing point and,
