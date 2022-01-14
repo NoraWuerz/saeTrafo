@@ -30,9 +30,9 @@ dependent variable on the left of a ~ operator and the explanatory
 variables on the right, separated by + operators. The argument corresponds
 to the argument \code{fixed} in function \code{\link[nlme]{lme}}.}
 
-\item{pop_area_size}{a vector containing the number of individuals within
-each domain. This numeric vector is named with the domain labels.
-(?ueberarbeiten?)}
+\item{pop_area_size}{A named numeric vector containing the number of
+individuals within each domain. This numeric vector is named with the
+domain names.}
 
 \item{pop_mean}{is a named list. Each element of the list contains the
 population means for the p covariates for a specicfic domain. The list is
@@ -102,11 +102,11 @@ the usage of random number generation, see Details. If seed is set to
 \code{NULL}, seed is chosen randomly. Defaults to \code{123}.}
 }
 \value{
-An object of class "NER", "SAE_Trafo" that provides estimators for
+An object of class "NER", "saeTrafo" that provides estimators for
 regional means optionally corresponding MSE estimates. Several generic
 functions have methods for the returned object. For a full list and
-descriptions of the components of objects of class "SAE_Trafo", see
-\code{\link{SAE_TrafoObject}}.
+descriptions of the components of objects of class "saeTrafo", see
+\code{\link{saeTrafoObject}}.
 }
 \description{
 Function \code{NER_Trafo} estimates means ...
@@ -123,7 +123,7 @@ Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
 }
 \seealso{
-\code{\link{SAE_TrafoObject}}, \code{\link[nlme]{lme}},
-\code{\link{estimators.sae_Trafo}},  \code{\link{plot.sae_Trafo}},
-\code{\link{sae_Trafo_summaries}}
+\code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},
+\code{\link{estimators.saeTrafo}},  \code{\link{plot.saeTrafo}},
+\code{\link{summaries.saeTrafo}}
 }

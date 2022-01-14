@@ -37,8 +37,8 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       pos <- pop_data[pop_domains] == names(pop_area_size)[i]
       pop_mean.mat[i, ] <- apply(model.matrix(fixed, pop_data[pos, ]), 2,
                                  FUN = mean)
-      pop_cov.mat[i, ] <- c(cov(model.matrix(fixed, data_pop[pos, ]),
-                                model.matrix(fixed, data_pop[pos, ])))
+      pop_cov.mat[i, ] <- c(stats::cov(model.matrix(fixed, data_pop[pos, ]),
+                                       model.matrix(fixed, data_pop[pos, ])))
     }
 
     pop_vars <- c(mod_vars, pop_domains)

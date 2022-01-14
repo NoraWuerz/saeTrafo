@@ -239,8 +239,8 @@ syn_est <- function(framework,
     }
 
     est_synthetic_density <- stats::density(x      = input,
-                                            bw     = bw.SJ(x      = input,
-                                                           method = "dpi"),
+                                            bw     = stats::bw.SJ(x      = input,
+                                                                  method = "dpi"),
                                             kernel = "epanechnikov"
     )
 

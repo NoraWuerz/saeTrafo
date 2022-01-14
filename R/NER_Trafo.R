@@ -7,9 +7,9 @@
 #' dependent variable on the left of a ~ operator and the explanatory
 #' variables on the right, separated by + operators. The argument corresponds
 #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
-#' @param pop_area_size a vector containing the number of individuals within
-#' each domain. This numeric vector is named with the domain labels.
-#' (?ueberarbeiten?)
+#' @param pop_area_size A named numeric vector containing the number of
+#' individuals within each domain. This numeric vector is named with the
+#' domain names.
 #' @param pop_mean is a named list. Each element of the list contains the
 #' population means for the p covariates for a specicfic domain. The list is
 #' named with the respective domain name. The numeric vector within the list is
@@ -63,11 +63,11 @@
 #' @param cpus number determining the kernels that are used for the
 #' parallelization. Defaults to 1. For details, see
 #' \code{\link[parallelMap]{parallelStart}}.
-#' @return An object of class "NER", "SAE_Trafo" that provides estimators for
+#' @return An object of class "NER", "saeTrafo" that provides estimators for
 #' regional means optionally corresponding MSE estimates. Several generic
 #' functions have methods for the returned object. For a full list and
-#' descriptions of the components of objects of class "SAE_Trafo", see
-#' \code{\link{SAE_TrafoObject}}.
+#' descriptions of the components of objects of class "saeTrafo", see
+#' \code{\link{saeTrafoObject}}.
 #' @details For the parametric bootstrap and the density estimation
 #' approach random number generation is used. Thus, a seed is set by the
 #' argument \code{seed}. \cr \cr
@@ -76,10 +76,9 @@
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 #' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
-#' @seealso \code{\link{SAE_TrafoObject}}, \code{\link[nlme]{lme}},
-#' \code{\link{estimators.sae_Trafo}},  \code{\link{plot.sae_Trafo}},
-#' \code{\link{sae_Trafo_summaries}}
-#' @examples
+#' @seealso \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},
+#' \code{\link{estimators.saeTrafo}},  \code{\link{plot.saeTrafo}},
+#' \code{\link{summaries.saeTrafo}}
 #' @export
 #' @importFrom nlme fixed.effects VarCorr lme random.effects
 #' @importFrom parallelMap parallelStop parallelLapply parallelLibrary
@@ -87,7 +86,7 @@
 #' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize
 #' qnorm quantile residuals rnorm sd
 #' @importFrom utils flush.console
-#' @importFrom stats fitted
+#' @importFrom stats fitted density bw.SJ cov
 #' @importFrom emdi data_transformation estimators
 
 NER_Trafo <- function(fixed,

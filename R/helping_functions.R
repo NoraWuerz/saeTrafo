@@ -34,4 +34,11 @@ include_dom_unobs <- function(x, obs_dom) {
   }
 }
 
+throw_class_error <- function(object, subclass){
+  if(!inherits(object, "saeTrafo")){
+    error_string <- paste0(subclass, " object has to be created by the saeTrafo package for saeTrafo methods to work.")
+    stop(error_string)
+  }
+}
+
 
