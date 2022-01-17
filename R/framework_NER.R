@@ -24,12 +24,12 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     N_dom_pop <- length(pop_area_size)
 
     pop_mean.mat <- matrix(data     = NA,
-                           nrow     = length(area_size),
+                           nrow     = length(pop_area_size),
                            ncol     = length(mod_vars) + 1,
                            dimnames = list(names(pop_area_size),
                                            c("intercept", mod_vars)))
     pop_cov.mat <- matrix(data     = NA,
-                          nrow     = length(area_size),
+                          nrow     = length(pop_area_size),
                           ncol     = (length(mod_vars) + 1)^2,
                           dimnames = list(names(pop_area_size),
                                           cov_names(c("intercept", mod_vars))))
@@ -37,8 +37,8 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       pos <- pop_data[pop_domains] == names(pop_area_size)[i]
       pop_mean.mat[i, ] <- apply(model.matrix(fixed, pop_data[pos, ]), 2,
                                  FUN = mean)
-      pop_cov.mat[i, ] <- c(stats::cov(model.matrix(fixed, data_pop[pos, ]),
-                                       model.matrix(fixed, data_pop[pos, ])))
+      pop_cov.mat[i, ] <- c(stats::cov(model.matrix(fixed, pop_data[pos, ]),
+                                       model.matrix(fixed, pop_data[pos, ])))
     }
 
     pop_vars <- c(mod_vars, pop_domains)
