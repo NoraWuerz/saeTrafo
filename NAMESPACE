@@ -2,6 +2,7 @@
 
 S3method(coef,NER)
 S3method(confint,NER)
+S3method(estimators,saeTrafo)
 S3method(family,NER)
 S3method(fitted,NER)
 S3method(formula,NER)

@@ -20,7 +20,7 @@
 #' return of that method.
 #' @export
 
-estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
+estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 
 
 #' Presents point, MSE and/or CV estimates of an emdiObject
@@ -69,12 +69,84 @@ estimators <- function(object, indicator, MSE, CV, ...) UseMethod("estimators")
 #' @rdname estimators
 #' @export
 
-estimators.saeTrafo <- function(object, indicator, MSE, CV, ...){
+estimators.saeTrafo <- function(object, indicator = "Mean", MSE = FALSE, CV = FALSE, ...) {
 
-  throw_class_error(object, "NER")
-  tmp <- object
-  class(tmp) <- c("emdi")
-  emdi::estimators(tmp, indicator, MSE, CV)
+  estimators_check(object = object, indicator = indicator,
+                   MSE = MSE, CV = CV)
 
+  # Only point estimates
+  all_ind <- point_emdi(object = object, indicator = indicator)
+  selected <- colnames(all_ind$ind)[-1]
+
+  if ( MSE == TRUE || CV == TRUE ) {
+    all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
+    colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
+    colnames(all_precisions$ind_cv) <- paste0(colnames(all_precisions$ind_cv), "_CV")
+    combined <- data.frame(all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
+    endings <- c("","_MSE", "_CV")[c(TRUE,MSE,CV)]
+
+    combined <- combined[,c("Domain",paste0(rep(selected,each = length(endings)),
+                                            endings))]
+  } else {
+    combined <- all_ind$ind
+  }
+
+  estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name)
+
+  class(estimators_emdi) <- "estimators.emdi"
+
+  return(estimators_emdi)
 }
+
+# Prints estimators.emdi objects
+#' @export
+
+print.estimators.emdi <- function(x,...) {
+  cat(paste0("Indicator/s: ", x$ind_name, "\n"))
+  print(x$ind)
+}
+
+
+# Tail/head functions ----------------------------------------------------------
+
+
+#' @importFrom utils head
+#' @export
+# CV estimators
+
+head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
+  head(x$ind, n = n, addrownums = addrownums, ...)
+}
+
+#' @importFrom utils tail
+#' @export
+
+tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
+  tail(x$ind, n = n, keepnums = keepnums, ...)
+}
+
+
+# Transforms estimators.emdi objects into a matrix object
+#' @export
+
+as.matrix.estimators.emdi <- function(x,...) {
+  as.matrix(x$ind[,-1])
+}
+
+# Transforms estimators.emdi objects into a dataframe object
+#' @export
+
+as.data.frame.estimators.emdi <- function(x,...) {
+  as.data.frame(x$ind, ...)
+}
+
+# Subsets an estimators.emdi object
+#' @export
+
+subset.estimators.emdi <- function(x, ...) {
+  x <- as.data.frame(x)
+  subset(x = x,  ...)
+}
+
+
 
