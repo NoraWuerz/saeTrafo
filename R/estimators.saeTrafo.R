@@ -55,7 +55,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 
 estimators.saeTrafo <- function(object,  MSE = FALSE, CV = FALSE, ...) {
 
-  indicator <- "Mean"
+  indicator <- c("Mean")
 
   #estimators_check(object = object, indicator = indicator,
   #                 MSE = MSE, CV = CV)
