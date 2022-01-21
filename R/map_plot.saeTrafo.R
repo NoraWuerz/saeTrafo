@@ -175,7 +175,7 @@ plot_real <- function(object,
   map_obj@data[colnames(map_data)] <- map_data
 
 
-  map_obj.fort <- fortify(map_obj, region = map_dom_id)
+  map_obj.fort <- ggplot2::fortify(map_obj, region = map_dom_id)
   map_obj.fort <- merge(map_obj.fort, map_obj@data,
                         by.x = "id", by.y = map_dom_id)
 
