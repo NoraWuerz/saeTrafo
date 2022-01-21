@@ -89,6 +89,7 @@
 #' @importFrom stats fitted density bw.SJ cov
 #' @importFrom emdi data_transformation estimators
 
+
 NER_Trafo <- function(fixed,
                       pop_area_size = NULL,
                       pop_mean = NULL,

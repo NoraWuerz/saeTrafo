@@ -71,8 +71,8 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 
 estimators.saeTrafo <- function(object, indicator = "Mean", MSE = FALSE, CV = FALSE, ...) {
 
-  estimators_check(object = object, indicator = indicator,
-                   MSE = MSE, CV = CV)
+  #estimators_check(object = object, indicator = indicator,
+  #                 MSE = MSE, CV = CV)
 
   # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
@@ -93,7 +93,7 @@ estimators.saeTrafo <- function(object, indicator = "Mean", MSE = FALSE, CV = FA
 
   estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name)
 
-  class(estimators_emdi) <- "estimators.emdi"
+  class(estimators_emdi) <- "estimators.saeTrafo"
 
   return(estimators_emdi)
 }
@@ -101,7 +101,7 @@ estimators.saeTrafo <- function(object, indicator = "Mean", MSE = FALSE, CV = FA
 # Prints estimators.emdi objects
 #' @export
 
-print.estimators.emdi <- function(x,...) {
+print.estimators.saeTrafo <- function(x,...) {
   cat(paste0("Indicator/s: ", x$ind_name, "\n"))
   print(x$ind)
 }
@@ -114,36 +114,36 @@ print.estimators.emdi <- function(x,...) {
 #' @export
 # CV estimators
 
-head.estimators.emdi <- function(x, n = 6L, addrownums = NULL, ...) {
+head.estimators.saeTrafo <- function(x, n = 6L, addrownums = NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
 }
 
 #' @importFrom utils tail
 #' @export
 
-tail.estimators.emdi <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
+tail.estimators.saeTrafo <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
   tail(x$ind, n = n, keepnums = keepnums, ...)
 }
 
 
-# Transforms estimators.emdi objects into a matrix object
+# Transforms estimators.saeTrafo objects into a matrix object
 #' @export
 
-as.matrix.estimators.emdi <- function(x,...) {
+as.matrix.estimators.saeTrafo <- function(x,...) {
   as.matrix(x$ind[,-1])
 }
 
-# Transforms estimators.emdi objects into a dataframe object
+# Transforms estimators.saeTrafo objects into a dataframe object
 #' @export
 
-as.data.frame.estimators.emdi <- function(x,...) {
+as.data.frame.estimators.saeTrafo <- function(x,...) {
   as.data.frame(x$ind, ...)
 }
 
-# Subsets an estimators.emdi object
+# Subsets an estimators.saeTrafo object
 #' @export
 
-subset.estimators.emdi <- function(x, ...) {
+subset.estimators.saeTrafo <- function(x, ...) {
   x <- as.data.frame(x)
   subset(x = x,  ...)
 }
