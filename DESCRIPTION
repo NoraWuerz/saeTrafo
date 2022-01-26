@@ -13,7 +13,8 @@ LazyData: true
 Encoding: UTF-8
 Copyright: inst/COPYRIGHTS
 RoxygenNote: 7.1.2
-Imports: nlme, emdi, stats, sfsmisc, parallelMap
+Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
+    openxlsx, reshape2
 Suggests: simFrame
 NeedsCompilation: no
 Packaged: 2021-07-07 10:35:53 UTC; span
