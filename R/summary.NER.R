@@ -3,6 +3,7 @@
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
+#' @importFrom stats shapiro.test
 #' @rdname saeTrafo_summaries
 
 summary.NER <- function(object, ...) {
@@ -44,9 +45,9 @@ summary.NER <- function(object, ...) {
   if (length(residuals(object$model, level = 0, type = "pearson")) > 3 &
       length(residuals(object$model, level = 0, type = "pearson")) < 5000) {
     shapiro_p_res <-
-      shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
+      stats::shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
     shapiro_W_res <-
-      shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
+      stats::shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
   } else {
     warning("Number of observations exceeds 5000 or is lower then 3 and thus the
             Shapiro-Wilk test is not applicable for the residuals.")
