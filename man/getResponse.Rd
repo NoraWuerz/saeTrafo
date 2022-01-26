@@ -26,5 +26,5 @@ package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getResponse}}.
 }
 \seealso{
-\code{\link{NERTrafo}}, \code{\link[nlme]{getResponse}}
+\code{\link{NER_Trafo}}, \code{\link[nlme]{getResponse}}
 }

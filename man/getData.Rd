@@ -26,5 +26,5 @@ itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getData}}.
 }
 \seealso{
-\code{\link{NER}}, \code{\link[nlme]{getData}}
+\code{\link{NER_Trafo}}, \code{\link[nlme]{getData}}
 }

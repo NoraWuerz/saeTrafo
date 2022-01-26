@@ -41,8 +41,11 @@ throw_class_error <- function(object, subclass){
   }
 }
 
+
+#' @importFrom stats model.frame model.matrix model.response
+
 makeXY <- function(formula, data){
-  mf <- model.frame(formula=formula, data=data)
+  mf <- stats::model.frame(formula=formula, data=data)
   x <- model.matrix(attr(mf, "terms"), data=mf)
   y <- model.response(mf)
 
