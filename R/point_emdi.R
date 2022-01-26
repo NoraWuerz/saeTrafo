@@ -59,7 +59,7 @@ point_emdi <- function(object, indicator = "all") {
   }
 
   if (any(indicator == "custom") || any(indicator == "Custom")) {
-     indicator = c(indicator[!(indicator == "custom" | indicator == "Custom")],
+    indicator = c(indicator[!(indicator == "custom" | indicator == "Custom")],
                   colnames(object$ind[-c(1,2,3,4,5,6,7,8,9,10,11)]))
   }
 
@@ -93,5 +93,3 @@ point_emdi <- function(object, indicator = "all") {
 
   return(point_emdi)
 }
-
-
