@@ -66,7 +66,7 @@ map_plot <- function(object,
                      return_data = FALSE
                      ){
 
-  indicator <- "Mean"
+  indicator <- c("Mean")
 
   if (is.null(map_obj)) {
     message("No Map Object has been provided. An artificial polygone is used for
@@ -107,12 +107,12 @@ map_pseudo <- function(object, indicator, panelplot, MSE, CV)
   tplot <- get_polygone(values = values)
 
   if (panelplot) {
-    ggplot(tplot, aes(x = x, y = y)) + geom_polygon(aes(group=id, fill = value))
-    + facet_wrap( ~ variable, ncol = ceiling(sqrt(length(unique(tplot$variable)))))
+    ggplot2::ggplot(tplot, aes(x = x, y = y)) + ggplot2::geom_polygon(aes(group=id, fill = value))
+    + ggplot2::facet_wrap( ~ variable, ncol = ceiling(sqrt(length(unique(tplot$variable)))))
   } else {
     for (ind in indicator) {
-      print(ggplot(tplot[tplot$variable == ind,], aes(x = x, y = y)) +
-              ggtitle(paste0(ind)) + geom_polygon(aes(group = id, fill = value)) )
+      print(ggplot2::ggplot(tplot[tplot$variable == ind,], aes(x = x, y = y)) +
+              ggplot2::ggtitle(paste0(ind)) + ggplot2::geom_polygon(aes(group = id, fill = value)) )
       cat("Press [enter] to continue")
       line <- readline()
     }
@@ -135,7 +135,6 @@ plot_real <- function(object,
     stop("No Domain ID for the map object is given")
   }
   long <- lat <- group <- NULL
-
 
 
   map_data <- estimators(object = object, indicator = indicator,
@@ -174,24 +173,24 @@ plot_real <- function(object,
 
   map_obj@data[colnames(map_data)] <- map_data
 
-
   map_obj.fort <- ggplot2::fortify(map_obj, region = map_dom_id)
   map_obj.fort <- merge(map_obj.fort, map_obj@data,
                         by.x = "id", by.y = map_dom_id)
 
   indicator <- colnames(map_data)
   indicator <- indicator[!(indicator %in% "Domain")]
+
   for (ind in indicator) {
     map_obj.fort[ind][,1][!is.finite(map_obj.fort[ind][,1])] <- NA
     scale_point <- get_scale_points(map_obj.fort[ind][,1], ind, scale_points)
-    print(ggplot(map_obj.fort, aes(long, lat, group = group,
+    print(ggplot2::ggplot(map_obj.fort, aes(long, lat, group = group,
                                    fill = map_obj.fort[ind][,1])) +
-            geom_polygon(color = "azure3") + coord_equal() +
-            labs(x = "", y = "", fill = ind) +
-            ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
-            scale_fill_gradient(low = col[1], high = col[2],limits = scale_point,
+            ggplot2::geom_polygon(color = "azure3") + coord_equal() +
+            ggplot2::labs(x = "", y = "", fill = ind) +
+            ggplot2::ggtitle(gsub(pattern = "_",replacement = " ",x = ind)) +
+            ggplot2::scale_fill_gradient(low = col[1], high = col[2],limits = scale_point,
                                 guide = guide) +
-            theme(axis.ticks = element_blank(), axis.text = element_blank(),
+            ggplot2::theme(axis.ticks = element_blank(), axis.text = element_blank(),
                   legend.title = element_blank())
 
     )

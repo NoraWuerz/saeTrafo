@@ -370,5 +370,6 @@ g3 <- function(sigmau2,
        sigmau2^2 * var_sig.e -
        2 * sigmae2 * sigmau2 * cov_sig.e_sig.u)
   res_g3[is.nan(res_g3)] <- 0
+
   return(res_g3)
 }

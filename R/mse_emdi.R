@@ -15,6 +15,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
     object$MSE <- object$MSE[, c("Domain", "Direct", "FH")]
     object$ind <- object$ind[, c("Domain", "Direct", "FH")]
   }
+
   all_cv <- sqrt(object$MSE[,-1]) / object$ind[,-1]
 
   if (any(indicator == "Quantiles") || any(indicator == "quantiles")) {
@@ -39,6 +40,10 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
     ind <- object$MSE[, c("Domain", "FH")]
     ind_cv <- cbind(Domain = object$MSE[,1], all_cv)
     ind_name <- "Fay-Herriot estimates"
+  } else if (any(class(object) == "NER")) {
+    ind <- object$MSE[, c("Domain", "Mean")]
+    ind_cv <- data.frame(Domain = object$MSE[,1], Mean = all_cv)
+    ind_name <- "Nested error regression model estimates"
   } else if (any(indicator == "Direct") || any(indicator == "direct" )) {
     ind <- object$MSE[, c("Domain", "Direct")]
     ind_cv <- cbind(Domain = object$MSE[,1], all_cv)
@@ -57,7 +62,7 @@ mse_emdi <- function(object, indicator = "all", CV = FALSE) {
   mse_emdi <- list(ind = ind, ind_cv = ind_cv, ind_name = ind_name)
   }
 
-  class(mse_emdi) <- "mse.emdi"
+  class(mse_emdi) <- "mse.saeTrafo"
 
   return(mse_emdi)
 }
