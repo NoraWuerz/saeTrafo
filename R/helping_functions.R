@@ -22,7 +22,7 @@ only.mod_vars <- function(x, var) {
 }
 
 include_dom_unobs <- function(x, obs_dom) {
-  if(is.vector(x)){
+  if(is.vector(x) | is.numeric(x)){
     tmp <- rep(0, length(obs_dom))
     tmp[obs_dom] <- x
     return(tmp)
