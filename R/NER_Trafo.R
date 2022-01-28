@@ -194,6 +194,6 @@ NER_Trafo <- function(fixed,
     )
   }
 
-  class(NER_out) <- c("NER", "saeTrafo")
+  class(NER_out) <- c("saeTrafo", "NER")
   return(NER_out)
 }

@@ -18,7 +18,8 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
     )
 
-    pop_area_size <- table(pop_data[pop_domains])
+    pop_area_size <- as.numeric(table(pop_data[pop_domains]))
+    names(pop_area_size) <- names(table(pop_data[pop_domains]))
 
     # Number of domains in the population
     N_dom_pop <- length(pop_area_size)
