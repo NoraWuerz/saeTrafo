@@ -2,20 +2,9 @@
 % Please edit documentation in R/plot.saeTrafo.R
 \name{plot.saeTrafo}
 \alias{plot.saeTrafo}
-\alias{plot.NER}
 \title{Plots for an saeTrafo object}
 \usage{
 \method{plot}{saeTrafo}(
-  x,
-  label = "orig",
-  color = c("blue", "lightblue3"),
-  gg_theme = NULL,
-  cooks = TRUE,
-  range = NULL,
-  ...
-)
-
-\method{plot}{NER}(
   x,
   label = "orig",
   color = c("blue", "lightblue3"),
