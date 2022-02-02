@@ -17,7 +17,7 @@ write.excel(
 write.ods(
   object,
   file = "ods_output.ods",
-  indicator = "all",
+  indicator = c("Mean"),
   MSE = FALSE,
   CV = FALSE,
   split = FALSE
