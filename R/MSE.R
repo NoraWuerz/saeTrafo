@@ -59,8 +59,6 @@ mse <- function(framework,
         ))
 
         parallelMap::parallelStop()
-      } else { # hier ev. Formel ueberlegen (!!!!)
-        mse_out <- NULL
       }
     } else {
       if (!is.null(framework$pop_cov)) {
@@ -76,8 +74,6 @@ mse <- function(framework,
           threshold      = threshold,
           start_time     = start_time
         ))
-      } else { # hier ev. Formel ueberlegen (!!!!)
-        mse_out <- NULL
       }
     }
 
