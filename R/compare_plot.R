@@ -2,41 +2,38 @@
 #'
 #' Function \code{compare_plot} is a generic function used to produce plots
 #' comparing point and existing MSE/CV estimates of direct and model-based
-#' estimation for all indicators or a selection of indicators.
-#' @param model a model object of type "emdi", either "ebp" or "fh", representing
-#' point and MSE estimates.
+#' estimation for the Mean.
+#' @param model a model object of type "NER", representing point and optional
+#' MSE estimates.
 #' @param direct an object of type "direct","emdi", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "ebp",
-#' \code{direct} is required. If the input argument \code{model} is of type
-#' "fh", the \code{direct} component is already included in the input
-#' argument \code{model}.
-#' @param indicator optional character vector that selects which indicators
-#' shall be returned. Defaults to "all".
+#' and MSE estimates. For more information how to generate direct estimates
+#' please see \code{\link[emdi]{direct}}.
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct
-#' and model-based estimates are compared via suitable plots. Defaults to \code{FALSE}.
+#' and model-based estimates are compared via suitable plots. Defaults to
+#' \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation
-#' estimates of the direct and model-based estimates are compared via suitable plots.
-#' Defaults to \code{FALSE}.
+#' estimates of the direct and model-based estimates are compared via suitable
+#' plots. Defaults to \code{FALSE}.
 #' @param label argument that enables to customize title and axis labels. There
 #' are three options to label the evaluation plots: (i) original labels ("orig"),
 #' (ii) axis labels but no title ("no_title"), (iii) neither axis
 #' labels nor title ("blank").
 #' @param color a vector with two elements determining color schemes in returned
 #' plots.
-#' @param shape a numeric vector with two elements determining the shape of points
-#' in returned plots.
+#' @param shape a numeric vector with two elements determining the shape of
+#' points in returned plots.
 #' @param line_type a character vector with two elements determining the line
 #' types in returned plots.
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' For using this argument, package \pkg{ggplot2} must be loaded via
 #' \code{library(ggplot2)}.
 #' @param ... further arguments passed to or from other methods.
-#' @return Plots comparing direct and model-based estimators for each selected
-#' indicator obtained by \code{\link[ggplot2]{ggplot}}.
+#' @return Plots comparing direct and model-based estimators for the Mean
+#' obtained by \code{\link[ggplot2]{ggplot}}.
 #' @export
 #' @name compare_plot
 
-compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
+compare_plot <- function(model, direct, MSE = FALSE,
                          CV = FALSE, label = "orig", color = c("blue", "lightblue3"),
                          shape = c(16, 16), line_type = c("solid", "solid"),
                          gg_theme = NULL, ...) UseMethod("compare_plot")
@@ -45,34 +42,17 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 
 #' Shows plots for the comparison of estimates
 #'
-#' Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and
-#' \code{compare_plot.fh} produce plots comparing point and existing
-#' MSE/CV estimates of direct and model-based estimation for all indicators or a
-#' selection of indicators for objects of type "emdi". The direct and model-based
-#' point estimates are compared by a scatter plot and a line plot for each selected
-#' indicator. If the input arguments MSE and CV are set to TRUE, two extra plots
+#' Methods \code{compare_plot.NER} produce plots comparing point and existing
+#' MSE/CV estimates of direct and model-based estimation from \code{NER_Trafo}.
+#' The direct and model-based point estimates are compared by a scatter plot and
+#' a line plot. If the input arguments MSE and CV are set to TRUE, two extra plots
 #' are created, respectively: the MSE/CV estimates of the direct and model-based
 #' estimates are compared by boxplots and scatter plots.
-#' @param model a model object of type "emdi", either "ebp" or "fh", representing
-#' point and MSE estimates.
+#' @param model a model object of type "NER", representing point and optional
+#' MSE estimates.
 #' @param direct an object of type "direct","emdi", representing point
-#' and MSE estimates. If the input argument \code{model} is of type "ebp",
-#' \code{direct} is required. If the input argument \code{model} is of type
-#' "fh", the \code{direct} component is already included in the input
-#' argument \code{model}.
-#' @param indicator optional character vector that selects which indicators
-#' shall be returned: (i) all calculated indicators ("all");
-#' (ii) each indicator name: "Mean", "Quantile_10", "Quantile_25", "Median",
-#' "Quantile_75", "Quantile_90", "Head_Count",
-#' "Poverty_Gap", "Gini", "Quintile_Share" or the function name/s of
-#' "custom_indicator/s"; (iii) groups of indicators: "Quantiles", "Poverty",
-#' "Inequality" or "Custom". If two of these groups are selected, only the first
-#' one is returned. Note, additional custom indicators can be
-#' defined as argument for the EBP approaches (see also \code{\link{ebp}})
-#' and do not appear in groups of indicators even though these might belong to
-#' one of the groups. If the \code{model} argument is of type "fh",
-#' indicator can be set to "all", "Direct", FH", or "FH_Bench" (if emdi
-#' object is overwritten by function \code{\link{benchmark}}). Defaults to "all".
+#' and MSE estimates. For more information how to generate direct estimates
+#' please see \code{\link[emdi]{direct}}.
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct
 #' and model-based estimates are compared via boxplots and scatter plots.
 #' @param CV optional logical. If \code{TRUE}, the coefficient of variation
@@ -110,20 +90,22 @@ compare_plot <- function(model, direct,  indicator = "all", MSE = FALSE,
 #' compared by boxplots and scatter plots.
 #' @details Since all of the comparisons need a direct estimator, the plots are
 #' only created for in-sample domains.
-#' @seealso \code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-#' \code{\link{fh}}
+#' @seealso \code{\link{saeTrafoObject}}, \code{\link[emdi]{direct}},
+#' \code{\link{NER_Trafo}}
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 geom_point geom_smooth geom_line geom_boxplot
 #' @importFrom ggplot2 aes xlim ylim scale_shape_manual scale_linetype_manual coord_flip
 #' @importFrom ggplot2 scale_color_manual scale_fill_manual
-#' @name compare_plots_emdi
+#' @name compare_plots_saeTrafo
 #' @rdname compare_plot
 NULL
 
 
 
-compare_plots <- function(object, type, selected_indicators, MSE, CV, label, color,
+compare_plots <- function(object, type, MSE, CV, label, color,
                           shape, line_type, gg_theme,...) {
+
+  selected_indicators <- c("Mean")
 
   Model_based <- NULL
   Direct <- NULL
@@ -133,7 +115,6 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
   slope <- NULL
   intercept <- NULL
   area <- NULL
-
 
   if (MSE == FALSE & CV == FALSE) {
     plotList <- vector(mode = "list", length = length(selected_indicators) * 2)
@@ -259,7 +240,6 @@ compare_plots <- function(object, type, selected_indicators, MSE, CV, label, col
     }
 
     if (CV == TRUE) {
-
       data_tmp3 <- data.frame(Direct = object[, paste0(ind, "_Direct_CV")],
                               Model_based = object[, paste0(ind, "_Model_CV")],
                               smp_size = object$smp_size2)
@@ -417,5 +397,105 @@ define_evallabel <- function(type, label, indi){
 
   }
   return(label)
+}
+
+#' @rdname compare_plot
+#' @export
+compare_plot.NER <- function(model = NULL, direct = NULL,
+                             MSE = FALSE, CV = FALSE, label = "orig",
+                             color = c("blue", "lightblue3"),
+                             shape = c(16, 16), line_type = c("solid", "solid"),
+                             gg_theme = NULL, ...) {
+
+  indicator <- c("Mean")
+  compare_plot_check(model = model, indicator = indicator,
+                     label = label, color = color, shape = shape,
+                     line_type = line_type, gg_theme = gg_theme)
+
+  if (inherits(direct, "fh")) {
+    stop(paste0("It is not possible to compare the point and MSE estimates of a",
+                " model of type 'fh', to the point and MSE estimates of",
+                " an 'ebp' object."))
+  }
+
+  if ((inherits(model, "NER") & is.null(direct)) |
+      (inherits(direct, "NER") & is.null(model))) {
+    stop(paste0("If the model is of type 'NER', the input argument",
+                " direct is required. Please use the package emdi to calculate",
+                " a direct estimator of class 'direct' from 'emdi'"))
+  } else if (inherits(model, "NER") & (inherits(direct, "direct") | inherits(direct, "ebp") )) {
+
+    compare_plot_ebp(model = model, direct = direct,
+                     MSE = MSE, CV = CV,
+                     label = label, color = color, shape = shape,
+                     line_type = line_type, gg_theme = gg_theme)
+  }
+}
+
+
+compare_plot_ebp <- function(model, direct, MSE = FALSE,
+                             CV = FALSE, label = "orig",
+                             color = c("blue", "lightblue3"),
+                             shape = c(16, 16), line_type = c("solid", "solid"),
+                             gg_theme = NULL) {
+
+  indicator <- c("Mean")
+
+  Model_based <- NULL
+  Direct <- NULL
+  ID <- NULL
+  value <- NULL
+  Method <- NULL
+
+  ind_direct <- point_emdi(object = direct, indicator = indicator)$ind
+  selected_direct <- colnames(ind_direct)[-1]
+  colnames(ind_direct) <- c("Domain", paste0(colnames(ind_direct)[-1], "_Direct"))
+
+  ind_model <- point_emdi(object = model, indicator = indicator)$ind
+  selected_model <- colnames(ind_model)[-1]
+  colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1], "_Model"))
+  smp_size <- (table(direct$framework$smp_domains_vec))
+
+  compare_plot_check2(ind_direct, ind_model)
+
+  Data <- merge(ind_direct, ind_model, by = "Domain" )
+
+  matcher <- match(Data$Domain, names(smp_size))
+  Data$smp_size <- as.numeric(smp_size)[matcher]
+
+  if (MSE == TRUE || CV == TRUE ) {
+
+    precisions_direct <-
+      mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+    colnames(precisions_direct$ind) <-
+      c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
+    colnames(precisions_direct$ind_cv) <-
+      c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
+
+    precisions_model <-
+      mse_emdi(object = model, indicator = indicator, CV = TRUE)
+    colnames(precisions_model$ind) <-
+      c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
+    colnames(precisions_model$ind_cv) <-
+      c("Domain", paste0(colnames(precisions_model$ind_cv)[-1], "_Model_CV"))
+
+    if (MSE == TRUE) {
+      Data <- merge(Data, precisions_direct$ind, id = "Domain")
+      Data <- merge(Data, precisions_model$ind, id = "Domain")
+    }
+    if (CV == TRUE) {
+      Data <- merge(Data, precisions_direct$ind_cv, id = "Domain")
+      Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
+      Data$smp_size2 <- Data$smp_size
+    }
+
+  }
+
+  selected_indicators <- selected_model[selected_model %in% selected_direct]
+
+  compare_plots(object = Data, type = "unit",
+                selected_indicators = selected_indicators,
+                MSE = MSE, CV = CV, label = label, color = color,
+                shape = shape, line_type = line_type, gg_theme = gg_theme)
 }
 
