@@ -58,3 +58,38 @@ compare_plot_check2 <- function(ind_direct, ind_model) {
   }
 }
 
+
+compare_pred_check <- function(object1, object2, MSE) {
+
+  if (!inherits(object1, "saeTrafo") || !(inherits(object2, "emdi") |
+                                          inherits(object2, "saeTrafo"))) {
+    stop("Object 1 must be of class saeTrafo object 2 of class saeTrafo or
+         emdi.")
+  }
+
+  if ((length(object1$ind$Domain) == length(object2$ind$Domain)) &&
+      (!all(as.character(object1$ind$Domain) %in%
+            as.character(object2$ind$Domain)))) {
+    stop("It is only possible to compare objects with the same domains.")
+  }
+
+  if ((length(object1$ind$Domain) < length(object2$ind$Domain)) &&
+      !all(as.character(object1$ind$Domain) %in%
+           as.character(object2$ind$Domain))) {
+    stop("The first object contains domains that are not contained in the second
+         object. It is only possible to compare emdi objects with the same
+         domains.")
+  }
+
+  if ((length(object2$ind$Domain) < length(object1$ind$Domain)) &&
+      !all(as.character(object2$ind$Domain) %in%
+           as.character(object1$ind$Domain))) {
+    stop("The second object contains domains that are not contained in the first
+         object. It is only possible to compare objects with the same domains.")
+  }
+
+  if ((MSE == TRUE) && (is.null(object1$MSE) || is.null(object2$MSE))) {
+    stop("If MSE is set to TRUE, both objects need to contain MSE estimates.")
+  }
+}
+

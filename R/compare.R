@@ -30,19 +30,37 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' duplicated, the suffixes "_1" and "_2" are added to their names. "_1" and
 #' "_2" standing for object1 and object2, respectively.
 #' @seealso \code{\link{emdi}}, \code{\link{NER_Trafo}},
-#' \code{\link{saeTrafo.object}}
+#' \code{\link{saeTrafoObject}}
 #' @examples
-#' \donttest{
 #' # Example comparing two saeTrafo objects
-#' # (the second object can be of the class emdi)
-#' formel <- eqIncome ~ gender + eqsize + cash + self_empl + unempl_ben +
-#' age_ben + surv_ben + sick_ben + dis_ben + rent + fam_allow + house_allow +
-#' cap_inv + tax_adj
 #'
-#' res_ls <- NER_Trafo(fixed = formel, smp_domains = "district",
-#' pop_area_size = pop_area_size, pop_mean = pop_mean, pop_cov = pop_cov,
-#' smp_data = eusilcA_smp, MSE = F, B = 3, cpus = 4, seed = 3)
-#' }
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean)
+#' data("pop_cov)
+#'
+#' # Nested error regression model 1
+#' NER_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'                    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben +
+#'                    rent + fam_allow + house_allow + cap_inv + tax_adj,
+#'                    smp_domains = "district", pop_area_size = pop_area_size,
+#'                    pop_mean = pop_mean, pop_cov = pop_cov,
+#'                    smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' # Nested error regression model 2
+#' NER_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
+#'                    unempl_ben + age_ben + surv_ben,
+#'                    smp_domains = "district", pop_area_size = pop_area_size,
+#'                    pop_mean = pop_mean, pop_cov = pop_cov,
+#'                    smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' # Generate a data frame for the comparison of point estimates
+#' compare_pred(NER_1, NER_2)
+#'
+#' # Generate a data frame for the comparison of MSE estimates
+#' compare_pred(NER_1, NER_2, MSE = TRUE)
+#'
 #' @export
 #' @rdname compare_pred
 #' @method compare_pred saeTrafo
@@ -50,37 +68,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 
 compare_pred.saeTrafo <- function(object1, object2, MSE = FALSE, ...) {
 
-  if (!inherits(object1, "saeTrafo") || !(inherits(object2, "emdi") |
-                                          inherits(object2, "saeTrafo"))) {
-    stop("Object 1 must be of class saeTrafo object 2 of class saeTrafo or
-         emdi.")
-  }
-
-  if ((length(object1$ind$Domain) == length(object2$ind$Domain)) &&
-      (!all(as.character(object1$ind$Domain) %in%
-            as.character(object2$ind$Domain)))) {
-    stop("It is only possible to compare objects with the same domains.")
-  }
-
-  if ((length(object1$ind$Domain) < length(object2$ind$Domain)) &&
-      !all(as.character(object1$ind$Domain) %in%
-           as.character(object2$ind$Domain))) {
-    stop("The first object contains domains that are not contained in the second
-         object. It is only possible to compare emdi objects with the same
-         domains.")
-  }
-
-  if ((length(object2$ind$Domain) < length(object1$ind$Domain)) &&
-      !all(as.character(object2$ind$Domain) %in%
-           as.character(object1$ind$Domain))) {
-    stop("The second object contains domains that are not contained in the first
-         object. It is only possible to compare objects with the same domains.")
-  }
-
-  if ((MSE == TRUE) && (is.null(object1$MSE) || is.null(object2$MSE))) {
-    stop("If MSE is set to TRUE, both objects need to contain MSE estimates.")
-  }
-
+  compare_pred_check(object1, object2, MSE)
 
   if (MSE == FALSE) {
     object1data <- get("ind", object1)
