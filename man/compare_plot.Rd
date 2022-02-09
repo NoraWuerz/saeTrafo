@@ -33,14 +33,12 @@ compare_plot(
 )
 }
 \arguments{
-\item{model}{a model object of type "emdi", either "ebp" or "fh", representing
-point and MSE estimates.}
+\item{model}{a model object of type "NER", representing point and optional
+MSE estimates.}
 
 \item{direct}{an object of type "direct","emdi", representing point
-and MSE estimates. If the input argument \code{model} is of type "ebp",
-\code{direct} is required. If the input argument \code{model} is of type
-"fh", the \code{direct} component is already included in the input
-argument \code{model}.}
+and MSE estimates. For more information how to generate direct estimates
+please see \code{\link[emdi]{direct}}.}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE estimates of the direct
 and model-based estimates are compared via boxplots and scatter plots.}
@@ -95,12 +93,10 @@ Function \code{compare_plot} is a generic function used to produce plots
 comparing point and existing MSE/CV estimates of direct and model-based
 estimation for the Mean.
 
-Methods \code{compare_plot.direct}, \code{compare_plot.ebp} and
-\code{compare_plot.fh} produce plots comparing point and existing
-MSE/CV estimates of direct and model-based estimation for all indicators or a
-selection of indicators for objects of type "emdi". The direct and model-based
-point estimates are compared by a scatter plot and a line plot for each selected
-indicator. If the input arguments MSE and CV are set to TRUE, two extra plots
+Methods \code{compare_plot.NER} produce plots comparing point and existing
+MSE/CV estimates of direct and model-based estimation from \code{NER_Trafo}.
+The direct and model-based point estimates are compared by a scatter plot and
+a line plot. If the input arguments MSE and CV are set to TRUE, two extra plots
 are created, respectively: the MSE/CV estimates of the direct and model-based
 estimates are compared by boxplots and scatter plots.
 }
@@ -109,6 +105,6 @@ Since all of the comparisons need a direct estimator, the plots are
 only created for in-sample domains.
 }
 \seealso{
-\code{\link{emdiObject}}, \code{\link{direct}}, \code{\link{ebp}},
-\code{\link{fh}}
+\code{\link{saeTrafoObject}}, \code{\link[emdi]{direct}},
+\code{\link{NER_Trafo}}
 }
