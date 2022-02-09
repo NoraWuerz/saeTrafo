@@ -48,29 +48,30 @@ estimates of the direct and model-based estimates are compared via boxplots
 and scatter plots.}
 
 \item{label}{argument that enables to customize title and axis labels. There
-are three options to label the evaluation plots: (i) original labels ("orig"),
-(ii) axis labels but no title ("no_title"), (iii) neither axis
+are three options to label the evaluation plots: (i) original labels
+("orig"), (ii) axis labels but no title ("no_title"), (iii) neither axis
 labels nor title ("blank").}
 
 \item{color}{a vector with two elements. The first color determines
 the color for the regression line in the scatter plot and the color for
 the direct estimates in the remaining plots. The second color specifies the
 color of the intersection line in the scatter plot and the color for the
-model-based estimates in the remaining plots. Defaults to c("blue", "lightblue3").}
+model-based estimates in the remaining plots. Defaults to
+c("blue", "lightblue3").}
 
 \item{shape}{a numeric vector with two elements. The first shape determines
-the shape of the points in the scatterplot and the shape of the points for the
-direct estimates in the remaining plots. The second shape determines
+the shape of the points in the scatterplot and the shape of the points for
+the direct estimates in the remaining plots. The second shape determines
 the shape for the points for the model-based estimates. The options
 are numbered from 0 to 25. Defaults to c(16, 16).}
 
 \item{line_type}{a character vector with two elements. The first line type
 determines the line type for the regression line in the scatter plot and the
-line type for the direct estimates in the remaining plots. The second line type
-specifies the line type of the intersection line in the scatter plot and the
-line type for the model-based estimates in the remaining plots. The options
-are: "twodash", "solid", "longdash", "dotted", "dotdash", "dashed" and "blank".
-Defaults to  c("solid", "solid").}
+line type for the direct estimates in the remaining plots. The second line
+type specifies the line type of the intersection line in the scatter plot and
+the line type for the model-based estimates in the remaining plots. The
+options are: "twodash", "solid", "longdash", "dotted", "dotdash", "dashed"
+and "blank". Defaults to  c("solid", "solid").}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 For using this argument, package \pkg{ggplot2} must be loaded via
@@ -83,10 +84,11 @@ Plots comparing direct and model-based estimators for the Mean
 obtained by \code{\link[ggplot2]{ggplot}}.
 
 A scatter plot and a line plot comparing direct and model-based
-estimators for each selected indicator obtained by \code{\link[ggplot2]{ggplot}}.
-If the input arguments MSE and CV are set to TRUE two extra plots are created,
-respectively: the MSE/CV estimates of the direct and model-based estimates are
-compared by boxplots and scatter plots.
+estimators for each selected indicator obtained by
+\code{\link[ggplot2]{ggplot}}. If the input arguments MSE and CV are set to
+\code{TRUE} two extra plots are created, respectively: the MSE/CV estimates
+of the direct and model-based estimates are compared by boxplots and scatter
+plots.
 }
 \description{
 Function \code{compare_plot} is a generic function used to produce plots
@@ -96,9 +98,9 @@ estimation for the Mean.
 Methods \code{compare_plot.NER} produce plots comparing point and existing
 MSE/CV estimates of direct and model-based estimation from \code{NER_Trafo}.
 The direct and model-based point estimates are compared by a scatter plot and
-a line plot. If the input arguments MSE and CV are set to TRUE, two extra plots
-are created, respectively: the MSE/CV estimates of the direct and model-based
-estimates are compared by boxplots and scatter plots.
+a line plot. If the input arguments MSE and CV are set to TRUE, two extra
+plots are created, respectively: the MSE/CV estimates of the direct and
+model-based estimates are compared by boxplots and scatter plots.
 }
 \details{
 Since all of the comparisons need a direct estimator, the plots are

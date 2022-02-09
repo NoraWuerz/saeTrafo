@@ -37,8 +37,8 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' #Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
-#' data("pop_mean)
-#' data("pop_cov)
+#' data("pop_mean")
+#' data("pop_cov")
 #'
 #' # Nested error regression model 1
 #' NER_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
