@@ -49,8 +49,8 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' model-based estimates are compared by boxplots and scatter plots.
 #' @param model a model object of type "NER", representing point and optional
 #' MSE estimates.
-#' @param direct an object of type "direct","emdi", representing point
-#' and MSE estimates. For more information how to generate direct estimates
+#' @param direct an object of type "direct" form "emdi", representing point
+#' and MSE estimates. For more information on how to generate direct estimates,
 #' please see \code{\link[emdi]{direct}}.
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct
 #' and model-based estimates are compared via boxplots and scatter plots.
@@ -91,10 +91,10 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' plots.
 #' @details Since all of the comparisons need a direct estimator, the plots are
 #' only created for in-sample domains.
-#' @examples
+#' @example
 #'
-#' Example for creating plots to compare the saeTrafo object with direct
-#' estimates (produced by the package emdi)
+#' # Example for creating plots to compare the saeTrafo object with direct
+#' # estimates (produced by the package emdi)
 #'
 #' #Load Data
 #' data("eusilcA_smp")
@@ -113,6 +113,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #'                        smp_data = eusilcA_smp, MSE = TRUE)
 #'
 #' # Get direct estimates from the R-package emdi
+#' require(emdi)
 #' library(emdi)
 #' emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
 #'                       smp_domains = "district", weights = "weight",
@@ -124,6 +125,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #'
 #' # Personalize comparison plots using the options provided with this function
 #' # and ggplot themes
+#' require(ggplot2)
 #' library(ggplot2)
 #' saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
 #'                        CV = TRUE, label = "no_title",
@@ -131,12 +133,9 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #'                        shape = c(1,2),
 #'                        line_type = c("dotted", "dashed"),
 #'                        gg_theme = theme(
-#'                           text = element_text(size = 20),
+#'                           text = element_text(size = 20, color = "blue"),
 #'                           panel.border = element_rect(linetype = "dashed",
-#'                                                       fill = "NA")),
-#'                        labs(title = "My compare_plot"))
-#'
-#'
+#'                                                       fill = "NA")))
 #'
 #' @seealso \code{\link{saeTrafoObject}}, \code{\link[emdi]{direct}},
 #' \code{\link{NER_Trafo}}
@@ -147,6 +146,42 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' @name compare_plots_saeTrafo
 #' @rdname compare_plot
 NULL
+
+#' @rdname compare_plot
+#' @export
+compare_plot.NER <- function(model = NULL, direct = NULL,
+                             MSE = FALSE, CV = FALSE, label = "orig",
+                             color = c("blue", "lightblue3"),
+                             shape = c(16, 16), line_type = c("solid", "solid"),
+                             gg_theme = NULL, ...) {
+
+  indicator <- c("Mean")
+  compare_plot_check(model = model, indicator = indicator,
+                     label = label, color = color, shape = shape,
+                     line_type = line_type, gg_theme = gg_theme)
+
+  if (inherits(direct, "fh")) {
+    stop(paste0("It is not possible to compare the point and MSE estimates of",
+                " a model of type 'fh', to the point and MSE estimates of",
+                " an 'ebp' object."))
+  }
+
+  if ((inherits(model, "NER") & is.null(direct)) |
+      (inherits(direct, "NER") & is.null(model))) {
+    stop(paste0("If the model is of type 'NER', the input argument",
+                " direct is required. Please use the package emdi to calculate",
+                " a direct estimator of class 'direct' from 'emdi'"))
+  } else if (inherits(model, "NER") & (inherits(direct, "direct") |
+                                       inherits(direct, "ebp"))) {
+
+    compare_plot_ebp(model = model, direct = direct,
+                     MSE = MSE, CV = CV,
+                     label = label, color = color, shape = shape,
+                     line_type = line_type, gg_theme = gg_theme)
+  }
+}
+
+# Auxiliary functions ----------------------------------------------------------
 
 compare_plots <- function(object, type, MSE, CV, label, color,
                           shape, line_type, gg_theme, ...) {
@@ -282,10 +317,10 @@ compare_plots <- function(object, type, MSE, CV, label, color,
                ggplot(data_shaped, aes(x = area, y = value, colour = Method)) +
                geom_point(aes(color = Method, shape = Method)) +
                labs(title = label_ind$ordered_MSE["title"],
-                                   x = label_ind$ordered_MSE["x_lab"],
-                                   y = label_ind$ordered_MSE["y_lab"]) +
+                    x = label_ind$ordered_MSE["x_lab"],
+                    y = label_ind$ordered_MSE["y_lab"]) +
                scale_color_manual(values = color)) +
-        scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
+              scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
     if (CV == TRUE) {
@@ -322,10 +357,10 @@ compare_plots <- function(object, type, MSE, CV, label, color,
                ggplot(data_shaped, aes(x = area, y = value, colour = Method)) +
                geom_point(aes(color = Method, shape = Method)) +
                labs(title = label_ind$ordered_CV["title"],
-                                   x = label_ind$ordered_CV["x_lab"],
-                                   y = label_ind$ordered_CV["y_lab"]) +
+                    x = label_ind$ordered_CV["x_lab"],
+                    y = label_ind$ordered_CV["y_lab"]) +
                scale_color_manual(values = color)) +
-        scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
+              scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
 
@@ -457,41 +492,6 @@ define_evallabel <- function(type, label, indi) {
   return(label)
 }
 
-#' @rdname compare_plot
-#' @export
-compare_plot.NER <- function(model = NULL, direct = NULL,
-                             MSE = FALSE, CV = FALSE, label = "orig",
-                             color = c("blue", "lightblue3"),
-                             shape = c(16, 16), line_type = c("solid", "solid"),
-                             gg_theme = NULL, ...) {
-
-  indicator <- c("Mean")
-  compare_plot_check(model = model, indicator = indicator,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
-
-  if (inherits(direct, "fh")) {
-    stop(paste0("It is not possible to compare the point and MSE estimates of",
-                " a model of type 'fh', to the point and MSE estimates of",
-                " an 'ebp' object."))
-  }
-
-  if ((inherits(model, "NER") & is.null(direct)) |
-      (inherits(direct, "NER") & is.null(model))) {
-    stop(paste0("If the model is of type 'NER', the input argument",
-                " direct is required. Please use the package emdi to calculate",
-                " a direct estimator of class 'direct' from 'emdi'"))
-  } else if (inherits(model, "NER") & (inherits(direct, "direct") |
-                                       inherits(direct, "ebp"))) {
-
-    compare_plot_ebp(model = model, direct = direct,
-                     MSE = MSE, CV = CV,
-                     label = label, color = color, shape = shape,
-                     line_type = line_type, gg_theme = gg_theme)
-  }
-}
-
-
 compare_plot_ebp <- function(model, direct, MSE = FALSE,
                              CV = FALSE, label = "orig",
                              color = c("blue", "lightblue3"),
@@ -521,14 +521,14 @@ compare_plot_ebp <- function(model, direct, MSE = FALSE,
   if (MSE == TRUE || CV == TRUE) {
 
     precisions_direct <-
-      mse_emdi(object = direct, indicator = indicator, CV = TRUE)
+      mse_saeTrafo(object = direct, indicator = indicator, CV = TRUE)
     colnames(precisions_direct$ind) <-
       c("Domain", paste0(colnames(precisions_direct$ind)[-1], "_Direct_MSE"))
     colnames(precisions_direct$ind_cv) <-
       c("Domain", paste0(colnames(precisions_direct$ind_cv)[-1], "_Direct_CV"))
 
     precisions_model <-
-      mse_emdi(object = model, indicator = indicator, CV = TRUE)
+      mse_saeTrafo(object = model, indicator = indicator, CV = TRUE)
     colnames(precisions_model$ind) <-
       c("Domain", paste0(colnames(precisions_model$ind)[-1], "_Model_MSE"))
     colnames(precisions_model$ind_cv) <-

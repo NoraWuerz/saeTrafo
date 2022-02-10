@@ -5,51 +5,75 @@
 #' (CV).
 #' @param object an object for which point and/or MSE estimates and/or
 #' calculated CV's are desired.
-#' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
-#' per domain are added to the data frame of point estimates. Defaults to
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates per domain are
+#' added to the data frame of point estimates. Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, coefficients of variation per
+#' domain are added to the data frame of point estimates. Defaults to
 #' \code{FALSE}.
-#' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
-#' indicators per domain are added to the data frame of point estimates.
-#' Defaults to \code{FALSE}.
 #' @param ... arguments to be passed to or from other methods.
-#' @return
-#' The return of \code{estimators} depends on the class of its argument. The
-#' documentation of particular methods gives detailed information about the
-#' return of that method.
 #' @export
 
 estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 
-
 #' Presents point, MSE and/or CV estimates of an saeTrafoObject
 #'
-#' Method \code{estimators.saeTrafo} presents point and MSE estimates for regional
-#' disaggregated indicators. Coefficients of variation are calculated
-#' using these estimators. This method enables to select for which indicators
-#' the estimates shall be returned. The returned object is suitable for
-#' printing with the \code{print.estimators.saeTrafo} method.
+#' Method \code{estimators.saeTrafo} presents point and MSE estimates.
+#' Coefficients of variation are calculated using these estimators. The returned
+#' object is suitable for printing with the method
+#' \code{print.estimators.saeTrafo}.
 #' @param object an object of type "saeTrafo", representing point and,
 #' if chosen, MSE estimates.
-#' @param MSE optional logical. If \code{TRUE}, MSE estimates for selected indicators
-#' per domain are added to the data frame of point estimates. Defaults to
-#' \code{FALSE}.
-#' @param CV optional logical. If \code{TRUE}, coefficients of variation for selected
-#' indicators per domain are added to the data frame of point estimates.
-#' Defaults to \code{FALSE}.
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates are added to the
+#' data frame of point estimates. Defaults to \code{FALSE}.
+#' @param CV optional logical. If \code{TRUE}, coefficients of variation are
+#' added to the data frame of point estimates. Defaults to \code{FALSE}.
 #' @param ... other parameters that can be passed to function \code{estimators}.
 #' @return
-#' The return of \code{estimators.saeTrafo} is an object of type "estimators.saeTrafo" with
-#' point and/or MSE estimates and/or calculated CV's per domain obtained from
-#' \code{saeTrafoObject$ind} and, if chosen, \code{saeTrafoObject$MSE}. These objects
-#' contain two elements, one data frame \code{ind} and a character naming the
-#' indicator or indicator group \code{ind_name}.
-#' @details Objects of class "estimators.saeTrafo" have methods for following generic
-#' functions: \code{head} and \code{tail} (for default documentation, see
-#' \code{\link[utils]{head}}),  \code{as.matrix} (for default documentation, see
-#' \code{\link[base]{matrix}}), \code{as.data.frame} (for default documentation,
-#' see \code{\link[base]{as.data.frame}}), \code{subset} (for default
-#' documentation, see \code{\link[base]{subset}}).
+#' The return of \code{estimators.saeTrafo} is an object of type
+#' "estimators.saeTrafo" with point and/or MSE estimates and/or calculated CV's
+#' from \code{saeTrafoObject$ind} and, if chosen, \code{saeTrafoObject$MSE}.
+#' These objects contain two elements, one data frame
+#' \code{ind} and a character naming the indicator or indicator group
+#' \code{ind_name}.
+#' @details Objects of class "estimators.saeTrafo" have methods for following
+#' generic functions: \code{head} and \code{tail} (for default documentation,
+#' see \code{\link[utils]{head}}, \code{\link[utils]{tail}}),
+#' \code{as.matrix} (for default documentation, see \code{\link[base]{matrix}}),
+#' \code{as.data.frame} (for default documentation, see
+#' \code{\link[base]{as.data.frame}}), \code{subset} (for default documentation,
+#' see \code{\link[base]{subset}}).
 #' @seealso \code{\link{saeTrafoObject}},  \code{\link{NER_Trafo}}
+#' @example
+#'
+#' # Example for presenting point, MSE, and CV estimates for a saeTrafo object
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' sae_mean <- estimators(NER_model, MSE = TRUE, CV = TRUE)
+#' class(sae_mean)
+#'
+#' # use generic functions for estimators.saeTrafo object
+#' print(sae_mean)
+#' head(sea_mean)
+#' tail(sea_mean)
+#' as.matrix(sae_mean)
+#' as.data.frame(sae_mean)
+#' subset(sae_mean)
+#'
 #' @rdname estimators
 #' @export
 
@@ -57,48 +81,51 @@ estimators.saeTrafo <- function(object,  MSE = FALSE, CV = FALSE, ...) {
 
   indicator <- c("Mean")
 
-  #estimators_check(object = object, indicator = indicator,
-  #                 MSE = MSE, CV = CV)
+  estimators_check(object = object, indicator = indicator,
+                   MSE = MSE, CV = CV)
 
-  # Only point estimates
   all_ind <- point_emdi(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
 
-  if ( MSE == TRUE || CV == TRUE ) {
-    all_precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
+  if (MSE == TRUE || CV == TRUE) {
+    all_precisions <- mse_saeTrafo(object    = object,
+                                   indicator = indicator,
+                                   CV        = TRUE
+    )
     colnames(all_precisions$ind) <- paste0(colnames(all_precisions$ind), "_MSE")
-    colnames(all_precisions$ind_cv) <- paste0(colnames(all_precisions$ind_cv), "_CV")
-    combined <- data.frame(all_ind$ind, all_precisions$ind, all_precisions$ind_cv)
-    endings <- c("","_MSE", "_CV")[c(TRUE,MSE,CV)]
-
-    combined <- combined[,c("Domain",paste0(rep(selected,each = length(endings)),
-                                            endings))]
+    colnames(all_precisions$ind_cv) <-
+      paste0(colnames(all_precisions$ind_cv), "_CV")
+    combined <- data.frame(all_ind$ind,
+                           all_precisions$ind,
+                           all_precisions$ind_cv
+    )
+    endings <- c("", "_MSE", "_CV")[c(TRUE, MSE, CV)]
+    combined <-
+      combined[, c("Domain",
+                   paste0(rep(selected, each = length(endings)), endings))]
   } else {
     combined <- all_ind$ind
   }
 
-  estimators_emdi <- list(ind = combined, ind_name = all_ind$ind_name)
+  estimators_saeTrafo <- list(ind = combined, ind_name = all_ind$ind_name)
+  class(estimators_saeTrafo) <- "estimators.saeTrafo"
 
-  class(estimators_emdi) <- "estimators.saeTrafo"
-
-  return(estimators_emdi)
+  return(estimators_saeTrafo)
 }
 
-# Prints estimators.emdi objects
+
+# Generic functions for object of class estimators.saeTrafo --------------------
+
+# Prints estimators.saeTrafo objects
 #' @export
 
-print.estimators.saeTrafo <- function(x,...) {
+print.estimators.saeTrafo <- function(x, ...) {
   cat(paste0("Indicator/s: ", x$ind_name, "\n"))
   print(x$ind)
 }
 
-
-# Tail/head functions ----------------------------------------------------------
-
-
 #' @importFrom utils head
 #' @export
-# CV estimators
 
 head.estimators.saeTrafo <- function(x, n = 6L, addrownums = NULL, ...) {
   head(x$ind, n = n, addrownums = addrownums, ...)
@@ -107,22 +134,22 @@ head.estimators.saeTrafo <- function(x, n = 6L, addrownums = NULL, ...) {
 #' @importFrom utils tail
 #' @export
 
-tail.estimators.saeTrafo <- function(x, n = 6L, keepnums = TRUE, addrownums = NULL, ...) {
+tail.estimators.saeTrafo <- function(x, n = 6L, keepnums = TRUE,
+                                     addrownums = NULL, ...) {
   tail(x$ind, n = n, keepnums = keepnums, ...)
 }
-
 
 # Transforms estimators.saeTrafo objects into a matrix object
 #' @export
 
-as.matrix.estimators.saeTrafo <- function(x,...) {
-  as.matrix(x$ind[,-1])
+as.matrix.estimators.saeTrafo <- function(x, ...) {
+  as.matrix(x$ind[, -1])
 }
 
-# Transforms estimators.saeTrafo objects into a dataframe object
+# Transforms estimators.saeTrafo objects into a data.frame object
 #' @export
 
-as.data.frame.estimators.saeTrafo <- function(x,...) {
+as.data.frame.estimators.saeTrafo <- function(x, ...) {
   as.data.frame(x$ind, ...)
 }
 
@@ -133,6 +160,3 @@ subset.estimators.saeTrafo <- function(x, ...) {
   x <- as.data.frame(x)
   subset(x = x,  ...)
 }
-
-
-

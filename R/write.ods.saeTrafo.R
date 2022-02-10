@@ -93,7 +93,8 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
 }
 
 add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
-  precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
+
+  precisions <- mse_saeTrafo(object = object, indicator = indicator, CV = TRUE)
   if (MSE) {
     precisions$ind[,1] <-
       iconv(x <- precisions$ind[,1], from = "",to = "UTF-8")

@@ -252,7 +252,8 @@ add_pointests <- function(object, indicator, wb, headlines_cs) {
 }
 
 add_precisions <- function(object, indicator, MSE, wb, headlines_cs, CV) {
-  precisions <- mse_emdi(object = object, indicator = indicator, CV = TRUE)
+
+  precisions <- mse_saeTrafo(object = object, indicator = indicator, CV = TRUE)
 
   if (MSE) {
     addWorksheet(wb, sheetName = "MSE Estimators", gridLines = FALSE)

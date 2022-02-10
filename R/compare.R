@@ -21,7 +21,8 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' objects or a saeTrafo object and a emdi object.
 #'
 #' @param object1 an object of type "saeTrafo".
-#' @param object2 an object of type "saeTrafo" or "emdi" (\code{\link{emdi}}).
+#' @param object2 an object of type "saeTrafo" or "emdi"
+#' (\code{\link[emdi]{emdiObject}}).
 #' @param MSE if \code{TRUE}, MSE estimates are returned. Defaults to
 #' \code{FALSE} and than point estimates are returned.
 #' @param ... further arguments passed to or from other methods.
@@ -31,7 +32,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' "_2" standing for object1 and object2, respectively.
 #' @seealso \code{\link{emdi}}, \code{\link{NER_Trafo}},
 #' \code{\link{saeTrafoObject}}
-#' @examples
+#' @example
 #' # Example comparing two saeTrafo objects
 #'
 #' #Load Data
@@ -41,25 +42,28 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' data("pop_cov")
 #'
 #' # Nested error regression model 1
-#' NER_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#'                    unempl_ben + age_ben + surv_ben + sick_ben + dis_ben +
-#'                    rent + fam_allow + house_allow + cap_inv + tax_adj,
-#'                    smp_domains = "district", pop_area_size = pop_area_size,
-#'                    pop_mean = pop_mean, pop_cov = pop_cov,
-#'                    smp_data = eusilcA_smp, MSE = TRUE)
+#' NER_model_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                          self_empl + unempl_ben + age_ben + surv_ben +
+#'                          sick_ben + dis_ben + rent + fam_allow +
+#'                          house_allow + cap_inv + tax_adj,
+#'                          smp_domains = "district",
+#'                          pop_area_size = pop_area_size,
+#'                          pop_mean = pop_mean, pop_cov = pop_cov,
+#'                          smp_data = eusilcA_smp, MSE = TRUE)
 #'
 #' # Nested error regression model 2
-#' NER_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash + self_empl +
-#'                    unempl_ben + age_ben + surv_ben,
-#'                    smp_domains = "district", pop_area_size = pop_area_size,
-#'                    pop_mean = pop_mean, pop_cov = pop_cov,
-#'                    smp_data = eusilcA_smp, MSE = TRUE)
+#' NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                          self_empl + unempl_ben + age_ben + surv_ben,
+#'                          smp_domains = "district",
+#'                          pop_area_size = pop_area_size,
+#'                          pop_mean = pop_mean, pop_cov = pop_cov,
+#'                          smp_data = eusilcA_smp, MSE = TRUE)
 #'
 #' # Generate a data frame for the comparison of point estimates
-#' compare_pred(NER_1, NER_2)
+#' compare_pred(NER_model_1, NER_model_2)
 #'
 #' # Generate a data frame for the comparison of MSE estimates
-#' compare_pred(NER_1, NER_2, MSE = TRUE)
+#' compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
 #'
 #' @export
 #' @rdname compare_pred

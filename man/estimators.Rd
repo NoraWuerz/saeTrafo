@@ -13,45 +13,40 @@ estimators(object, MSE, CV, ...)
 \item{object}{an object of type "saeTrafo", representing point and,
 if chosen, MSE estimates.}
 
-\item{MSE}{optional logical. If \code{TRUE}, MSE estimates for selected indicators
-per domain are added to the data frame of point estimates. Defaults to
-\code{FALSE}.}
+\item{MSE}{optional logical. If \code{TRUE}, MSE estimates are added to the
+data frame of point estimates. Defaults to \code{FALSE}.}
 
-\item{CV}{optional logical. If \code{TRUE}, coefficients of variation for selected
-indicators per domain are added to the data frame of point estimates.
-Defaults to \code{FALSE}.}
+\item{CV}{optional logical. If \code{TRUE}, coefficients of variation are
+added to the data frame of point estimates. Defaults to \code{FALSE}.}
 
 \item{...}{other parameters that can be passed to function \code{estimators}.}
 }
 \value{
-The return of \code{estimators} depends on the class of its argument. The
-documentation of particular methods gives detailed information about the
-return of that method.
-
-The return of \code{estimators.saeTrafo} is an object of type "estimators.saeTrafo" with
-point and/or MSE estimates and/or calculated CV's per domain obtained from
-\code{saeTrafoObject$ind} and, if chosen, \code{saeTrafoObject$MSE}. These objects
-contain two elements, one data frame \code{ind} and a character naming the
-indicator or indicator group \code{ind_name}.
+The return of \code{estimators.saeTrafo} is an object of type
+"estimators.saeTrafo" with point and/or MSE estimates and/or calculated CV's
+from \code{saeTrafoObject$ind} and, if chosen, \code{saeTrafoObject$MSE}.
+These objects contain two elements, one data frame
+\code{ind} and a character naming the indicator or indicator group
+\code{ind_name}.
 }
 \description{
 Function \code{estimators} is a generic function used to present point and
 mean squared error (MSE) estimates and calculated coefficients of variation
 (CV).
 
-Method \code{estimators.saeTrafo} presents point and MSE estimates for regional
-disaggregated indicators. Coefficients of variation are calculated
-using these estimators. This method enables to select for which indicators
-the estimates shall be returned. The returned object is suitable for
-printing with the \code{print.estimators.saeTrafo} method.
+Method \code{estimators.saeTrafo} presents point and MSE estimates.
+Coefficients of variation are calculated using these estimators. The returned
+object is suitable for printing with the method
+\code{print.estimators.saeTrafo}.
 }
 \details{
-Objects of class "estimators.saeTrafo" have methods for following generic
-functions: \code{head} and \code{tail} (for default documentation, see
-\code{\link[utils]{head}}),  \code{as.matrix} (for default documentation, see
-\code{\link[base]{matrix}}), \code{as.data.frame} (for default documentation,
-see \code{\link[base]{as.data.frame}}), \code{subset} (for default
-documentation, see \code{\link[base]{subset}}).
+Objects of class "estimators.saeTrafo" have methods for following
+generic functions: \code{head} and \code{tail} (for default documentation,
+see \code{\link[utils]{head}}, \code{\link[utils]{tail}}),
+\code{as.matrix} (for default documentation, see \code{\link[base]{matrix}}),
+\code{as.data.frame} (for default documentation, see
+\code{\link[base]{as.data.frame}}), \code{subset} (for default documentation,
+see \code{\link[base]{subset}}).
 }
 \seealso{
 \code{\link{saeTrafoObject}},  \code{\link{NER_Trafo}}

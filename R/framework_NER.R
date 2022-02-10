@@ -1,8 +1,6 @@
 # Internal documentation -------------------------------------------------------
 
 # The function notation defines the notational framework for NER_Trafo
-
-
 framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
                           pop_domains, smp_data, smp_domains) {
 
@@ -28,34 +26,36 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
                            nrow     = length(pop_area_size),
                            ncol     = length(mod_vars) + 1,
                            dimnames = list(names(pop_area_size),
-                                           c("intercept", mod_vars)))
+                                           c("intercept", mod_vars))
+    )
     pop_cov.mat <- matrix(data     = NA,
                           nrow     = length(pop_area_size),
                           ncol     = (length(mod_vars) + 1)^2,
                           dimnames = list(names(pop_area_size),
-                                          cov_names(c("intercept", mod_vars))))
+                                          cov_names(c("intercept", mod_vars)))
+    )
     for (i in 1:N_dom_pop) {
       pos <- pop_data[pop_domains] == names(pop_area_size)[i]
-      pop_mean.mat[i, ] <- apply(model.matrix(fixed, pop_data[pos, ]), 2,
-                                 FUN = mean)
+      pop_mean.mat[i, ] <- apply(X      = model.matrix(fixed, pop_data[pos, ]),
+                                 MARGIN = 2,
+                                 FUN    = mean
+      )
       pop_cov.mat[i, ] <- c(stats::cov(model.matrix(fixed, pop_data[pos, ]),
-                                       model.matrix(fixed, pop_data[pos, ])))
+                                       model.matrix(fixed, pop_data[pos, ]))
+      )
     }
 
     pop_vars <- c(mod_vars, pop_domains)
     pop_data <- pop_data[, pop_vars]
 
-    # Order of domains pruefen (!!!)
     pop_data <- pop_data[order(pop_data[[pop_domains]]), ]
-    pop_data[[pop_domains]] <- factor(pop_data[[pop_domains]],
-      levels = unique(pop_data[[pop_domains]])
-    )
+    pop_data[[pop_domains]] <-
+      factor(pop_data[[pop_domains]], levels = unique(pop_data[[pop_domains]]))
     pop_domains_vec <- pop_data[[pop_domains]]
 
     smp_data <- smp_data[order(smp_data[[smp_domains]]), ]
-    smp_data[[smp_domains]] <- factor(smp_data[[smp_domains]],
-      levels = unique(pop_data[[pop_domains]])
-    )
+    smp_data[[smp_domains]] <-
+      factor(smp_data[[smp_domains]], levels = unique(pop_data[[pop_domains]]))
     smp_domains_vec <- smp_data[[smp_domains]]
     smp_domains_vec <- droplevels(smp_domains_vec)
 
@@ -75,19 +75,22 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_domains = smp_domains
     )
 
-    pop_mean <- lapply(pop_mean, only.mod_vars, mod_vars)
-    pop_mean.mat <- matrix(unlist(lapply(pop_mean, c_1)), ncol = length(mod_vars) + 1, byrow = TRUE)
+    pop_mean <- lapply(pop_mean, only_mod_vars, mod_vars)
+    pop_mean.mat <- matrix(data  = unlist(lapply(pop_mean, c_1)),
+                           ncol  = length(mod_vars) + 1,
+                           byrow = TRUE
+    )
     row.names(pop_mean.mat) <- names(pop_mean)
     colnames(pop_mean.mat) <- c("intercept", mod_vars)
 
-    if(!is.null(pop_cov)) {
-      pop_cov <- lapply(pop_cov, only.mod_vars, mod_vars)
+    if (!is.null(pop_cov)) {
+      pop_cov <- lapply(pop_cov, only_mod_vars, mod_vars)
       pop_cov.mat <- matrix(unlist(lapply(pop_cov, crbind_0)),
         ncol = (length(mod_vars) + 1)^2, byrow = TRUE
       )
       row.names(pop_cov.mat) <- names(pop_cov)
       colnames(pop_cov.mat) <- cov_names(c("intercept", mod_vars))
-    }else{
+    } else {
       pop_cov.mat <- NULL
     }
 

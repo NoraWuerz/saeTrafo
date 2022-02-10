@@ -1,4 +1,3 @@
-# Functions called in framework_NER
 fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
                          fixed, smp_domains) {
   if (!all(mod_vars %in% colnames(pop_data))) {
