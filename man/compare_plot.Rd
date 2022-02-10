@@ -106,6 +106,54 @@ model-based estimates are compared by boxplots and scatter plots.
 Since all of the comparisons need a direct estimator, the plots are
 only created for in-sample domains.
 }
+\examples{
+
+Example for creating plots to compare the saeTrafo object with direct
+estimates (produced by the package emdi)
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+# Get direct estimates from the R-package emdi
+library(emdi)
+emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
+                      smp_domains = "district", weights = "weight",
+                      var = TRUE, na.rm = TRUE)
+
+# Comparison plots with uncertainty assessment plots (for MSE and CV)
+saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
+                       CV = TRUE)
+
+# Personalize comparison plots using the options provided with this function
+# and ggplot themes
+library(ggplot2)
+saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
+                       CV = TRUE, label = "no_title",
+                       color = c("orange", "green"),
+                       shape = c(1,2),
+                       line_type = c("dotted", "dashed"),
+                       gg_theme = theme(
+                          text = element_text(size = 20),
+                          panel.border = element_rect(linetype = "dashed",
+                                                      fill = "NA")),
+                       labs(title = "My compare_plot"))
+
+
+
+}
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link[emdi]{direct}},
 \code{\link{NER_Trafo}}
