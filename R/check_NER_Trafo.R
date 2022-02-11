@@ -41,12 +41,12 @@ fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
 fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
                          smp_data, fixed, smp_domains) {
   if (!all(names(pop_area_size) %in% names(pop_mean))) {
-    stop(paste0("Domains in pop_area_size not equal to domains in pop_mean."))
+    stop("Domains in pop_area_size not equal to domains in pop_mean.")
   }
 
   # pop-cov kann lehr sein (!)
   # if (!all(names(pop_area_size) %in% names(pop_cov))) {
-  #   stop(paste0("Domains in pop_area_size not equal to domains in pop_cov."))
+  #   stop("Domains in pop_area_size not equal to domains in pop_cov.")
   # }
 
   # check: mod_vars includes in pop_cov and pop_mean
@@ -61,7 +61,7 @@ fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
                  Please provide valid variable name for smp_domains."))
   }
   if (!all(smp_data[smp_domains][, 1] %in% names(pop_area_size))) {
-    stop(paste0("More than one sample domain is not inclueded in the population data."))
+    stop("More than one sample domain is not inclueded in the population data.")
   }
   if (!((as.character(fixed[2])) %in% colnames(smp_data))) {
     stop(paste0("Variable ", as.character(fixed[2]), " is not contained in smp_data.

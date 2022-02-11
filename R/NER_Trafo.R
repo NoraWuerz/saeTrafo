@@ -149,7 +149,9 @@ NER_Trafo <- function(fixed,
   if (MSE == TRUE) {
 
     if(is.null(pop_cov) && MSE == TRUE && transformation != "no") {
-      stop(paste0("No MSE estimator available. For MSE estimation a covariance matrices or population data are needed otherwise the Prasad Rao MSE (transformation == \"no\") is avaliable."))
+      stop("No MSE estimator available. For MSE estimation a covariance matrices
+            or population data are needed otherwise the Prasad Rao MSE
+            (transformation == \"no\") is avaliable.")
     }
 
     # The function parametric_bootstrap can be found in script mse_estimation.R
