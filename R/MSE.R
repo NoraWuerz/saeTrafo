@@ -1,5 +1,12 @@
 # MSE estimation function for saeTrafo objects ---------------------------------
 
+#' @importFrom parallel detectCores clusterSetRNGStream
+#' @importFrom parallelMap parallelStart parallelLibrary parallelLapply
+#' @importFrom parallelMap parallelStop
+#' @importFrom nlme gapply
+#' @importFrom stats rnorm model.matrix
+#'
+
 mse <- function(framework,
                 point_estim,
                 fixed,
@@ -12,16 +19,14 @@ mse <- function(framework,
 
   if (transformation == "no") {
 
-    mse_out <- mse_prasad_rao(
-      framework   = framework,
-      point_estim = point_estim,
-      fixed       = fixed
+    mse_out <- mse_prasad_rao(framework   = framework,
+                              point_estim = point_estim,
+                              fixed       = fixed
     )
 
     successful_bootstraps <- NULL
-    MSE <- data.frame(
-      Domain = names(framework$pop_area_size),
-      Mean   = mse_out
+    MSE <- data.frame(Domain = names(framework$pop_area_size),
+                      Mean   = mse_out
     )
 
     return(list(
@@ -35,21 +40,18 @@ mse <- function(framework,
     start_time <- Sys.time()
 
     if (cpus > 1) {
-      cpus <- min(cpus, parallel::detectCores())
-      parallelMap::parallelStart(
-        mode = parallel_mode,
-        cpus = cpus, show.info = FALSE
-      )
+      cpus <- min(cpus, detectCores())
+      parallelStart(mode = parallel_mode, cpus = cpus, show.info = FALSE)
 
       if (parallel_mode == "socket") {
-        parallel::clusterSetRNGStream()
+        clusterSetRNGStream()
       }
 
-      parallelMap::parallelLibrary(packages = c("base", "nlme", "emdi", "stats",
-                                                "sfsmisc", "saeTrafo"))
+      parallelLibrary(packages = c("base", "nlme", "emdi", "stats", "sfsmisc",
+                                   "saeTrafo"))
 
       if (!is.null(framework$pop_cov)) {
-        mse_out <- simplify2array(parallelMap::parallelLapply(
+        mse_out <- simplify2array(parallelLapply(
           xs             = seq_len(B),
           fun            = mse_bc_agg_wrapper,
           B              = B,
@@ -61,7 +63,7 @@ mse <- function(framework,
           threshold      = threshold,
           start_time     = start_time
         ))
-        parallelMap::parallelStop()
+        parallelStop()
       }
     } else {
       if (!is.null(framework$pop_cov)) {
@@ -111,13 +113,12 @@ mse_bc_agg_wrapper <- function(i,
                                threshold,
                                start_time) {
 
-  tmp <- mse_bc_agg(
-    framework      = framework,
-    point_estim    = point_estim,
-    fixed          = fixed,
-    transformation = transformation,
-    interval       = interval,
-    threshold      = threshold
+  tmp <- mse_bc_agg(framework      = framework,
+                    point_estim    = point_estim,
+                    fixed          = fixed,
+                    transformation = transformation,
+                    interval       = interval,
+                    threshold      = threshold
   )
 
   if (i %% 10 == 0) {
@@ -153,19 +154,17 @@ mse_bc_agg <- function(framework,
                        threshold) {
 
   # generate random effects for each bootstrap replication
-  u_d_b <- rnorm(
-    n    = framework$N_dom_pop,
-    mean = 0,
-    sd   = sqrt(point_estim$model_par$sigmau2est)
+  u_d_b <- rnorm(n    = framework$N_dom_pop,
+                 mean = 0,
+                 sd   = sqrt(point_estim$model_par$sigmau2est)
   )
 
-  u_di_b <- unlist(base::mapply(
-    FUN   = rep,
-    x     = u_d_b,
-    times = include_dom_unobs(
-      x       = framework$n_smp,
-      obs_dom = framework$dist_obs_dom
-    )
+  u_di_b <- unlist(mapply(FUN   = rep,
+                          x     = u_d_b,
+                          times = include_dom_unobs(
+                            x       = framework$n_smp,
+                            obs_dom = framework$dist_obs_dom
+                          )
   ))
 
   # true means
@@ -204,13 +203,12 @@ mse_bc_agg <- function(framework,
   }
 
   # construct bootstrap sample
-  e_di_b <- stats::rnorm(
-    n    = framework$N_smp,
-    mean = 0,
-    sd   = sqrt(point_estim$model_par$sigmae2est)
+  e_di_b <- rnorm(n    = framework$N_smp,
+                  mean = 0,
+                  sd   = sqrt(point_estim$model_par$sigmae2est)
   )
 
-  Y_smp_b <- stats::model.matrix(fixed, framework$smp_data) %*%
+  Y_smp_b <- model.matrix(fixed, framework$smp_data) %*%
     point_estim$model_par$betas + u_di_b + e_di_b
 
   smp_data_b <- framework$smp_data
@@ -226,14 +224,12 @@ mse_bc_agg <- function(framework,
 
   # calculate mean with proposed method
   Y_estim_b <- rep(NA, length = framework$N_dom_pop)
-  try(
-    Y_estim_b <- point_estim(
-      framework      = framework_b,
-      fixed          = fixed,
-      transformation = transformation,
-      threshold      = threshold,
-      interval       = interval
-    )$ind$Mean
+  try(Y_estim_b <- point_estim(framework      = framework_b,
+                               fixed          = fixed,
+                               transformation = transformation,
+                               threshold      = threshold,
+                               interval       = interval
+                   )$ind$Mean
   )
 
   return((Y_estim_b - Y_mean_b_orig_korr)^2)
@@ -249,37 +245,31 @@ mse_prasad_rao <- function(framework,
                            interval,
                            threshold) {
 
-  out_g1 <- g1(
-    sigmau2   = point_estim$model_par$sigmau2est,
-    sigmae2   = point_estim$model_par$sigmae2est,
-    n_smp     = include_dom_unobs(
-      x       = framework$n_smp,
-      obs_dom = framework$dist_obs_dom
-    )
+  out_g1 <- g1(sigmau2   = point_estim$model_par$sigmau2est,
+               sigmae2   = point_estim$model_par$sigmae2est,
+               n_smp     = include_dom_unobs(x       = framework$n_smp,
+                                             obs_dom = framework$dist_obs_dom
+               )
   )
 
-  out_g2 <- g2(
-    sigmau2 = point_estim$model_par$sigmau2est,
-    sigmae2 = point_estim$model_par$sigmae2est,
-    n_smp   = include_dom_unobs(
-      x       = framework$n_smp,
-      obs_dom = framework$dist_obs_dom
-    ),
-    Xmean = framework$pop_mean.mat,
-    X     = model.matrix(fixed, framework$smp_data),
-    area  = framework$smp_domains_vec
+  out_g2 <- g2(sigmau2 = point_estim$model_par$sigmau2est,
+               sigmae2 = point_estim$model_par$sigmae2est,
+               n_smp   = include_dom_unobs(x       = framework$n_smp,
+                                           obs_dom = framework$dist_obs_dom
+               ),
+               Xmean = framework$pop_mean.mat,
+               X     = model.matrix(fixed, framework$smp_data),
+               area  = framework$smp_domains_vec
   )
 
-  out_g3 <- g3(
-    sigmau2 = point_estim$model_par$sigmau2est,
-    sigmae2 = point_estim$model_par$sigmae2est,
-    n_smp   = include_dom_unobs(
-      x       = framework$n_smp,
-      obs_dom = framework$dist_obs_dom
-    ),
-    X       = model.matrix(fixed, framework$smp_data),
-    area     = framework$smp_domains_vec,
-    pop_area = row.names(framework$pop_mean.mat)
+  out_g3 <- g3(sigmau2 = point_estim$model_par$sigmau2est,
+               sigmae2 = point_estim$model_par$sigmae2est,
+               n_smp   = include_dom_unobs(x       = framework$n_smp,
+                                           obs_dom = framework$dist_obs_dom
+               ),
+               X       = model.matrix(fixed, framework$smp_data),
+               area     = framework$smp_domains_vec,
+               pop_area = row.names(framework$pop_mean.mat)
   )
 
   mse1 <- out_g1 + out_g2 + 2 * out_g3
@@ -287,21 +277,14 @@ mse_prasad_rao <- function(framework,
 }
 
 # Components g1, g2, g3 for the function mse_prasad_rao
-g1 <- function(sigmau2,
-               sigmae2,
-               n_smp) {
+g1 <- function(sigmau2, sigmae2, n_smp) {
 
   tmp <- ((sigmau2) / (sigmau2 + sigmae2 / n_smp)) * (sigmae2 / n_smp)
   tmp[is.nan(tmp)] <- 0
   return(tmp)
 }
 
-g2 <- function(sigmau2,
-               sigmae2,
-               n_smp,
-               Xmean,
-               X,
-               area) {
+g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
 
   gamma_d <- sigmau2 / (sigmau2 + (sigmae2 / n_smp))
 
@@ -310,18 +293,15 @@ g2 <- function(sigmau2,
   m <- nrow(Xmean)
   m_in <- length(unique(area))
 
-  xmean <- include_dom_unobs(
-    matrix(
-      unlist(nlme::gapply(
-        object = data.frame(X),
-        FUN    = colMeans,
-        groups = area
-      )),
-      nrow  = m_in,
-      ncol  = p,
-      byrow = TRUE
-    ),
-    obs_dom = row.names(Xmean) %in% area
+  xmean <- include_dom_unobs(matrix(unlist(gapply(object = data.frame(X),
+                                                  FUN    = colMeans,
+                                                  groups = area
+                                    )),
+                                    nrow  = m_in,
+                                    ncol  = p,
+                                    byrow = TRUE
+                             ),
+                             obs_dom = row.names(Xmean) %in% area
   )
 
   X_vec <- Xmean - gamma_d * xmean
@@ -344,12 +324,7 @@ g2 <- function(sigmau2,
   return(g2_res)
 }
 
-g3 <- function(sigmau2,
-               sigmae2,
-               n_smp,
-               X,
-               area,
-               pop_area) {
+g3 <- function(sigmau2, sigmae2, n_smp, X, area, pop_area) {
 
   t <- length(n_smp)
   k <- (ncol(X) - 1)

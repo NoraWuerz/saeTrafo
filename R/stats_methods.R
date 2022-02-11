@@ -1,4 +1,4 @@
-# Extract model coefficients of saeTrafo objects -----------------------------------
+# Extract model coefficients of saeTrafo objects -------------------------------
 
 #' @aliases coefficients
 #' @export
@@ -54,7 +54,6 @@ fitted.NER <- function(object, ...) {
 
 #' @export
 #' @method formula NER
-#' @importFrom stats formula
 
 formula.NER <- function(x, ...) {
   throw_class_error(x, "NER")
@@ -64,7 +63,6 @@ formula.NER <- function(x, ...) {
 # Extract log-Likelihood of saeTrafo objects -----------------------------------
 #' @export
 #' @method logLik NER
-#' @importFrom stats logLik
 
 logLik.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -75,12 +73,10 @@ logLik.NER <- function(object, ...) {
 # Extract the number of `observations´ from a fit of an saeTrafo object --------
 #' @export
 #' @method nobs NER
-#' @importFrom stats nobs
 
 nobs.NER <- function(object, ...) {
   throw_class_error(object, "NER")
-  N_obs <- object$framework$N_smp
-  N_obs
+  object$framework$N_smp
 }
 
 #-------------------------------------------------------------------------------

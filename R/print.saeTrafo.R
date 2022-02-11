@@ -1,14 +1,9 @@
-#  #' Prints an emdiObject
-#  #'
-#  #' Basic information of an saeTrafo object is printed.
-#  #' @param x an x of type "saeTrafo", representing point and MSE
-#  #' estimates.
-#  #' @param ... optional arguments passed to \code{\link{print.default}}.
-#  #' @seealso \code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}},
-#  #'  \code{\link{emdiObject}}
+# Prints a saeTrafo object
+
 #' @export
 
 print.NER <- function(x, ...) {
+
   throw_class_error(x, "NER")
 
   cat("Nested error regression model (under transformations)\n")
@@ -18,24 +13,24 @@ print.NER <- function(x, ...) {
   cat("In-sample domains: ", x$framework$N_dom_smp, "\n")
 
   if (x$transformation == "log") {
-    transform_method <- data.frame(Transformation  = x$transformation,
-                                   Shift_parameter = round(x$transform_param$shift_par,3),
-                                   row.names       = ""
+    transform_method <- data.frame(
+      Transformation  = x$transformation,
+      Shift_parameter = round(x$transform_param$shift_par, 3),
+      row.names       = ""
     )
-  }
-  else if (x$transformation == "log.shift") {
-    transform_method <- data.frame(Transformation  = x$transformation,
-                                   Method          = x$method,
-                                   Optimal_lambda  = x$transform_param$optimal_lambda,
-                                   row.names       = ""
+  } else if (x$transformation == "log.shift") {
+    transform_method <- data.frame(
+      Transformation  = x$transformation,
+      Method          = x$method,
+      Optimal_lambda  = x$transform_param$optimal_lambda,
+      row.names       = ""
     )
-  }
-  else if (x$transformation == "no") {
+  } else if (x$transformation == "no") {
     transform_method <- NULL
   }
 
   cat("\n")
-  if(is.null(transform_method)){
+  if (is.null(transform_method)) {
     cat("Transformation: No transformation \n")
   } else {
     cat("Transformation:\n")

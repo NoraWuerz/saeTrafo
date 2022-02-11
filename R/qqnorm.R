@@ -1,9 +1,9 @@
 #' Quantile-quantile plots for an saeTrafo object
 #'
-#' Normal quantile-quantile plots of the underlying model (see also
+#' Normal quantile-quantile plots of the underlying model (see
 #' \code{\link{NER_Trafo}}) are obtained. The plots are obtained by
 #' \code{\link[ggplot2]{ggplot}}.
-#' @param y a model object of type "saeTrafo" (see also \code{\link{NER_Trafo}}).
+#' @param y a model object of type "saeTrafo" (see \code{\link{NER_Trafo}}).
 #' @param color a character vector with two elements. The first element defines
 #' the color for the line in the QQ-plots, for the Cook's Distance plot and for
 #' the Box-Cox plot. The second element defines the color for the densities.
@@ -16,14 +16,10 @@
 #' @export
 #' @method qqnorm saeTrafo
 #' @importFrom ggplot2 qplot geom_abline ggtitle ylab xlab ggplot stat_qq
-#' @importFrom ggplot2 aes geom_point geom_smooth coord_fixed geom_line
-#' @importFrom ggplot2 scale_color_manual scale_fill_manual geom_segment
-#' @importFrom ggplot2 scale_linetype_discrete geom_density geom_text
-#' @importFrom ggplot2 geom_line geom_vline stat_function geom_qq
+#' @importFrom ggplot2 aes
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra arrangeGrob grid.arrange
-#' @importFrom stats shapiro.test logLik cooks.distance
-#' @importFrom HLMdiag mdffits
+#' @importFrom stats sd
 
 qqnorm.saeTrafo <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {
@@ -36,36 +32,40 @@ qqnorm.saeTrafo <- function(y, color = c("blue", "lightblue3"),
   # Residuals
   res <- qplot(sample = residuals) +
     geom_abline(colour = color[1]) +
-    ggtitle("Error term") + ylab("Quantiles of pearson residuals") +
-    xlab("Theoretical quantiles") + gg_theme
+    ggtitle("Error term") +
+    ylab("Quantiles of pearson residuals") +
+    xlab("Theoretical quantiles") +
+    gg_theme
 
   # Random effects
-  ran <- ggplot(data.frame(tmp) ,aes(sample = tmp)) +
+  ran <- ggplot(data.frame(tmp), aes(sample = tmp)) +
     stat_qq(distribution = qnorm, dparams = list(mean = mean(tmp),
-                                                sd = sd(tmp))) +
-    geom_abline(intercept = 0, slope = 1,na.rm = TRUE, col = color[1]) +
-    ggtitle("Random effect") + ylab("Quantiles of random effects") +
-    xlab("Theoretical quantiles") + gg_theme
+                                                 sd = sd(tmp))) +
+    geom_abline(intercept = 0, slope = 1, na.rm = TRUE, col = color[1]) +
+    ggtitle("Random effect") +
+    ylab("Quantiles of random effects") +
+    xlab("Theoretical quantiles") +
+    gg_theme
 
-  invisible(grid.arrange(arrangeGrob(res, ran ,ncol = 2)))
+  invisible(grid.arrange(arrangeGrob(res, ran, ncol = 2)))
 }
 
 
 #' @rdname qqnorm.saeTrafo
+#' @importFrom nlme ranef
 #' @export
 qqnorm.NER <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {
 
   residuals <- residuals(y$model, level = 0, type = "pearson")
-  rand.eff <- nlme::ranef(y$model)$'(Intercept)'
-  srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
-  tmp <- as.matrix(random.effects(y$model))[,1]
+  rand.eff <- ranef(y$model)$'(Intercept)'
+  tmp <- as.matrix(random.effects(y$model))[, 1]
 
   model <- y$model
   model$call$fixed <- y$fixed
 
   NextMethod("qqnorm",
              residuals = residuals,
-             tmp = tmp
-             )
+             tmp       = tmp
+  )
 }

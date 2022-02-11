@@ -1,10 +1,9 @@
-# Internal documentation -------------------------------------------------------
-
-# Point estimation function
+# Point estimation function for saeTrafo objects ------------------------------
 
 # This function implements the transformation of data, estimation of the nested
 # error linear regression model and calculates different estimators.
-
+#' @importFrom emdi data_transformation
+#' @importFrom nlme lme
 
 point_estim <- function(framework,
                         fixed,
@@ -29,11 +28,11 @@ point_estim <- function(framework,
 
   # Data_transformation function returns transformed data and shift parameter.
   # The data_transformation is in the package emdi which is imported.
-  transformation_par <-
-    emdi::data_transformation(fixed          = fixed,
-                              smp_data       = framework$smp_data,
-                              transformation = transformation,
-                              lambda         = optimal_lambda
+
+  transformation_par <- data_transformation(fixed          = fixed,
+                                            smp_data       = framework$smp_data,
+                                            transformation = transformation,
+                                            lambda         = optimal_lambda
   )
   shift_par <- transformation_par$shift
 
@@ -42,12 +41,12 @@ point_estim <- function(framework,
   # Estimation of the nested error linear regression model
   # See Molina and Rao (2010) p. 374
   # lme function is included in the nlme package which is imported.
-  mixed_model <- nlme::lme(fixed     = fixed,
-                           data      = transformation_par$transformed_data,
-                           random    = as.formula(paste0(
-                             "~ 1 | as.factor(",framework$smp_domains, ")")),
-                           method    = "REML",
-                           keep.data = keep_data
+  mixed_model <- lme(fixed     = fixed,
+                     data      = transformation_par$transformed_data,
+                     random    = as.formula(paste0(
+                       "~ 1 | as.factor(", framework$smp_domains, ")")),
+                     method    = "REML",
+                     keep.data = keep_data
   )
 
 
@@ -129,15 +128,13 @@ point_estim <- function(framework,
         ind$Mean <- 1 / framework$pop_area_size *
           (synthetic * exp(rand_eff_long + bc_d)) - optimal_lambda
       }
-
     } else {
-
       est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
         rand_eff_long + bc_d
       est_ds <- include_dom_unobs(
-        x       = tapply(X     = framework$smp_data[as.character(fixed[2])][, 1],
-                         INDEX = framework$smp_domains_vec,
-                         FUN   = mean
+        x      = tapply(X     = framework$smp_data[as.character(fixed[2])][, 1],
+                        INDEX = framework$smp_domains_vec,
+                        FUN   = mean
                   ),
         obs_dom = framework$dist_obs_dom
       )
@@ -161,28 +158,21 @@ point_estim <- function(framework,
   ))
 }
 
-
-
-
-# All following functions are only internal ------------------------------------
-
 # Functions to extract and calculate model parameter----------------------------
 
 # Function model_par extracts the needed parameters theta from the nested
 # error linear regression model. It returns the beta coefficients (betas),
 # sigmae2est, sigmau2est and the random effect (rand_eff).
+#' @importFrom nlme fixed.effects VarCorr
 
-model_par <- function(framework,
-                      mixed_model,
-                      fixed,
-                      transformation_par) {
+model_par <- function(framework, mixed_model, fixed, transformation_par) {
 
     # fixed parametersn
-    betas <- nlme::fixed.effects(mixed_model)
+    betas <- fixed.effects(mixed_model)
     # Estimated error variance
     sigmae2est <- mixed_model$sigma^2
     # VarCorr(fit2) is the estimated random error variance
-    sigmau2est <- as.numeric(nlme::VarCorr(mixed_model)[1, 1])
+    sigmau2est <- as.numeric(VarCorr(mixed_model)[1, 1])
     # Random effect: vector with zeros for all domains, filled with
     rand_eff <- rep(0, length(unique(framework$pop_domains_vec)))
     # random effect for in-sample domains (obs_dom)
@@ -196,12 +186,13 @@ model_par <- function(framework,
 }
 
 # Function for synthetic part estimation ---------------------------------------
+
 # Function for small area estimation specific kernel-density estimation
 # method for the synthetic part see Wuerz et. al.
-syn_est <- function(framework,
-                    est_par,
-                    fixed,
-                    threshold) {
+#' @importFrom stats density bw.SJ
+#' @importFrom sfsmisc integrate.xy
+
+syn_est <- function(framework, est_par, fixed, threshold) {
 
   y_est <- model.matrix(fixed, framework$smp_data) %*% est_par$betas
 
@@ -238,15 +229,14 @@ syn_est <- function(framework,
       input <- data_smp_z * x_sd_d[i] + x_mean_d[i]
     }
 
-    est_synthetic_density <- stats::density(x      = input,
-                                            bw     = stats::bw.SJ(x      = input,
-                                                                  method = "dpi"),
-                                            kernel = "epanechnikov"
+    est_synthetic_density <- density(x      = input,
+                                     bw     = bw.SJ(x = input, method = "dpi"),
+                                     kernel = "epanechnikov"
     )
 
-    est_synthetic[i] <- sfsmisc::integrate.xy(x  = est_synthetic_density$x,
-                                              fx = est_synthetic_density$y *
-                                                exp(est_synthetic_density$x)
+    est_synthetic[i] <- integrate.xy(x  = est_synthetic_density$x,
+                                     fx = est_synthetic_density$y *
+                                       exp(est_synthetic_density$x)
     )
   }
 

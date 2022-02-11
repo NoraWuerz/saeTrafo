@@ -10,7 +10,7 @@
 \method{qqnorm}{NER}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 }
 \arguments{
-\item{y}{a model object of type "saeTrafo" (see also \code{\link{NER_Trafo}}).}
+\item{y}{a model object of type "saeTrafo" (see \code{\link{NER_Trafo}}).}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
@@ -26,7 +26,7 @@ For using this argument, package \pkg{ggplot2} must be loaded via
 Two Q-Q plots in one grid obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
-Normal quantile-quantile plots of the underlying model (see also
+Normal quantile-quantile plots of the underlying model (see
 \code{\link{NER_Trafo}}) are obtained. The plots are obtained by
 \code{\link[ggplot2]{ggplot}}.
 }

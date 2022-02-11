@@ -54,20 +54,20 @@ add_summary_ods_NER <- function(object, wb, headlines_cs) {
                          "out of sample observations",
                          "in sample observations")
   df_nobs <- cbind.data.frame(rownames(df_nobs), df_nobs)
-  readODS::write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
+  write_ods(x = df_nobs, path = paste0(wb, "_sumObs", ".ods"))
 
   df_size_dom <- as.data.frame(su$size_dom)
   df_size_dom <- cbind.data.frame(rownames(df_size_dom), df_size_dom)
-  readODS::write_ods(x = df_size_dom, path = paste0(wb, "_sumDom", ".ods"))
+  write_ods(x = df_size_dom, path = paste0(wb, "_sumDom", ".ods"))
 
   if (!is.null(su$transform)) {
-    readODS::write_ods(x = su$transform, path = paste0(wb, "_sumTrafo", ".ods"))
+    write_ods(x = su$transform, path = paste0(wb, "_sumTrafo", ".ods"))
   }
   su$normality <-  cbind.data.frame(rownames(su$normality), su$normality)
-  readODS::write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
+  write_ods(x = su$normality, path = paste0(wb, "_sumNorm", ".ods"))
 
   su$coeff_determ <-  cbind.data.frame("Coefficients of determination", su$coeff_determ)
-  readODS::write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoefDet", ".ods"))
+  write_ods(x = su$coeff_determ, path = paste0(wb, "_sumCoefDet", ".ods"))
 
   return(NULL)
 }
@@ -87,7 +87,7 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
 
   data <- point_saeTrafo(object = object, indicator = indicator)$ind
   data[,1] <- iconv(x = data[,1], from = "", to = "UTF-8")
-  readODS::write_ods(x = data, path = paste0(wb, "_pointEstim", ".ods"))
+  write_ods(x = data, path = paste0(wb, "_pointEstim", ".ods"))
 
   return(NULL)
 }
@@ -98,12 +98,12 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
   if (MSE) {
     precisions$ind[,1] <-
       iconv(x <- precisions$ind[,1], from = "",to = "UTF-8")
-    readODS::write_ods(x = precisions$ind, path = paste0(wb, "_precMSE", ".ods"))
+    write_ods(x = precisions$ind, path = paste0(wb, "_precMSE", ".ods"))
   }
   if (CV) {
     precisions$ind_cv[,1] <-
       iconv(x <- precisions$ind_cv[,1], from = "",to = "UTF-8")
-    readODS::write_ods(x = precisions$ind_cv, path = paste0(wb, "_precCV", ".ods"))
+    write_ods(x = precisions$ind_cv, path = paste0(wb, "_precCV", ".ods"))
   }
   return(NULL)
 }

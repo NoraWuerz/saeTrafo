@@ -52,18 +52,18 @@ summary.NER <- function(object, ...) {
     transform_method <- NULL
   }
 
-  skewness_res <- moments::skewness(residuals(object$model, level = 0, type = "pearson"))
-  kurtosis_res <- moments::kurtosis(residuals(object$model, level = 0, type = "pearson"))
+  skewness_res <- skewness(residuals(object$model, level = 0, type = "pearson"))
+  kurtosis_res <- kurtosis(residuals(object$model, level = 0, type = "pearson"))
 
-  skewness_ran <- moments::skewness(ranef(object$model)$'(Intercept)')
-  kurtosis_ran <- moments::kurtosis(ranef(object$model)$'(Intercept)')
+  skewness_ran <- skewness(ranef(object$model)$'(Intercept)')
+  kurtosis_ran <- kurtosis(ranef(object$model)$'(Intercept)')
 
   if (length(residuals(object$model, level = 0, type = "pearson")) > 3 &
       length(residuals(object$model, level = 0, type = "pearson")) < 5000) {
     shapiro_p_res <-
-      stats::shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
+      shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[2]]
     shapiro_W_res <-
-      stats::shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
+      shapiro.test(residuals(object$model, level = 0, type = "pearson"))[[1]]
   } else {
     warning("Number of observations exceeds 5000 or is lower then 3 and thus the
              Shapiro-Wilk test is not applicable for the residuals.")
@@ -90,7 +90,7 @@ summary.NER <- function(object, ...) {
   )
   tempMod <- object$model
   tempMod$call$fixed <- object$fixed
-  r_squared <- suppressWarnings(MuMIn::r.squaredGLMM(tempMod))
+  r_squared <- suppressWarnings(r.squaredGLMM(tempMod))
   if (is.matrix(r_squared)) {
     r_marginal <- r_squared[1, 1]
     r_conditional <- r_squared[1, 2]

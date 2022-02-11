@@ -16,6 +16,7 @@ pop_mean
 }
 \description{
 This data contains aggregates from \code{\link{eusilcA_pop}}
-which is based on \code{\link[simFrame]{eusilcP}} from package \pkg{simFrame}.
+which is based on \code{\link[simFrame]{eusilcP}} from package
+\pkg{simFrame}.
 }
 \keyword{datasets}
