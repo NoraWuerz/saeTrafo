@@ -33,10 +33,9 @@ compare_plot_check2 <- function(ind_direct, ind_model) {
           sample.")
   }
   if (!all(ind_direct$Domain %in% ind_model$Domain)) {
-    warning(paste("Not all domains contained in the direct estimation have",
-                  "been found in the model estimation. Following plots will",
-                  "only contain results for estimates available in both",
-                  "objects"))
+    warning("Not all domains contained in the direct estimation have been found
+            in the model estimation. Following plots will only contain results
+            for estimates available in both objects")
   }
   if (!all(ind_model$Domain %in% ind_direct$Domain)) {
     message(paste("Not all domains contained in the model estimation have been",

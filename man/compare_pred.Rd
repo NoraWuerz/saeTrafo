@@ -15,14 +15,14 @@ compare_pred(object1, object2, MSE = FALSE, ...)
 \item{object2}{an object of type "saeTrafo" or "emdi"
 (\code{\link[emdi]{emdiObject}}).}
 
-\item{MSE}{if \code{TRUE}, MSE estimates are returned. Defaults to
-\code{FALSE} and than point estimates are returned.}
+\item{MSE}{optional logical. If \code{TRUE}, MSE estimates are returned.
+Defaults to \code{FALSE} and than point estimates are returned.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \value{
 Data frame containing the point estimates or the MSE estimates
-(if \code{MSE} is set to \code{TRUE}\) of both objects. If column names are
+(if \code{MSE} is set to \code{TRUE}) of both objects. If column names are
 duplicated, the suffixes "_1" and "_2" are added to their names. "_1" and
 "_2" standing for object1 and object2, respectively.
 }

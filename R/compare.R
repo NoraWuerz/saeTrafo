@@ -5,8 +5,8 @@
 #'
 #' @param object1 an object of type "saeTrafo".
 #' @param object2 an object of type "saeTrafo" or "emdi" (\code{\link{emdi}}).
-#' @param MSE if \code{TRUE}, MSE estimates are returned. Defaults to
-#' \code{FALSE} and than point estimates are returned.
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates are returned.
+#' Defaults to \code{FALSE} and than point estimates are returned.
 #' @param ... further arguments passed to or from other methods.
 #' @export
 #' @name compare_pred
@@ -22,11 +22,11 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' @param object1 an object of type "saeTrafo".
 #' @param object2 an object of type "saeTrafo" or "emdi"
 #' (\code{\link[emdi]{emdiObject}}).
-#' @param MSE if \code{TRUE}, MSE estimates are returned. Defaults to
-#' \code{FALSE} and than point estimates are returned.
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates are returned.
+#' Defaults to \code{FALSE} and than point estimates are returned.
 #' @param ... further arguments passed to or from other methods.
 #' @return Data frame containing the point estimates or the MSE estimates
-#' (if \code{MSE} is set to \code{TRUE}\) of both objects. If column names are
+#' (if \code{MSE} is set to \code{TRUE}) of both objects. If column names are
 #' duplicated, the suffixes "_1" and "_2" are added to their names. "_1" and
 #' "_2" standing for object1 and object2, respectively.
 #' @seealso \code{\link{emdi}}, \code{\link{NER_Trafo}},
@@ -83,7 +83,6 @@ compare_pred.saeTrafo <- function(object1, object2, MSE = FALSE, ...) {
   if (inherits(object1, "fh")) {
     object1data <- object1data[, -4] # remove column Out
   }
-
   if (inherits(object2, "fh")) {
     object2data <- object2data[, -4] # remove column Out
   }
@@ -111,7 +110,6 @@ compare_pred.saeTrafo <- function(object1, object2, MSE = FALSE, ...) {
       colnames(object1data)[12:dim(object1data)[2]] <-
         paste0(names(object1data[12:dim(object1data)[2]]), "_1")
     }
-
     if (dim(object2data)[2] > 11) {
       colnames(object2data)[12:dim(object2data)[2]] <-
         paste0(names(object2data[12:dim(object2data)[2]]), "_2")

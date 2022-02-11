@@ -84,7 +84,7 @@ estimators.saeTrafo <- function(object,  MSE = FALSE, CV = FALSE, ...) {
   estimators_check(object = object, indicator = indicator,
                    MSE = MSE, CV = CV)
 
-  all_ind <- point_emdi(object = object, indicator = indicator)
+  all_ind <- point_saeTrafo(object = object, indicator = indicator)
   selected <- colnames(all_ind$ind)[-1]
 
   if (MSE == TRUE || CV == TRUE) {

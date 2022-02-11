@@ -224,7 +224,7 @@ add_pointests <- function(object, indicator, wb, headlines_cs) {
                 indicator groups as described in help(estimators.emdi)."))
   }
 
-  data <- point_emdi(object = object, indicator = indicator)$ind
+  data <- point_saeTrafo(object = object, indicator = indicator)$ind
 
   writeDataTable(x           = data,
                  sheet       = "Point Estimators",

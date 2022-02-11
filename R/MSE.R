@@ -1,4 +1,5 @@
-# MSE estimation function
+# MSE estimation function for saeTrafo objects ---------------------------------
+
 mse <- function(framework,
                 point_estim,
                 fixed,
@@ -30,6 +31,7 @@ mse <- function(framework,
   }
 
   if (transformation == "log" | transformation == "log.shift") {
+
     start_time <- Sys.time()
 
     if (cpus > 1) {
@@ -42,7 +44,9 @@ mse <- function(framework,
       if (parallel_mode == "socket") {
         parallel::clusterSetRNGStream()
       }
-      parallelMap::parallelLibrary(packages = c("base", "nlme", "emdi", "stats", "sfsmisc", "saeTrafo"))
+
+      parallelMap::parallelLibrary(packages = c("base", "nlme", "emdi", "stats",
+                                                "sfsmisc", "saeTrafo"))
 
       if (!is.null(framework$pop_cov)) {
         mse_out <- simplify2array(parallelMap::parallelLapply(
@@ -57,7 +61,6 @@ mse <- function(framework,
           threshold      = threshold,
           start_time     = start_time
         ))
-
         parallelMap::parallelStop()
       }
     } else {
@@ -96,6 +99,7 @@ mse <- function(framework,
 }
 
 # parametric bootstrap mse estimation ------------------------------------------
+
 # wrapper function for the parametric bootstrap showing running time information
 mse_bc_agg_wrapper <- function(i,
                                B,
@@ -133,7 +137,7 @@ mse_bc_agg_wrapper <- function(i,
         "\r", i, " of ", B, " Bootstrap iterations completed \t Approximately ",
         remaining, " remaining \n"
       )
-      if (.Platform$OS.type == "windows") flush.console()
+      if (.Platform$OS.type == "windows") {flush.console()}
     }
   }
   return(tmp)
@@ -156,7 +160,7 @@ mse_bc_agg <- function(framework,
   )
 
   u_di_b <- unlist(base::mapply(
-    rep,
+    FUN   = rep,
     x     = u_d_b,
     times = include_dom_unobs(
       x       = framework$n_smp,
@@ -166,7 +170,8 @@ mse_bc_agg <- function(framework,
 
   # true means
   Y_mean_b_orig <- back_transformation(
-    y              = framework$pop_mean.mat %*% point_estim$model_par$betas + u_d_b,
+    y              = framework$pop_mean.mat %*% point_estim$model_par$betas +
+      u_d_b,
     transformation = transformation,
     shift          = point_estim$shift_par,
     lambda         = point_estim$optimal_lambda
@@ -178,16 +183,22 @@ mse_bc_agg <- function(framework,
     if (transformation == "log") {
       Y_mean_b_orig_korr[i] <-
         Y_mean_b_orig[i] *
-          as.numeric(exp(0.5 * (framework$pop_cov.mat[i, ] %*%
-            as.numeric(point_estim$model_par$betas
-              %*% t(point_estim$model_par$betas)) + point_estim$model_par$sigmae2est)))
+        as.numeric(exp(
+          0.5 * (framework$pop_cov.mat[i, ] %*%
+                   as.numeric(point_estim$model_par$betas %*%
+                                t(point_estim$model_par$betas)) +
+                   point_estim$model_par$sigmae2est)
+        ))
     }
     if (transformation == "log.shift") {
       Y_mean_b_orig_korr[i] <-
         (Y_mean_b_orig[i] + point_estim$optimal_lambda) *
-        as.numeric(exp(0.5 * (framework$pop_cov.mat[i, ]
-        %*% as.numeric(point_estim$model_par$betas
-            %*% t(point_estim$model_par$betas)) + point_estim$model_par$sigmae2est))) -
+        as.numeric(exp(
+          0.5 * (framework$pop_cov.mat[i, ] %*%
+                   as.numeric(point_estim$model_par$betas %*%
+                                t(point_estim$model_par$betas)) +
+                   point_estim$model_par$sigmae2est)
+        )) -
         point_estim$optimal_lambda
     }
   }
@@ -272,12 +283,14 @@ mse_prasad_rao <- function(framework,
   )
 
   mse1 <- out_g1 + out_g2 + 2 * out_g3
+  return(mse1)
 }
 
 # Components g1, g2, g3 for the function mse_prasad_rao
 g1 <- function(sigmau2,
                sigmae2,
                n_smp) {
+
   tmp <- ((sigmau2) / (sigmau2 + sigmae2 / n_smp)) * (sigmae2 / n_smp)
   tmp[is.nan(tmp)] <- 0
   return(tmp)
@@ -297,7 +310,9 @@ g2 <- function(sigmau2,
   m <- nrow(Xmean)
   m_in <- length(unique(area))
 
-  xmean <- include_dom_unobs(matrix(unlist(nlme::gapply(
+  xmean <- include_dom_unobs(
+    matrix(
+      unlist(nlme::gapply(
         object = data.frame(X),
         FUN    = colMeans,
         groups = area
@@ -315,7 +330,7 @@ g2 <- function(sigmau2,
 
   for (i in 1:m) {
     x_areawise <- X[area == u_area[i], ]
-    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
+    V_inv <- sigmae2^ (-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
       matrix(1, n_smp[i], n_smp[i]))
 
     sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
@@ -338,7 +353,7 @@ g3 <- function(sigmau2,
 
   t <- length(n_smp)
   k <- (ncol(X) - 1)
-  term <- (sum(n_smp) - t - k + 1)^(-1)
+  term <- (sum(n_smp) - t - k + 1)^ (-1)
 
   sum_ni2_xi_xi <- matrix(0, k + 1, k + 1)
 
@@ -346,7 +361,8 @@ g3 <- function(sigmau2,
     if (n_smp[i] != 0) {
       x_areawise <- X[area == pop_area[i], ]
       smp_mean_xi <- apply(x_areawise, MARGIN = 2, FUN = mean)
-      sum_ni2_xi_xi <- sum_ni2_xi_xi + n_smp[i]^2 * smp_mean_xi %*% t(smp_mean_xi)
+      sum_ni2_xi_xi <- sum_ni2_xi_xi +
+        n_smp[i]^2 * smp_mean_xi %*% t(smp_mean_xi)
     }
   }
 
@@ -356,12 +372,12 @@ g3 <- function(sigmau2,
   n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
 
   var_sig.e <- 2 * term * sigmae2^2
-  var_sig.u <- 2 * n_star^(-2) * (term * (t - 1) * (sum(n_smp) - k) * sigmae2^2 +
-    2 * n_star * sigmae2 * sigmau2 +
-    n_star_star * sigmau2^2)
-  cov_sig.e_sig.u <- -(t - 1) * n_star^(-1) * var_sig.e
+  var_sig.u <- 2 * n_star^ (-2) *
+    (term * (t - 1) * (sum(n_smp) - k) * sigmae2^2 +
+       2 * n_star * sigmae2 * sigmau2 + n_star_star * sigmau2^2)
+  cov_sig.e_sig.u <- - (t - 1) * n_star^ (-1) * var_sig.e
 
-  res_g3 <- n_smp^(-2) * (sigmau2 + sigmae2 / n_smp)^(-3) *
+  res_g3 <- n_smp^ (-2) * (sigmau2 + sigmae2 / n_smp)^ (-3) *
     (sigmae2^2 * var_sig.u +
        sigmau2^2 * var_sig.e -
        2 * sigmae2 * sigmau2 * cov_sig.e_sig.u)

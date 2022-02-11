@@ -324,6 +324,7 @@ compare_plots <- function(object, type, MSE, CV, label, color,
     }
 
     if (CV == TRUE) {
+
       data_tmp3 <- data.frame(Direct = object[, paste0(ind, "_Direct_CV")],
                               Model_based = object[, paste0(ind, "_Model_CV")],
                               smp_size = object$smp_size2)
@@ -363,7 +364,6 @@ compare_plots <- function(object, type, MSE, CV, label, color,
               scale_shape_manual(values = c(shape[1], shape[2])) + gg_theme)
     }
 
-
     if (!ind == tail(selected_indicators, 1)) {
       cat("Press [enter] to continue")
       line <- readline()
@@ -373,9 +373,9 @@ compare_plots <- function(object, type, MSE, CV, label, color,
 }
 
 define_evallabel <- function(type, label, indi) {
+
   if (!inherits(label, "list")) {
     if (label == "orig") {
-
       if (type == "unit") {
         label <- list(scatter = c(title = indi,
                                   y_lab = "Model-based",
@@ -419,7 +419,6 @@ define_evallabel <- function(type, label, indi) {
                                      x_lab = "Domain
                                      (ordered by increasing CV of Direct)"))
       }
-
     } else if (label == "blank") {
       label <- list(scatter = c(title = "",
                                 y_lab = "",
@@ -487,7 +486,6 @@ define_evallabel <- function(type, label, indi) {
       }
 
     }
-
   }
   return(label)
 }
@@ -500,12 +498,12 @@ compare_plot_ebp <- function(model, direct, MSE = FALSE,
 
   indicator <- c("Mean")
 
-  ind_direct <- point_emdi(object = direct, indicator = indicator)$ind
+  ind_direct <- point_saeTrafo(object = direct, indicator = indicator)$ind
   selected_direct <- colnames(ind_direct)[-1]
   colnames(ind_direct) <- c("Domain", paste0(colnames(ind_direct)[-1],
                                              "_Direct"))
 
-  ind_model <- point_emdi(object = model, indicator = indicator)$ind
+  ind_model <- point_saeTrafo(object = model, indicator = indicator)$ind
   selected_model <- colnames(ind_model)[-1]
   colnames(ind_model) <- c("Domain", paste0(colnames(ind_model)[-1],
                                             "_Model"))
@@ -543,7 +541,6 @@ compare_plot_ebp <- function(model, direct, MSE = FALSE,
       Data <- merge(Data, precisions_model$ind_cv, id = "Domain")
       Data$smp_size2 <- Data$smp_size
     }
-
   }
 
   selected_indicators <- selected_model[selected_model %in% selected_direct]

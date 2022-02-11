@@ -8,7 +8,9 @@
 #' districts.
 #' @export
 
-load_shapeaustria <- function(){
-  load(system.file("shapes/shape_austria_dis.rda", package = "saeTrafo"),
-       envir = .GlobalEnv)
+load_shapeaustria <- function() {
+  load(file  = system.file("shapes/shape_austria_dis.rda",
+                           package = "saeTrafo"),
+       envir = .GlobalEnv
+  )
 }

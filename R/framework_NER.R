@@ -14,6 +14,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
 
   # no population data available
   if (!is.null(pop_data)) {
+
     fw_check_pop(
       pop_data = pop_data, mod_vars = mod_vars, pop_domains = pop_domains,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
@@ -95,6 +96,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     colnames(pop_mean.mat) <- c("intercept", mod_vars)
 
     if (!is.null(pop_cov)) {
+
       pop_cov <- lapply(X   = pop_cov,
                         FUN = only_mod_vars,
                         var = mod_vars

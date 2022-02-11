@@ -1,4 +1,5 @@
 writeexcel_check <- function(object, file, split){
+
   if (!inherits(object, "saeTrafo")) {
     stop('First object needs to be of class saeTrafo.')
   }
@@ -12,6 +13,7 @@ writeexcel_check <- function(object, file, split){
 }
 
 writeods_check <- function(object, file, split){
+
   if (!inherits(object, "saeTrafo")) {
     stop('First object needs to be of class saeTrafo.')
   }

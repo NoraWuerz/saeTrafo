@@ -85,7 +85,7 @@ add_pointests_ods <- function(object, indicator, wb, headlines_cs) {
                 indicator groups as described in help(estimators.emdi)."))
   }
 
-  data <- point_emdi(object = object, indicator = indicator)$ind
+  data <- point_saeTrafo(object = object, indicator = indicator)$ind
   data[,1] <- iconv(x = data[,1], from = "", to = "UTF-8")
   readODS::write_ods(x = data, path = paste0(wb, "_pointEstim", ".ods"))
 

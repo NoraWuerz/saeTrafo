@@ -18,8 +18,8 @@ map_plot(
 )
 }
 \arguments{
-\item{object}{an object of type emdi, containing the estimates to be
-visualized.}
+\item{object}{an object of type \code{saeTrafo}, containing the estimates to
+be visualized.}
 
 \item{MSE}{optional logical. If \code{TRUE}, the MSE is also visualized.
 Defaults to \code{FALSE}.}
@@ -42,18 +42,17 @@ in both objects differ.}
 color in the plots.}
 
 \item{scale_points}{a structure defining the lowest, the mid and the highest
-value of the colorscale. If a numeric vector of length two is given, this scale
-will be used for every plot. Alternatively, a list defining colors for each
-plot separately may be given.}
+value of the colorscale. If a numeric vector of length two is given, this
+scale will be used for every plot. Alternatively, a list defining colors for
+each plot separately may be given.}
 
-\item{guide}{character passed to
-\code{scale_colour_gradient} from \pkg{ggplot2}.
-Possible values are "none", "colourbar", and "legend".}
+\item{guide}{character passed to \code{scale_fill_gradient} from
+\pkg{ggplot2}. Possible values are "none", "colourbar", and "legend".}
 
-\item{return_data}{if set to \code{TRUE}, a fortified data frame including the
-map data as well as the chosen indicators is returned. Customized maps can
-easily be obtained from this data frame via the package \pkg{ggplot2}. Defaults
-to \code{FALSE}.}
+\item{return_data}{if set to \code{TRUE}, a fortified data frame including
+the map data as well as the chosen indicators is returned. Customized maps
+can easily be obtained from this data frame via the package \pkg{ggplot2}.
+Defaults to \code{FALSE}.}
 }
 \value{
 Creates the plots demanded, and, if selected, a fortified data.frame
@@ -61,9 +60,9 @@ containing the mapdata and chosen indicators.
 }
 \description{
 Function \code{map_plot} creates spatial visualizations of the estimates
-obtained by small area estimation methods or direct estimation.
+obtained by small area estimation methods.
 }
 \seealso{
-\code{\link{direct}}, \code{\link{ebp}}, \code{\link{fh}}, \code{\link{emdiObject}},
-\code{\link[maptools]{readShapePoly}}
+\code{\link[maptools]{readShapePoly}}, \code{\link{sp}},
+\code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 }
