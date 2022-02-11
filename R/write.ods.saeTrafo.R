@@ -108,11 +108,13 @@ add_precisions_ods <- function(object, indicator, MSE, wb, headlines_cs, CV) {
   return(NULL)
 }
 
+#' @importFrom readODS write_ods
+
 add_estims_ods <- function(object, indicator, wb, headlines_cs, MSE, CV) {
   data <- estimators(object = object, indicator = indicator, MSE = MSE, CV = CV)$ind
   data[,1] <-
     iconv(x <- data[,1], from = "",to = "UTF-8")
 
-  readODS::write_ods(x = data, path = paste0(wb, "_estim", ".ods"))
+  write_ods(x = data, path = paste0(wb, "_estim", ".ods"))
   return(NULL)
 }

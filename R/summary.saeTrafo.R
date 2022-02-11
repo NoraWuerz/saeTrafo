@@ -28,25 +28,29 @@ summary.NER <- function(object, ...) {
   smp_size <- object$framework$N_smp
   pop_size <- object$framework$N_pop
 
-  smp_size_dom <- summary(as.data.frame(table(object$framework$smp_domains_vec))[,"Freq"])
+  smp_size_dom <-
+    summary(as.data.frame(table(object$framework$smp_domains_vec))[, "Freq"])
 
   if (is.null(object$framework$pop_area_size)) {
-    pop_size_dom <- summary(as.data.frame(table(object$framework$pop_domains_vec))[,"Freq"])
+    pop_size_dom <-
+      summary(as.data.frame(table(object$framework$pop_domains_vec))[, "Freq"])
   } else {
     pop_size_dom <- summary(object$framework$pop_area_size)
   }
   sizedom_smp_pop <- rbind(Sample_domains = smp_size_dom,
                            Population_domains = pop_size_dom)
   if (object$transformation == "log.shift") {
-    transform_method <- data.frame(Transformation  = object$transformation,
-                                   Method          = object$method,
-                                   Optimal_lambda  = object$transform_param$optimal_lambda,
-                                   row.names       = ""
+    transform_method <- data.frame(
+      Transformation  = object$transformation,
+      Method          = object$method,
+      Optimal_lambda  = object$transform_param$optimal_lambda,
+      row.names       = ""
     )
   } else if (object$transformation == "log") {
-    transform_method <- data.frame(Transformation  = object$transformation,
-                                   Shift_parameter = round(object$transform_param$shift_par,3),
-                                   row.names       = ""
+    transform_method <- data.frame(
+      Transformation  = object$transformation,
+      Shift_parameter = round(object$transform_param$shift_par, 3),
+      row.names       = ""
     )
   } else if (object$transformation == "no") {
     transform_method <- NULL
@@ -82,12 +86,13 @@ summary.NER <- function(object, ...) {
     shapiro_W_ran <- NA
   }
 
-  norm <- data.frame(Skewness  = c(skewness_res,skewness_ran),
+  norm <- data.frame(Skewness  = c(skewness_res, skewness_ran),
                      Kurtosis  = c(kurtosis_res, kurtosis_ran),
                      Shapiro_W = c(shapiro_W_res, shapiro_W_ran),
                      Shapiro_p = c(shapiro_p_res, shapiro_p_ran),
                      row.names = c("Error", "Random_effect")
   )
+
   tempMod <- object$model
   tempMod$call$fixed <- object$fixed
   r_squared <- suppressWarnings(r.squaredGLMM(tempMod))
@@ -125,7 +130,7 @@ summary.NER <- function(object, ...) {
 
 
 #' @export
-print.summary.NER <- function(x,...) {
+print.summary.NER <- function(x, ...) {
   throw_class_error(x, "ebp")
   cat("Nested Error Regression Model\n")
   cat("\n")
@@ -140,14 +145,14 @@ print.summary.NER <- function(x,...) {
   cat("Units in population: ", x$size_pop, "\n")
   print(x$size_dom)
   cat("\n")
-  if(is.null(x$call$weights)) {
+  if (is.null(x$call$weights)) {
     cat("Explanatory measures:\n")
   } else {
     cat("Explanatory measures for the mixed model:\n")
   }
   print(x$coeff_determ)
   cat("\n")
-  if(is.null(x$call$weights)) {
+  if (is.null(x$call$weights)) {
     cat("Residual diagnostics:\n")
   } else {
     cat("Residual diagnostics for the mixed model:\n")
@@ -156,7 +161,7 @@ print.summary.NER <- function(x,...) {
   cat("\n")
   cat("ICC: ", x$icc, "\n")
   cat("\n")
-  if(is.null(x$transform)){
+  if (is.null(x$transform)) {
     cat("Transformation: No transformation \n")
   } else {
     cat("Transformation:\n")
@@ -164,12 +169,9 @@ print.summary.NER <- function(x,...) {
   }
 }
 
-
 #  ICC
-
-icc <- function(model){
-  u <- as.numeric(VarCorr(model)[1,1])
+icc <- function(model) {
+  u <- as.numeric(VarCorr(model)[1, 1])
   e <- model$sigma^2
   u / (u + e)
 }
-
