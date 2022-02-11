@@ -1,11 +1,16 @@
+# Auxiliary functions for the package saeTrafo ---------------------------------
+
+# add a 0 row and 0 column to a matrix
 crbind_0 <- function(x) {
   return(cbind(0, rbind(0, x)))
 }
 
+# add a 1 to a vector
 c_1 <- function(x) {
   return(c(1, x))
 }
 
+# generate covariance names from covariate name vector
 cov_names <- function(x) {
   return(paste(
     matrix(x, nrow = length(x), ncol = length(x)),
@@ -13,6 +18,7 @@ cov_names <- function(x) {
   ))
 }
 
+# returns matrix or vector only with entries which match to the names in var
 only_mod_vars <- function(x, var) {
   if (!is.matrix(x)) {
     return(x[var])
@@ -21,6 +27,7 @@ only_mod_vars <- function(x, var) {
   }
 }
 
+# for vector or matices unobserved domains are included in the respective object
 include_dom_unobs <- function(x, obs_dom) {
   if (is.vector(x) | is.numeric(x)) {
     tmp <- rep(0, length(obs_dom))
@@ -34,6 +41,7 @@ include_dom_unobs <- function(x, obs_dom) {
   }
 }
 
+# check if the object is of class saeTrafo
 throw_class_error <- function(object, subclass) {
   if (!inherits(object, "saeTrafo")) {
     error_string <- paste0(subclass, " object has to be created by the ",
@@ -42,11 +50,12 @@ throw_class_error <- function(object, subclass) {
   }
 }
 
+# Extract response and covariates from data
 
 #' @importFrom stats model.frame model.matrix model.response
 
 makeXY <- function(formula, data) {
-  mf <- stats::model.frame(formula = formula, data = data)
+  mf <- model.frame(formula = formula, data = data)
   x <- model.matrix(attr(mf, "terms"), data = mf)
   y <- model.response(mf)
 

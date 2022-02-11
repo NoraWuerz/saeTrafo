@@ -181,7 +181,7 @@ compare_plot.NER <- function(model = NULL, direct = NULL,
   }
 }
 
-# Auxiliary functions ----------------------------------------------------------
+# Auxiliary functions (from emdi) ----------------------------------------------
 
 compare_plots <- function(object, type, MSE, CV, label, color,
                           shape, line_type, gg_theme, ...) {
