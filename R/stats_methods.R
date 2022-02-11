@@ -15,7 +15,6 @@ coef.NER <- function(object, ...) {
 #' @export
 #' @method confint NER
 #' @importFrom nlme intervals
-#' @importFrom stats confint
 
 confint.NER <- function(object, parm = NULL, level = 0.95, ...) {
   throw_class_error(object, "NER")
@@ -31,7 +30,7 @@ confint.NER <- function(object, parm = NULL, level = 0.95, ...) {
 
 #' @export
 #' @method family NER
-#' @importFrom stats family gaussian
+#' @importFrom stats gaussian
 
 family.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -43,7 +42,6 @@ family.NER <- function(object, ...) {
 #' @aliases fitted.values
 #' @export
 #' @method fitted NER
-#' @importFrom stats fitted fitted.values
 
 fitted.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -66,7 +64,7 @@ formula.NER <- function(x, ...) {
 
 logLik.NER <- function(object, ...) {
   throw_class_error(object, "NER")
-  message('Estimation approach used is reml: ', round(object$model$logLik, 5))
+  message("Estimation approach used is reml: ", round(object$model$logLik, 5))
   invisible(object$model$logLik)
 }
 
@@ -91,7 +89,6 @@ nobs.NER <- function(object, ...) {
 #' @return Data frame with domain predictors.
 #' @export
 #' @method predict NER
-#' @importFrom stats predict
 
 predict.NER <- function(object, ...) {
   object$ind
@@ -113,7 +110,6 @@ residuals.NER <- function(object, ...) {
 
 #' @export
 #' @method  sigma NER
-#' @importFrom stats sigma
 
 sigma.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -124,7 +120,7 @@ sigma.NER <- function(object, ...) {
 
 #' @export
 #' @method terms NER
-#' @importFrom stats aov terms
+#' @importFrom stats aov
 
 terms.NER <- function(x, ...) {
   throw_class_error(x, "NER")
@@ -142,4 +138,3 @@ vcov.NER <- function(object, ...) {
   throw_class_error(object, "NER")
   vcov(object$model, ...)
 }
-
