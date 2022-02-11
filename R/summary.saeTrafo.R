@@ -18,6 +18,7 @@
 #' @name summaries.saeTrafo
 
 summary.NER <- function(object, ...) {
+
   throw_class_error(object, "NER")
 
   call_emdi <- object$call
@@ -112,16 +113,16 @@ summary.NER <- function(object, ...) {
   )
 
   sum_NER <- list(out_of_smp   = N_dom_unobs,
-                   in_smp       = N_dom_smp,
-                   size_smp     = smp_size,
-                   size_pop     = pop_size,
-                   size_dom     = sizedom_smp_pop,
-                   smp_size_tab = NULL,
-                   transform    = transform_method,
-                   normality    = norm,
-                   icc          = icc_mixed,
-                   coeff_determ = coeff_det,
-                   call         = call_emdi
+                  in_smp       = N_dom_smp,
+                  size_smp     = smp_size,
+                  size_pop     = pop_size,
+                  size_dom     = sizedom_smp_pop,
+                  smp_size_tab = NULL,
+                  transform    = transform_method,
+                  normality    = norm,
+                  icc          = icc_mixed,
+                  coeff_determ = coeff_det,
+                  call         = call_emdi
   )
 
   class(sum_NER) <- c("summary.NER", "saeTrafo")
@@ -131,7 +132,7 @@ summary.NER <- function(object, ...) {
 
 #' @export
 print.summary.NER <- function(x, ...) {
-  throw_class_error(x, "ebp")
+  throw_class_error(x, "NER")
   cat("Nested Error Regression Model\n")
   cat("\n")
   cat("Call:\n ")

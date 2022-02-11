@@ -92,7 +92,7 @@ plot.saeTrafo <- function(x,
 
   # Preparation for plots ----
   residuals <- residuals(x$model, level = 0, type = "pearson")
-  rand.eff <- nlme::ranef(x$model)$'(Intercept)'
+  rand.eff <- ranef(x$model)$'(Intercept)'
   srand.eff <- (rand.eff - mean(rand.eff)) / sd(rand.eff)
   tmp <- as.matrix(random.effects(x$model))[,1]
   model <- x$model
