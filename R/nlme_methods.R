@@ -6,10 +6,10 @@
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the fixed effects is returned.
-#' @details The alias \code{fixed.effects} can also be used instead of \code{fixef}.
-#' The generic function \code{fixef} is imported from package nlme and
-#' re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
+#' @details The alias \code{fixed.effects} can also be used instead of
+#' \code{fixef}. The generic function \code{fixef} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{fixed.effects}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{fixed.effects}}
 #' @aliases fixed.effects
@@ -43,10 +43,10 @@ fixed.effects.NER <- function(object, ...) {
 #' @param ... additional arguments that are not used in this method.
 #' @return Data frame used to fit the model. For "NER" the (untransformed)
 #' sample data is returned.
-#' @details The generic function \code{getData} is imported from package nlme and
-#' re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{getData}}.
+#' @details The generic function \code{getData} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{getData}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getData}}
 #' @name getData
 #' @importFrom nlme getData
@@ -98,9 +98,9 @@ getGroups.NER <- function(object, ...) {
 #' @param ... additional arguments that are not used in this method.
 #' @return A one-sided formula.
 #' @details The generic function \code{getGroupsFormula} is imported from package
-#' nlme and re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{getGroupsFormula}}.
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{getGroupsFormula}}.
 #' @seealso \code{\link{NER_Trafo}} \code{\link[nlme]{getGroupsFormula}}
 #' @name getGroupsFormula
 #' @importFrom nlme getGroupsFormula
@@ -161,10 +161,10 @@ getResponse.NER <- function(object, ...) {
 #' dimensions of the matrices are 1 x 1 for type "\code{random.effects}" and
 #' number of in-sample domains x number of in-sample domains for types
 #' "\code{conditional}" and "\code{marginal}".
-#' @details The generic function \code{getVarCov} is imported from package nlme
-#' and re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{getVarCov}}.
+#' @details The generic function \code{getVarCov} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{getVarCov}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getVarCov}}
 #' @name getVarCov
 #' @importFrom nlme getVarCov
@@ -236,10 +236,10 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 #' @return A vector containing the estimated random effects at domain level is
 #' returned.
 #' @details The alias \code{random.effects} can also be used instead of
-#' \code{ranef}. The generic function \code{ranef} is imported from package nlme
-#' and re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{random.effects}}.
+#' \code{ranef}. The generic function \code{ranef} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{random.effects}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{random.effects}}
 #' @name ranef
 #' @aliases random.effects
