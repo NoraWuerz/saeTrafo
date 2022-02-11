@@ -13,6 +13,27 @@ back_transformation <- function(y, transformation, lambda, shift) {
   return(y = back_transformed)
 }
 
+# Function std_data_transformation only returns a data frame with transformed
+# dependent variable.
+
+std_data_transformation <- function(fixed=fixed,
+                                    smp_data,
+                                    transformation,
+                                    lambda) {
+
+  y_vector <- as.matrix(smp_data[paste(fixed[2])])
+
+  std_transformed <- if (transformation == "log.shift") {
+    as.data.frame(log_shift_opt_std(y = y_vector, lambda = lambda))
+  } else if (transformation == "log") {
+    smp_data[paste(fixed[2])]
+  } else if (transformation == "no") {
+    smp_data[paste(fixed[2])]
+  }
+
+  smp_data[paste(fixed[2])] <- std_transformed
+  return(transformed_data = smp_data)
+}
 
 # Transformation types ---------------------------------------------------------
 
