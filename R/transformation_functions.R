@@ -1,113 +1,7 @@
-# Internal documentation -------------------------------------------------------
-
-# Various transformation functions ---------------------------------------------
-
-# Fuction data_transformation transforms the dependent variable depending on
-# the choice of transformation. See below for different transformations.
-# The return is a data frame with transformed dependent variable, all others
-# equal to sample data and a shift parameter m.
-
-
-# External documentation -------------------------------------------------------
-
-#' Tranforms dependent variables
-#'
-#' Function \code{data_transformation} transforms the dependent variable from
-#' the formula object \code{fixed} in the given sample data set. Thus, it
-#' returns the original sample data set with transformed dependent variable.
-#' For the transformation five types can be chosen, particularly no, natural
-#' log, Box-Cox, Dual and Log-Shift transformation.
-#'
-#' @param fixed a two-sided linear formula object describing the
-#' fixed-effects part of the nested error linear regression model with the
-#' dependent variable on the left of a ~ operator and the explanatory
-#' variables on the right, separated by + operators. The argument corresponds
-#' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
-#' @param smp_data a data frame that needs to comprise all variables named in
-#' \code{fixed}. If transformed data is further used to fit a nested error
-#' linear regression model, \code{smp_data} also needs to comprise the variable
-#' named in \code{smp_domains} (see \code{\link{ebp}}).
-#' @param transformation a character string. Five different transformation
-#' methods for the dependent variable can be chosen (i) no transformation ("no");
-#' (ii) natural log transformation ("log"); (iii) Box-Cox transformation
-#' ("box.cox"); (iv) Dual transformation ("dual"); (v) Log-Shift transformation
-#' ("log.shift")..
-#' @param lambda a scalar parameter that determines the transformations with
-#' transformation parameter. In case of no and natural log transformation
-#' \code{lambda} can be set to NULL.
-#' @return a named list with two elements, a data frame containing the data set
-#' with transformed dependent variable (\code{transformed_data}) and a shift
-#' parameter \code{shift} if present. In case of no transformation, the original
-#' data frame is returned and the shift parameter is NULL.
-#' @details For the natural log, Box-Cox and Dual transformation, the dependent variable
-#' is shifted such that all values are greater than zero since the transformations
-#' are not applicable for values equal to or smaller than zero. The shift is
-#' calculated as follows:
-#'   \deqn{shift = |min(y)| + 1 \qquad if \qquad min(y) <= 0}
-#' Function \code{data_transformation} works as a wrapper function. This means
-#' that the function manages the selection of the three different transformation
-#' functions \code{no_transform}, \code{log_transform} and \code{box_cox}.
-#' @seealso \code{\link[nlme]{lme}}
-#' @examples
-#' # Loading data - sample data
-#' data("eusilcA_smp")
-#'
-#' # Transform dependent variable in sample data with Box-Cox transformation
-#' transform_data <- data_transformation(eqIncome ~ gender + eqsize + cash +
-#' self_empl + unempl_ben + age_ben + surv_ben + sick_ben + dis_ben + rent +
-#' fam_allow + house_allow + cap_inv + tax_adj, eusilcA_smp, "box.cox", 0.7)
-#' @export
-
-
-data_transformation <- function(fixed,
-                                smp_data,
-                                transformation,
-                                lambda) {
-
-  y_vector <- as.vector(smp_data[paste(fixed[2])])
-
-  transformed <- if (transformation == "no") {
-    no_transform(y = y_vector, shift = NULL)
-  } else if (transformation == "log") {
-    log_transform(y = y_vector, shift = 0)
-  } else if (transformation == "log.shift") {
-    log_shift_opt(y = y_vector, lambda = lambda, shift = NULL)
-  }
-
-  smp_data[paste(fixed[2])] <- transformed$y
-
-  return(list(transformed_data = smp_data, shift = transformed$shift))
-} # End data_transformation
-
-
-# Following functions are only internal ----------------------------------------
-
-# Function std_data_transformation only returns a data frame with transformed
-# dependent variable.
-
-std_data_transformation <- function(fixed=fixed,
-                                    smp_data,
-                                    transformation,
-                                    lambda) {
-
-  y_vector <- as.matrix(smp_data[paste(fixed[2])])
-
-  std_transformed <- if (transformation == "log.shift") {
-      as.data.frame(log_shift_opt_std(y = y_vector, lambda = lambda))
-    } else if (transformation == "log") {
-      smp_data[paste(fixed[2])]
-    } else if (transformation == "no") {
-      smp_data[paste(fixed[2])]
-    }
-
-  smp_data[paste(fixed[2])] <- std_transformed
-  return(transformed_data = smp_data)
-} # End std_data_transformation
-
-
 # Back transformation function -------------------------------------------------
 
 back_transformation <- function(y, transformation, lambda, shift) {
+
   back_transformed <- if (transformation == "no") {
     no_transform_back(y = y)
   } else if (transformation == "log") {
@@ -117,25 +11,24 @@ back_transformation <- function(y, transformation, lambda, shift) {
   }
 
   return(y = back_transformed)
-} # End back_transform
+}
 
 
 # Transformation types ---------------------------------------------------------
 
-# No transformation ------------------------------------------------------------
+# No transformation
 
 # Transformation: no transformation
 no_transform <- function(y, shift = NULL) {
   return(list(y = y, shift = NULL))
-} # End no-transform
-
+}
 
 # Back transformation: no transformation
 no_transform_back <- function(y) {
   return(y = y)
 }
 
-# Log transformation -----------------------------------------------------------
+# Log transformation
 
 # Transformation: log
 log_transform <- function(y, shift = 0) {
@@ -146,23 +39,21 @@ log_transform <- function(y, shift = 0) {
   }
   y <- log(y)
   return(list(y = y, shift = shift))
-} # End log_transform
-
+}
 
 # Back transformation: log
 log_transform_back <- function(y, shift = 0) {
   y <- exp(y) - shift
   return(y = y)
-} # End log_transfom_back
+}
 
 
-# The log-shift transformation -------------------------------------------------
+# The log-shift transformation
 
 #  Transformation: log_shift_opt
 log_shift_opt <- function(y, lambda = lambda, shift = NULL) {
 
   with_shift <-  function(y, lambda) {
-
     min <- min(y + lambda)
     if (min <= 0) {
       lambda <- lambda + abs(min) + 1
@@ -172,22 +63,18 @@ log_shift_opt <- function(y, lambda = lambda, shift = NULL) {
     return(lambda)
   }
 
-  # Shift parameter
-  lambda <- with_shift(y = y, lambda = lambda )
+  lambda <- with_shift(y = y, lambda = lambda) # Shift parameter
 
   log_trafo <- function(y, lambda = lambda) {
     y <- log(y + lambda)
     return(y)
   }
   yt <- log_trafo(y = y, lambda = lambda)
-  #return(y)
   return(list(y = yt, shift = NULL))
-} # End log_shift
-
-
+}
 
 # Standardized transformation: Log_shift_opt
-geometric.mean <- function(x) { #for RMLE in the parameter estimation
+geometric.mean <- function(x) {
   exp(mean(log(x)))
 }
 
@@ -203,25 +90,26 @@ log_shift_opt_std <- function(y, lambda) {
     return(lambda)
   }
 
-  # Shift parameter
-  lambda <- with_shift(y = y, lambda = lambda )
+  lambda <- with_shift(y = y, lambda = lambda) # Shift parameter
 
   log_trafo_std <- function(y, lambda = lambda) {
     gm <- geometric.mean(y + lambda)
     y <- gm * log(y + lambda)
     return(y)
   }
+
   y <- log_trafo_std(y = y, lambda = lambda)
   return(y)
 }
 
 # Back transformation: log_shift_opt
 log_shift_opt_back <- function(y, lambda) {
-  log_shift_opt_back <- function(y, lambda = lambda){
+
+  log_shift_opt_back <- function(y, lambda = lambda) {
     y <-  exp(y) - lambda
     return(y = y)
   }
+
   y <- log_shift_opt_back(y = y, lambda = lambda)
   return(y = y)
-} #  End log_shift_opt
-
+}

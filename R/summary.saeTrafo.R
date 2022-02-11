@@ -132,6 +132,7 @@ summary.NER <- function(object, ...) {
 
 #' @export
 print.summary.NER <- function(x, ...) {
+
   throw_class_error(x, "NER")
   cat("Nested Error Regression Model\n")
   cat("\n")
