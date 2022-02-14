@@ -24,10 +24,10 @@ Methods \code{fixef.NER} extract the fixed effects from an saeTrafo object of
 class "NER".
 }
 \details{
-The alias \code{fixed.effects} can also be used instead of \code{fixef}.
-The generic function \code{fixef} is imported from package nlme and
-re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
+The alias \code{fixed.effects} can also be used instead of
+\code{fixef}. The generic function \code{fixef} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{fixed.effects}}.
 }
 \seealso{

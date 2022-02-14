@@ -25,10 +25,10 @@ Method \code{ranef.NER} extract the fixed effects from an saeTrafo object.
 }
 \details{
 The alias \code{random.effects} can also be used instead of
-\code{ranef}. The generic function \code{ranef} is imported from package nlme
-and re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{random.effects}}.
+\code{ranef}. The generic function \code{ranef} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{random.effects}}.
 }
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{random.effects}}

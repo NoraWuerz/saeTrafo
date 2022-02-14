@@ -20,10 +20,10 @@ sample data is returned.
 Methods \code{getData.NER} extract the data frame used to fit the model.
 }
 \details{
-The generic function \code{getData} is imported from package nlme and
-re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{getData}}.
+The generic function \code{getData} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{getData}}.
 }
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{getData}}

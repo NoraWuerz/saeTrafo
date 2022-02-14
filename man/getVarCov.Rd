@@ -34,10 +34,10 @@ Method \code{getVarCov.NER} extract the variance-covariance matrix from a
 fitted model of class "NER".
 }
 \details{
-The generic function \code{getVarCov} is imported from package nlme
-and re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{getVarCov}}.
+The generic function \code{getVarCov} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{getVarCov}}.
 }
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{getVarCov}}

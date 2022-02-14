@@ -2,7 +2,8 @@
 % Please edit documentation in R/NER_Trafo.R
 \name{NER_Trafo}
 \alias{NER_Trafo}
-\title{Nested error regression Model (Battese) with transformations}
+\title{Nested error regression Model \cite{Battese et al. (1988))} under
+transformations}
 \usage{
 NER_Trafo(
   fixed,
@@ -68,25 +69,24 @@ adjustment.}
 
 \item{B}{a number determining the number of bootstrap replications in the
 parametric bootstrap approach. The number must be greater than 1. Defaults to
-50. For practical applications, values larger than 200 are recommended (see
-also \cite{Molina, I. and Rao, J.N.K. (2010)}).}
+50. For practical applications, values larger than 200 are recommended.}
 
 \item{transformation}{a character string. Five different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
-(ii) log transformation ("log"); (iii) Log-Shift transformation ("log.shift").
-Defaults to \code{"log.shift"}.}
+(ii) log transformation ("log"); (iii) Log-Shift transformation
+("log.shift"). Defaults to \code{"log.shift"}.}
 
 \item{interval}{a string equal to 'default' or a numeric vector containing a
-lower and upper limit determining an interval for the estimation of the optimal
-parameter. The interval is passed to function \code{\link[stats]{optimize}} for
-the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox,
-c(0,2) for Dual and an interval based on the range of y for Log-Shift
+lower and upper limit determining an interval for the estimation of the
+optimal parameter. The interval is passed to function
+\code{\link[stats]{optimize}} for the optimization. Defaults to 'default'
+which equals an interval based on the range of y for Log-Shift
 transformation. If the convergence fails, it is often advisable to choose a
-smaller more suitable interval. For right skewed distributions, the negative values may be excluded,
-also values larger than 1 are seldom observed.}
+smaller more suitable interval. For right skewed distributions, the negative
+values may be excluded, also values larger than 1 are seldom observed.}
 
-\item{MSE}{if \code{TRUE}, MSE estimates are provided. Defaults
-to \code{FALSE}.}
+\item{MSE}{optional logical. If \code{TRUE}, MSE estimates are provided.
+Defaults to \code{FALSE}.}
 
 \item{parallel_mode}{modus of parallelization, defaults to an automatic
 selection of a suitable mode, depending on the operating system, if the
@@ -109,9 +109,16 @@ descriptions of the components of objects of class "saeTrafo", see
 \code{\link{saeTrafoObject}}.
 }
 \description{
-Function \code{NER_Trafo} estimates means ...
+Function \code{NER_Trafo} estimates small area means and their uncertainty
+based on the (transformed) nested error regression (NER) model.
 }
 \details{
+\code{NER_Trafo} supports the log as well as the data-driven log-shift transformation.
+Especially skewed variables, can often not be adequately described by the
+available auxiliary variables and therefore lead to error terms that are not
+normally distributed. Using (data-driven) transformations is a promising
+approach in this context.
+
 For the parametric bootstrap and the density estimation
 approach random number generation is used. Thus, a seed is set by the
 argument \code{seed}. \cr \cr
@@ -120,7 +127,7 @@ MORE INFORMATION TO different estimators (point and MSE)
 \references{
 Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
-Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
+Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},

@@ -1,6 +1,16 @@
-#' Nested error regression Model (Battese) with transformations
+#' Nested error regression Model \cite{Battese et al. (1988))} under
+#' transformations
 #'
-#' Function \code{NER_Trafo} estimates means ...
+#' Function \code{NER_Trafo} estimates small area means and their uncertainty
+#' based on the (transformed) nested error regression (NER) model.
+#'
+#' \code{NER_Trafo} supports the log as well as the data-driven log-shift transformation.
+#' Especially skewed variables, can often not be adequately described by the
+#' available auxiliary variables and therefore lead to error terms that are not
+#' normally distributed. Using (data-driven) transformations is a promising
+#' approach in this context.
+#'
+#'
 #'
 #' @param fixed a two-sided linear formula object describing the
 #' fixed-effects part of the nested error linear regression model with the
@@ -37,22 +47,21 @@
 #' adjustment.
 #' @param transformation a character string. Five different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
-#' (ii) log transformation ("log"); (iii) Log-Shift transformation ("log.shift").
-#' Defaults to \code{"log.shift"}.
+#' (ii) log transformation ("log"); (iii) Log-Shift transformation
+#' ("log.shift"). Defaults to \code{"log.shift"}.
 #' @param interval a string equal to 'default' or a numeric vector containing a
-#' lower and upper limit determining an interval for the estimation of the optimal
-#' parameter. The interval is passed to function \code{\link[stats]{optimize}} for
-#' the optimization. Defaults to 'default' which equals c(-1,2) for Box-Cox,
-#' c(0,2) for Dual and an interval based on the range of y for Log-Shift
+#' lower and upper limit determining an interval for the estimation of the
+#' optimal parameter. The interval is passed to function
+#' \code{\link[stats]{optimize}} for the optimization. Defaults to 'default'
+#' which equals an interval based on the range of y for Log-Shift
 #' transformation. If the convergence fails, it is often advisable to choose a
-#' smaller more suitable interval. For right skewed distributions, the negative values may be excluded,
-#' also values larger than 1 are seldom observed.
-#' @param MSE if \code{TRUE}, MSE estimates are provided. Defaults
-#' to \code{FALSE}.
+#' smaller more suitable interval. For right skewed distributions, the negative
+#' values may be excluded, also values larger than 1 are seldom observed.
+#' @param MSE optional logical. If \code{TRUE}, MSE estimates are provided.
+#' Defaults to \code{FALSE}.
 #' @param B a number determining the number of bootstrap replications in the
 #' parametric bootstrap approach. The number must be greater than 1. Defaults to
-#' 50. For practical applications, values larger than 200 are recommended (see
-#' also \cite{Molina, I. and Rao, J.N.K. (2010)}).
+#' 50. For practical applications, values larger than 200 are recommended.
 #' @param seed an integer to set the seed for the random number generator. For
 #' the usage of random number generation, see Details. If seed is set to
 #' \code{NULL}, seed is chosen randomly. Defaults to \code{123}.
@@ -75,7 +84,7 @@
 #' @references
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
-#' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
+#' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr
 #' @seealso \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},
 #' \code{\link{estimators.saeTrafo}},  \code{\link{plot.saeTrafo}},
 #' \code{\link{summaries.saeTrafo}}
@@ -89,7 +98,6 @@
 #' @importFrom stats fitted density bw.SJ cov
 #' @importFrom emdi data_transformation estimators
 
-
 NER_Trafo <- function(fixed,
                       pop_area_size = NULL,
                       pop_mean = NULL,
@@ -101,9 +109,9 @@ NER_Trafo <- function(fixed,
                       threshold = 30,
                       B = 50,
                       transformation = "log.shift",
-                      interval = 'default',
+                      interval = "default",
                       MSE = FALSE,
-                      parallel_mode = ifelse(grepl("windows",.Platform$OS.type),
+                      parallel_mode = ifelse(grepl("windows", .Platform$OS.type),
                                              "socket", "multicore"),
                       cpus = 1,
                       seed = 123) {
@@ -148,7 +156,7 @@ NER_Trafo <- function(fixed,
 
   if (MSE == TRUE) {
 
-    if(is.null(pop_cov) && MSE == TRUE && transformation != "no") {
+    if (is.null(pop_cov) && MSE == TRUE && transformation != "no") {
       stop("No MSE estimator available. For MSE estimation a covariance matrices
             or population data are needed otherwise the Prasad Rao MSE
             (transformation == \"no\") is avaliable.")

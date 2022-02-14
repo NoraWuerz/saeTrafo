@@ -21,9 +21,9 @@ saeTrafo object.
 }
 \details{
 The generic function \code{getGroupsFormula} is imported from package
-nlme and re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{getGroupsFormula}}.
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{getGroupsFormula}}.
 }
 \seealso{
 \code{\link{NER_Trafo}} \code{\link[nlme]{getGroupsFormula}}
