@@ -3,7 +3,8 @@
 # This function implements the transformation of data, estimation of the nested
 # error linear regression model and calculates different estimators.
 #' @importFrom emdi data_transformation
-#' @importFrom nlme lme
+#' @importFrom nlme lme random.effects
+#'
 
 point_estim <- function(framework,
                         fixed,
@@ -189,7 +190,7 @@ model_par <- function(framework, mixed_model, fixed, transformation_par) {
 
 # Function for small area estimation specific kernel-density estimation
 # method for the synthetic part see Wuerz et. al.
-#' @importFrom stats density bw.SJ
+#' @importFrom stats density bw.SJ model.matrix sd
 #' @importFrom sfsmisc integrate.xy
 
 syn_est <- function(framework, est_par, fixed, threshold) {

@@ -2,8 +2,7 @@
 % Please edit documentation in R/NER_Trafo.R
 \name{NER_Trafo}
 \alias{NER_Trafo}
-\title{Nested error regression Model \cite{Battese et al. (1988))} under
-transformations}
+\title{Nested error regression Model under transformations}
 \usage{
 NER_Trafo(
   fixed,
@@ -31,30 +30,38 @@ dependent variable on the left of a ~ operator and the explanatory
 variables on the right, separated by + operators. The argument corresponds
 to the argument \code{fixed} in function \code{\link[nlme]{lme}}.}
 
-\item{pop_area_size}{A named numeric vector containing the number of
+\item{pop_area_size}{a named numeric vector containing the number of
 individuals within each domain. This numeric vector is named with the
 domain names.}
 
-\item{pop_mean}{is a named list. Each element of the list contains the
+\item{pop_mean}{a named list. Each element of the list contains the
 population means for the p covariates for a specicfic domain. The list is
 named with the respective domain name. The numeric vector within the list is
-named with the covariate names. The covarites right of the ~ operator in
+named with the covariate names. The covariates right of the ~ operator in
 \code{fixed} need to comprise.}
 
-\item{pop_cov}{is a named list. Each element of the list contains the
+\item{pop_cov}{a named list. Each element of the list contains the
 domain-specific covariance matrice for p covariates for a specicfic domain.
 The list is named with the respective domain name. The matrix within the list
-has row and column names with the respective covariate names. The covarites
-right of the ~ operator in \code{fixed} need to comprise.}
+has row and column names with the respective covariate names. The covariates
+right of the ~ operator in \code{fixed} need to comprise. If \code{pop_cov}
+is not available only a bias-correction due to the transformation is
+added but for the lack of access to population data a correction is not
+possible. Additionally, no MSE could be determined.}
 
 \item{pop_data}{a data frame that needs to comprise the variables
 named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
-variables, and \code{pop_domains}.}
+variables, and \code{pop_domains}.
+Please note, if population data is available other methods using unit-level
+population data, like \code{\link[emdi]{ebp}}, could be applied.
+If nevertheless \code{NER_Trafo} is used, aggregates (mean, covariance, and
+population sizes) are automatic calculated. Therefore, no input for
+\code{pop_area_size}, \code{pop_mean}, and \code{pop_cov} is needed.}
 
 \item{pop_domains}{a character string containing the name of a variable that
 indicates domains in the population data. The variable can be numeric or
 a factor but needs to be of the same class as the variable named in
-\code{smp_domains}.}
+\code{smp_domains}. Only needed if population data are given.}
 
 \item{smp_data}{a data frame that needs to comprise all variables named in
 \code{fixed} and \code{smp_domains}.}
@@ -64,26 +71,27 @@ that indicates domains in the sample data. The variable can be numeric or a
 factor but needs to be of the same class as the variable named in
 \code{pop_domains}.}
 
-\item{threshold}{A threshold for the pooled or non pooled density for the
-adjustment.}
+\item{threshold}{a numeric value indicating the threshold for using pooled
+domain data (for domains with sample sizes below the threshold) or non pooled
+domain data (for domains with sample sizes above the threshold) for the
+density estimation within the approach of \cite{Wuerz et al. (2022)}.}
 
 \item{B}{a number determining the number of bootstrap replications in the
 parametric bootstrap approach. The number must be greater than 1. Defaults to
 50. For practical applications, values larger than 200 are recommended.}
 
-\item{transformation}{a character string. Five different transformation
+\item{transformation}{a character string. Three different transformation
 types for the dependent variable can be chosen (i) no transformation ("no");
 (ii) log transformation ("log"); (iii) Log-Shift transformation
 ("log.shift"). Defaults to \code{"log.shift"}.}
 
 \item{interval}{a string equal to 'default' or a numeric vector containing a
 lower and upper limit determining an interval for the estimation of the
-optimal parameter. The interval is passed to function
-\code{\link[stats]{optimize}} for the optimization. Defaults to 'default'
-which equals an interval based on the range of y for Log-Shift
-transformation. If the convergence fails, it is often advisable to choose a
-smaller more suitable interval. For right skewed distributions, the negative
-values may be excluded, also values larger than 1 are seldom observed.}
+optimal parameter for the log-shift transformation. The interval is passed to
+function  \code{\link[stats]{optimize}} for the optimization. Defaults to
+an interval based on the range of y. If the convergence fails, it is often
+advisable to choose a smaller more suitable interval. For right skewed
+distributions, the negative values may be excluded.}
 
 \item{MSE}{optional logical. If \code{TRUE}, MSE estimates are provided.
 Defaults to \code{FALSE}.}
@@ -109,16 +117,31 @@ descriptions of the components of objects of class "saeTrafo", see
 \code{\link{saeTrafoObject}}.
 }
 \description{
-Function \code{NER_Trafo} estimates small area means and their uncertainty
-based on the (transformed) nested error regression (NER) model.
+Function \code{NER_Trafo} estimates small area means based on the
+(transformed) nested error regression (NER) model
+(\cite{Battese et al. (1988)}).
+In contrast to the empirical best predictor of \cite{Molina and Rao (2010)},
+which is implemented in the package \pkg{emdi} (\code{\link[emdi]{ebp}}), no
+unit-level population data are required.\cr \cr
+\code{NER_Trafo} supports the log as well as the data-driven log-shift
+transformation. Especially for skewed variables, (data-driven)
+transformations are useful to meet the model assumptions for the error terms.
+If a transformation is chosen and aggregates (means and covariance) are
+simultaneously provided on population-level, point estimates are produced by
+the method of \cite{Wuerz et al. (2022)}, which uses kernel density
+estimation to resolve the issue of not having access to population
+micro-data. If only population means are available and the log or log-shift
+transformation is selected, a bias-correction due to the transformation is
+added but for the lack of access to population data a correction is not
+available. Therefore, a part of the bias is disregarded.\cr \cr
+Additionally, analytically mean squared errors (MSE) are calculated in the
+case of no transformation following \cite{Prasad and Rao (1990)}.
+For the log and log-shift transformation, a parametric bootstrap procedure
+proposed by \cite{Wuerz et al. (2022)} following
+\cite{Gonzalez-Manteiga et al. (2008)} is applied. Please note that this can
+only be determined if covariance data are also provided.
 }
 \details{
-\code{NER_Trafo} supports the log as well as the data-driven log-shift transformation.
-Especially skewed variables, can often not be adequately described by the
-available auxiliary variables and therefore lead to error terms that are not
-normally distributed. Using (data-driven) transformations is a promising
-approach in this context.
-
 For the parametric bootstrap and the density estimation
 approach random number generation is used. Thus, a seed is set by the
 argument \code{seed}. \cr \cr
@@ -127,7 +150,14 @@ MORE INFORMATION TO different estimators (point and MSE)
 \references{
 Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
-Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr
+Journal of the American Statistical Association, Vol.83, No. 401,
+28-36. \cr \cr
+Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
+a small-area EBLUP. Journal of Statistical Computation and Simulation,
+78:5, 443-462. \cr \cr
+Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+small-area estimators. Journal of the American statistical association,
+Vol.85, No. 409, 163-171. \cr \cr
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},

@@ -5,6 +5,7 @@
 #' @importFrom parallelMap parallelStop
 #' @importFrom nlme gapply
 #' @importFrom stats rnorm model.matrix
+#' @importFrom utils flush.console
 #'
 
 mse <- function(framework,

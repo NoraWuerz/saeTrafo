@@ -1,15 +1,28 @@
-#' Nested error regression Model \cite{Battese et al. (1988))} under
-#' transformations
+#' Nested error regression Model under transformations
 #'
-#' Function \code{NER_Trafo} estimates small area means and their uncertainty
-#' based on the (transformed) nested error regression (NER) model.
-#'
-#' \code{NER_Trafo} supports the log as well as the data-driven log-shift transformation.
-#' Especially skewed variables, can often not be adequately described by the
-#' available auxiliary variables and therefore lead to error terms that are not
-#' normally distributed. Using (data-driven) transformations is a promising
-#' approach in this context.
-#'
+#' Function \code{NER_Trafo} estimates small area means based on the
+#' (transformed) nested error regression (NER) model
+#' (\cite{Battese et al., 1988}).
+#' In contrast to the empirical best predictor of \cite{Molina and Rao (2010)},
+#' which is implemented in the package \pkg{emdi} (\code{\link[emdi]{ebp}}), no
+#' unit-level population data are required.\cr \cr
+#' \code{NER_Trafo} supports the log as well as the data-driven log-shift
+#' transformation. Especially for skewed variables, (data-driven)
+#' transformations are useful to meet the model assumptions for the error terms.
+#' If a transformation is chosen and aggregates (means and covariance) are
+#' simultaneously provided for the population, point estimates are produced by
+#' the method of \cite{Wuerz et al. (2022)}, which uses kernel density
+#' estimation to resolve the issue of not having access to population
+#' micro-data. If only population means are available and the log or log-shift
+#' transformation is selected, a bias-correction due to the transformation is
+#' added but for the lack of access to population data a correction is not
+#' available. Therefore, a part of the bias is disregarded.\cr \cr
+#' Additionally, analytically mean squared errors (MSE) are calculated in the
+#' case of no transformation following \cite{Prasad and Rao (1990)}.
+#' For the log and log-shift transformation, a parametric bootstrap procedure
+#' proposed by \cite{Wuerz et al. (2022)} following
+#' \cite{Gonzalez-Manteiga et al. (2008)} is applied. Please note that this can
+#' only be determined if covariance data are also provided.
 #'
 #'
 #' @param fixed a two-sided linear formula object describing the
@@ -17,46 +30,55 @@
 #' dependent variable on the left of a ~ operator and the explanatory
 #' variables on the right, separated by + operators. The argument corresponds
 #' to the argument \code{fixed} in function \code{\link[nlme]{lme}}.
-#' @param pop_area_size A named numeric vector containing the number of
+#' @param pop_area_size a named numeric vector containing the number of
 #' individuals within each domain. This numeric vector is named with the
 #' domain names.
-#' @param pop_mean is a named list. Each element of the list contains the
+#' @param pop_mean a named list. Each element of the list contains the
 #' population means for the p covariates for a specicfic domain. The list is
 #' named with the respective domain name. The numeric vector within the list is
-#' named with the covariate names. The covarites right of the ~ operator in
+#' named with the covariate names. The covariates right of the ~ operator in
 #' \code{fixed} need to comprise.
-#' @param pop_cov is a named list. Each element of the list contains the
+#' @param pop_cov a named list. Each element of the list contains the
 #' domain-specific covariance matrice for p covariates for a specicfic domain.
 #' The list is named with the respective domain name. The matrix within the list
-#' has row and column names with the respective covariate names. The covarites
-#' right of the ~ operator in \code{fixed} need to comprise.
+#' has row and column names with the respective covariate names. The covariates
+#' right of the ~ operator in \code{fixed} need to comprise. If \code{pop_cov}
+#' is not available only a bias-correction due to the transformation is
+#' added but for the lack of access to population data a correction is not
+#' possible. Additionally, no MSE could be determined.
 #' @param pop_data a data frame that needs to comprise the variables
 #' named on the right of the ~ operator in \code{fixed}, i.e. the explanatory
 #' variables, and \code{pop_domains}.
+#' Please note, if population data is available other methods using unit-level
+#' population data, like \code{\link[emdi]{ebp}}, could be applied.
+#' If nevertheless \code{NER_Trafo} is used, aggregates (mean, covariance, and
+#' population sizes) are automatic calculated. Therefore, no input for
+#' \code{pop_area_size}, \code{pop_mean}, and \code{pop_cov} is needed.
 #' @param pop_domains a character string containing the name of a variable that
 #' indicates domains in the population data. The variable can be numeric or
 #' a factor but needs to be of the same class as the variable named in
-#' \code{smp_domains}.
+#' \code{smp_domains}. Only needed if population data are given.
 #' @param smp_data a data frame that needs to comprise all variables named in
 #' \code{fixed} and \code{smp_domains}.
 #' @param smp_domains a character string containing the name of a variable
 #' that indicates domains in the sample data. The variable can be numeric or a
 #' factor but needs to be of the same class as the variable named in
 #' \code{pop_domains}.
-#' @param threshold A threshold for the pooled or non pooled density for the
-#' adjustment.
-#' @param transformation a character string. Five different transformation
+#' @param threshold a numeric value indicating the threshold for using pooled
+#' domain data (for domains with sample sizes below the threshold) or non pooled
+#' domain data (for domains with sample sizes above the threshold) for the
+#' density estimation within the approach of \cite{Wuerz et al. (2022)}.
+#' @param transformation a character string. Three different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
 #' (ii) log transformation ("log"); (iii) Log-Shift transformation
 #' ("log.shift"). Defaults to \code{"log.shift"}.
 #' @param interval a string equal to 'default' or a numeric vector containing a
 #' lower and upper limit determining an interval for the estimation of the
-#' optimal parameter. The interval is passed to function
-#' \code{\link[stats]{optimize}} for the optimization. Defaults to 'default'
-#' which equals an interval based on the range of y for Log-Shift
-#' transformation. If the convergence fails, it is often advisable to choose a
-#' smaller more suitable interval. For right skewed distributions, the negative
-#' values may be excluded, also values larger than 1 are seldom observed.
+#' optimal parameter for the log-shift transformation. The interval is passed to
+#' function  \code{\link[stats]{optimize}} for the optimization. Defaults to
+#' an interval based on the range of y. If the convergence fails, it is often
+#' advisable to choose a smaller more suitable interval. For right skewed
+#' distributions, the negative values may be excluded.
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates are provided.
 #' Defaults to \code{FALSE}.
 #' @param B a number determining the number of bootstrap replications in the
@@ -80,23 +102,73 @@
 #' @details For the parametric bootstrap and the density estimation
 #' approach random number generation is used. Thus, a seed is set by the
 #' argument \code{seed}. \cr \cr
-#' MORE INFORMATION TO different estimators (point and MSE)
 #' @references
 #' Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 #' Model for Predictions of County Crop Areas Using Survey and Satellite Data.
-#' Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr
+#' Journal of the American Statistical Association, Vol.83, No. 401,
+#' 28-36. \cr \cr
+#' Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
+#' a small-area EBLUP. Journal of Statistical Computation and Simulation,
+#' 78:5, 443-462. \cr \cr
+#' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
+#' indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
+#' 369-385. \cr \cr
+#' Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+#' small-area estimators. Journal of the American statistical association,
+#' Vol.85, No. 409, 163-171. \cr \cr
+#' Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
+#' indicators under transformations and access to limited population auxiliary
+#' information. XXXXXXXXXXXXXXXXX
+#' @examples
+#'
+#' # Examples for (transformed) nested error regression model
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # formula object for all examples
+#' formula <- eqIncome ~ gender + eqsize + cash + self_empl + unempl_ben +
+#'                       age_ben + surv_ben + sick_ben + dis_ben + rent +
+#'                       fam_allow + house_allow + cap_inv + tax_adj
+#'
+#' # Example 1: No transformation - classical NER
+#' NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no"
+#'                          smp_domains = "district", smp_data = eusilcA_smp,
+#'                          pop_area_size = pop_area_size, pop_mean = pop_mean,
+#'                          pop_cov = pop_cov, MSE = TRUE)
+#'
+#' # Example 2: Log-shift transformation and population aggregates
+#' # (means and covariances) with bootstrap MSE (for faster running time
+#' # change B to lower value)
+#' NER_model_2 <- NER_Trafo(fixed = formula,
+#'                          smp_domains = "district", smp_data = eusilcA_smp,
+#'                          pop_area_size = pop_area_size, pop_mean = pop_mean,
+#'                          pop_cov = pop_cov, MSE = TRUE)
+#'
+#' # Example 3: Log-shift transformation and population data
+#' # Despite population data availability the methodology from
+#' # Wuerz et al. (2022) is applied. Other methods like ebp() from package
+#' # emdi are applicable.
+#' NER_model_3 <- NER_Trafo(fixed = formula,
+#'                          smp_domains = "district", smp_data = eusilcA_smp,
+#'                          pop_data = eusilcA_pop, pop_domains = "district",
+#'                          MSE = TRUE)
+#'
+#' # Example 4: Log-shift transformation and population aggregates
+#' # (only means (!) - Therefore, no MSE estimation is available, bias is
+#' # disregarded )
+#' NER_model_4 <- NER_Trafo(fixed = formula,
+#'                          smp_domains = "district", smp_data = eusilcA_smp,
+#'                          pop_area_size = pop_area_size, pop_mean = pop_mean)
+#'
 #' @seealso \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},
 #' \code{\link{estimators.saeTrafo}},  \code{\link{plot.saeTrafo}},
 #' \code{\link{summaries.saeTrafo}}
 #' @export
-#' @importFrom nlme fixed.effects VarCorr lme random.effects
-#' @importFrom parallelMap parallelStop parallelLapply parallelLibrary
-#' @importFrom parallel detectCores clusterSetRNGStream
-#' @importFrom stats as.formula dnorm lm median model.matrix na.omit optimize
-#' qnorm quantile residuals rnorm sd
-#' @importFrom utils flush.console
-#' @importFrom stats fitted density bw.SJ cov
-#' @importFrom emdi data_transformation estimators
+#' @importFrom emdi data_transformation
 
 NER_Trafo <- function(fixed,
                       pop_area_size = NULL,

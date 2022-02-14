@@ -14,7 +14,8 @@
 #' @export
 #' @importFrom moments skewness kurtosis
 #' @importFrom MuMIn r.squaredGLMM
-#' @importFrom stats shapiro.test
+#' @importFrom stats shapiro.test residuals
+#' @importFrom nlme VarCorr
 #' @name summaries.saeTrafo
 
 summary.NER <- function(object, ...) {

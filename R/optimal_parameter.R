@@ -1,5 +1,6 @@
 # Function optimal parameter returns the estimated parameter for data-driven
 # transformations
+#' @importFrom stats optimize
 
 optimal_parameter <- function(generic_opt,
                               fixed,
@@ -10,11 +11,7 @@ optimal_parameter <- function(generic_opt,
 
   if (transformation != "no" && transformation != "log") {
 
-    if (transformation == "box.cox" & any(interval == "'default")) {
-      interval <- c(-1, 2)
-    } else if (transformation == "dual" & any(interval == "default")) {
-      interval <- c(0, 2)
-    } else if (transformation == "log.shift" & any(interval == "default")) {
+    if (transformation == "log.shift" & any(interval == "default")) {
       span <- range(smp_data[paste(fixed[2])])
       if ((span[1] + 1) <= 1) {
         lower <- abs(span[1]) + 1
@@ -66,6 +63,9 @@ generic_opt <- function(lambda, fixed, smp_data, smp_domains, transformation) {
 
 
 # REML method ------------------------------------------------------------------
+
+#' @importFrom nlme lme
+#' @importFrom stats as.formula
 
 reml <- function(fixed          = fixed,
                  smp_data       = smp_data,

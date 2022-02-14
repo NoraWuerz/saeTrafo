@@ -1,7 +1,7 @@
 # Internal documentation -------------------------------------------------------
 # The function notation defines the notational framework for NER_Trafo
 
-#' @importFrom stats cov
+#' @importFrom stats cov model.matrix
 
 framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
                           pop_domains, smp_data, smp_domains) {

@@ -75,7 +75,7 @@
 #' @importFrom ggplot2 geom_line geom_vline stat_function geom_qq
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra arrangeGrob grid.arrange
-#' @importFrom stats shapiro.test logLik cooks.distance
+#' @importFrom stats shapiro.test logLik cooks.distance dnorm residuals sd
 #' @importFrom HLMdiag mdffits
 #' @importFrom stringr str_to_title
 #' @name plot.saeTrafo
