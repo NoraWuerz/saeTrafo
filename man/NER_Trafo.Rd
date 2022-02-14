@@ -119,7 +119,7 @@ descriptions of the components of objects of class "saeTrafo", see
 \description{
 Function \code{NER_Trafo} estimates small area means based on the
 (transformed) nested error regression (NER) model
-(\cite{Battese et al. (1988)}).
+(\cite{Battese et al., 1988}).
 In contrast to the empirical best predictor of \cite{Molina and Rao (2010)},
 which is implemented in the package \pkg{emdi} (\code{\link[emdi]{ebp}}), no
 unit-level population data are required.\cr \cr
@@ -127,7 +127,7 @@ unit-level population data are required.\cr \cr
 transformation. Especially for skewed variables, (data-driven)
 transformations are useful to meet the model assumptions for the error terms.
 If a transformation is chosen and aggregates (means and covariance) are
-simultaneously provided on population-level, point estimates are produced by
+simultaneously provided for the population, point estimates are produced by
 the method of \cite{Wuerz et al. (2022)}, which uses kernel density
 estimation to resolve the issue of not having access to population
 micro-data. If only population means are available and the log or log-shift
@@ -145,7 +145,52 @@ only be determined if covariance data are also provided.
 For the parametric bootstrap and the density estimation
 approach random number generation is used. Thus, a seed is set by the
 argument \code{seed}. \cr \cr
-MORE INFORMATION TO different estimators (point and MSE)
+}
+\examples{
+
+# Examples for (transformed) nested error regression model
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# formula object for all examples
+formula <- eqIncome ~ gender + eqsize + cash + self_empl + unempl_ben +
+                      age_ben + surv_ben + sick_ben + dis_ben + rent +
+                      fam_allow + house_allow + cap_inv + tax_adj
+
+# Example 1: No transformation - classical NER
+NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no"
+                         smp_domains = "district", smp_data = eusilcA_smp,
+                         pop_area_size = pop_area_size, pop_mean = pop_mean,
+                         pop_cov = pop_cov, MSE = TRUE)
+
+# Example 2: Log-shift transformation and population aggregates
+# (means and covariances) with bootstrap MSE (for faster running time
+# change B to lower value)
+NER_model_2 <- NER_Trafo(fixed = formula,
+                         smp_domains = "district", smp_data = eusilcA_smp,
+                         pop_area_size = pop_area_size, pop_mean = pop_mean,
+                         pop_cov = pop_cov, MSE = TRUE)
+
+# Example 3: Log-shift transformation and population data
+# Despite population data availability the methodology from
+# Wuerz et al. (2022) is applied. Other methods like ebp() from package
+# emdi are applicable.
+NER_model_3 <- NER_Trafo(fixed = formula,
+                         smp_domains = "district", smp_data = eusilcA_smp,
+                         pop_data = eusilcA_pop, pop_domains = "district",
+                         MSE = TRUE)
+
+# Example 4: Log-shift transformation and population aggregates
+# (only means (!) - Therefore, no MSE estimation is available, bias is
+# disregarded )
+NER_model_4 <- NER_Trafo(fixed = formula,
+                         smp_domains = "district", smp_data = eusilcA_smp,
+                         pop_area_size = pop_area_size, pop_mean = pop_mean)
+
 }
 \references{
 Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
@@ -155,9 +200,15 @@ Journal of the American Statistical Association, Vol.83, No. 401,
 Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
 a small-area EBLUP. Journal of Statistical Computation and Simulation,
 78:5, 443-462. \cr \cr
+Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
+indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
+369-385. \cr \cr
 Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
 small-area estimators. Journal of the American statistical association,
 Vol.85, No. 409, 163-171. \cr \cr
+Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
+indicators under transformations and access to limited population auxiliary
+information. XXXXXXXXXXXXXXXXX
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link[nlme]{lme}},
