@@ -91,7 +91,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' plots.
 #' @details Since all of the comparisons need a direct estimator, the plots are
 #' only created for in-sample domains.
-#' @example
+#' @examples
 #'
 #' # Example for creating plots to compare the saeTrafo object with direct
 #' # estimates (produced by the package emdi)

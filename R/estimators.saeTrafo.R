@@ -43,7 +43,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 #' \code{\link[base]{as.data.frame}}), \code{subset} (for default documentation,
 #' see \code{\link[base]{subset}}).
 #' @seealso \code{\link{saeTrafoObject}},  \code{\link{NER_Trafo}}
-#' @example
+#' @examples
 #'
 #' # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 #'

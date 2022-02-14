@@ -31,7 +31,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' "_2" standing for object1 and object2, respectively.
 #' @seealso \code{\link{emdi}}, \code{\link{NER_Trafo}},
 #' \code{\link{saeTrafoObject}}
-#' @example
+#' @examples
 #' # Example comparing two saeTrafo objects
 #'
 #' #Load Data

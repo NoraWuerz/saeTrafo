@@ -33,6 +33,40 @@ predictions of two model objects.
 Method \code{compare_pred.saeTrafo} compares predictions of two saeTrafo
 objects or a saeTrafo object and a emdi object.
 }
+\examples{
+# Example comparing two saeTrafo objects
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model 1
+NER_model_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                         self_empl + unempl_ben + age_ben + surv_ben +
+                         sick_ben + dis_ben + rent + fam_allow +
+                         house_allow + cap_inv + tax_adj,
+                         smp_domains = "district",
+                         pop_area_size = pop_area_size,
+                         pop_mean = pop_mean, pop_cov = pop_cov,
+                         smp_data = eusilcA_smp, MSE = TRUE)
+
+# Nested error regression model 2
+NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                         self_empl + unempl_ben + age_ben + surv_ben,
+                         smp_domains = "district",
+                         pop_area_size = pop_area_size,
+                         pop_mean = pop_mean, pop_cov = pop_cov,
+                         smp_data = eusilcA_smp, MSE = TRUE)
+
+# Generate a data frame for the comparison of point estimates
+compare_pred(NER_model_1, NER_model_2)
+
+# Generate a data frame for the comparison of MSE estimates
+compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
+
+}
 \seealso{
 \code{\link{emdi}}, \code{\link{NER_Trafo}},
 \code{\link{saeTrafoObject}}
