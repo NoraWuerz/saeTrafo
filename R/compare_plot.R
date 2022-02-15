@@ -182,6 +182,8 @@ compare_plot.NER <- function(model = NULL, direct = NULL,
 
 # Auxiliary functions (from emdi) ----------------------------------------------
 
+#' @importFrom stats lm
+
 compare_plots <- function(object, type, MSE, CV, label, color,
                           shape, line_type, gg_theme, ...) {
 

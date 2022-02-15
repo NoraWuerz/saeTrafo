@@ -19,7 +19,7 @@
 #' @importFrom ggplot2 aes
 #' @importFrom nlme ranef random.effects
 #' @importFrom gridExtra arrangeGrob grid.arrange
-#' @importFrom stats sd residuals
+#' @importFrom stats sd residuals qnorm
 
 qqnorm.saeTrafo <- function(y, color = c("blue", "lightblue3"),
                         gg_theme = NULL, ...) {

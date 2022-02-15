@@ -135,7 +135,7 @@
 #'                       fam_allow + house_allow + cap_inv + tax_adj
 #'
 #' # Example 1: No transformation - classical NER
-#' NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no"
+#' NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no",
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
 #'                          pop_area_size = pop_area_size, pop_mean = pop_mean,
 #'                          pop_cov = pop_cov, MSE = TRUE)
@@ -228,7 +228,8 @@ NER_Trafo <- function(fixed,
 
   if (MSE == TRUE) {
 
-    if (is.null(pop_cov) && MSE == TRUE && transformation != "no") {
+    if (is.null(pop_cov) &&  is.null(pop_data) && MSE == TRUE &&
+        transformation != "no") {
       stop("No MSE estimator available. For MSE estimation a covariance matrices
             or population data are needed otherwise the Prasad Rao MSE
             (transformation == \"no\") is avaliable.")

@@ -162,7 +162,7 @@ formula <- eqIncome ~ gender + eqsize + cash + self_empl + unempl_ben +
                       fam_allow + house_allow + cap_inv + tax_adj
 
 # Example 1: No transformation - classical NER
-NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no"
+NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no",
                          smp_domains = "district", smp_data = eusilcA_smp,
                          pop_area_size = pop_area_size, pop_mean = pop_mean,
                          pop_cov = pop_cov, MSE = TRUE)

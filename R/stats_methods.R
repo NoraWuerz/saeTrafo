@@ -30,7 +30,7 @@ confint.NER <- function(object, parm = NULL, level = 0.95, ...) {
 
 #' @export
 #' @method family NER
-#' @importFrom stats gaussian
+#' @importFrom stats family gaussian
 
 family.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -42,6 +42,7 @@ family.NER <- function(object, ...) {
 #' @aliases fitted.values
 #' @export
 #' @method fitted NER
+#' @importFrom stats fitted
 
 fitted.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -71,6 +72,7 @@ logLik.NER <- function(object, ...) {
 # Extract the number of `observations´ from a fit of an saeTrafo object --------
 #' @export
 #' @method nobs NER
+#' @importFrom stats nobs
 
 nobs.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -110,6 +112,7 @@ residuals.NER <- function(object, ...) {
 
 #' @export
 #' @method  sigma NER
+#' @importFrom stats sigma
 
 sigma.NER <- function(object, ...) {
   throw_class_error(object, "NER")
@@ -120,7 +123,7 @@ sigma.NER <- function(object, ...) {
 
 #' @export
 #' @method terms NER
-#' @importFrom stats aov
+#' @importFrom stats aov terms
 
 terms.NER <- function(x, ...) {
   throw_class_error(x, "NER")

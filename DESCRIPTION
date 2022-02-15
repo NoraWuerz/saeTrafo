@@ -16,7 +16,7 @@ Copyright: inst/COPYRIGHTS
 RoxygenNote: 7.1.2
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
-Suggests: simFrame
+Suggests: simFrame, sp
 NeedsCompilation: no
 Packaged: 2021-07-07 10:35:53 UTC; span
 Author: Nora Würz [aut]
