@@ -1,7 +1,7 @@
-writeexcel_check <- function(object, file, split){
+writeexcel_check <- function(object, file, split) {
 
   if (!inherits(object, "saeTrafo")) {
-    stop('First object needs to be of class saeTrafo.')
+    stop("First object needs to be of class saeTrafo.")
   }
   if (!(inherits(split, "logical") && length(split) == 1)) {
     stop("split must to be a logical value. Set CV to TRUE or FALSE.")
@@ -12,10 +12,10 @@ writeexcel_check <- function(object, file, split){
   }
 }
 
-writeods_check <- function(object, file, split){
+writeods_check <- function(object, file, split) {
 
   if (!inherits(object, "saeTrafo")) {
-    stop('First object needs to be of class saeTrafo.')
+    stop("First object needs to be of class saeTrafo.")
   }
   if (!(inherits(split, "logical") && length(split) == 1)) {
     stop("split must to be a logical value. Set CV to TRUE or FALSE.")
