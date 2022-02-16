@@ -73,8 +73,8 @@ class(sae_mean)
 
 # use generic functions for estimators.saeTrafo object
 print(sae_mean)
-head(sea_mean)
-tail(sea_mean)
+head(sae_mean)
+tail(sae_mean)
 as.matrix(sae_mean)
 as.data.frame(sae_mean)
 subset(sae_mean)
