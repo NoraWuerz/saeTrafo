@@ -161,15 +161,16 @@ compare_plot.NER <- function(model = NULL, direct = NULL,
                      line_type = line_type, gg_theme = gg_theme)
 
   if (inherits(direct, "fh")) {
-    stop("It is not possible to compare the point and MSE estimates of a model
-         of type 'fh', to the point and MSE estimates of an 'ebp' object.")
+    stop(paste("It is not possible to compare the point and MSE estimates of",
+               "a model of type 'fh', to the point and MSE estimates of an",
+               "'ebp' object."))
   }
 
   if ((inherits(model, "NER") & is.null(direct)) |
       (inherits(direct, "NER") & is.null(model))) {
-    stop("If the model is of type 'NER', the input argument direct is required.
-          Please use the package emdi to calculate a direct estimator of class
-          'direct' from 'emdi'")
+    stop(paste("If the model is of type 'NER', the input argument direct is",
+               "required. Please use the package emdi to calculate a direct",
+               "estimator of class 'direct' from 'emdi'"))
   } else if (inherits(model, "NER") & (inherits(direct, "direct") |
                                        inherits(direct, "ebp"))) {
 

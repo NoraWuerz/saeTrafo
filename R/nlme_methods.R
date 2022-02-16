@@ -180,8 +180,8 @@ getVarCov.NER <- function(obj, individuals = 1, type = "random.effects", ...) {
   if (is.null(type) || !(type == "random.effects"
                          || type == "conditional"
                          || type == "marginal")) {
-    stop("The three options for type are ''random.effects'', ''conditional''
-         or ''marginal''.")
+    stop(paste("The three options for type are ''random.effects'',",
+               "''conditional'' or ''marginal''."))
   }
 
   getVarCov(obj$model, individuals = individuals, type = type)

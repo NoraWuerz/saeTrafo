@@ -328,16 +328,15 @@ define_label <- function(x, label){
         !any(names(label) %in% c("qq_res", "qq_ran",
                                  "d_res", "d_ran",
                                  "cooks", "box_cox"))) {
-     stop("List elements must have following names even though not
-          all must be included: qq_res, qq_ran, d_res, d_ran, cooks,
-          opt_lambda. Every list element must have the elements title,
-          y_lab and x_lab. See also help(plot.saeTrafo).")
+     stop(paste("List elements must have following names even though not all",
+                "must be included: qq_res, qq_ran, d_res, d_ran, cooks,",
+                "opt_lambda. Every list element must have the elements title,",
+                "y_lab and x_lab. See also help(plot.saeTrafo)."))
     }
     for (i in names(label)) {
       if (!all(names(label[[i]]) == c("title", "y_lab", "x_lab"))) {
-        stop("Every list element must have the elements title,
-              y_lab and x_lab in this order. See also
-              help(plot.saeTrafo).")
+        stop(paste("Every list element must have the elements title, y_lab and",
+                   "x_lab in this order. See also help(plot.saeTrafo)."))
       }
     }
 

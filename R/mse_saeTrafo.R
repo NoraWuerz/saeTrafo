@@ -3,9 +3,9 @@
 mse_saeTrafo <- function(object, indicator = "all", CV = FALSE) {
 
   if (is.null(object$MSE) && CV == TRUE) {
-    stop("No MSE estimates in saeTrafo object: arguments MSE and CV have to be
-          FALSE or a new saeTrafo object with variance/MSE needs to be
-          generated.")
+    stop(paste("No MSE estimates in saeTrafo object: arguments MSE and CV have",
+               "to be FALSE or a new saeTrafo object with variance/MSE needs",
+               "to be generated."))
   }
 
   if (inherits(object, "fh")) {

@@ -71,8 +71,8 @@ map_plot <- function(object,
   } else {
 
     if (length(color) != 2 || !is.vector(color)) {
-      stop("col needs to be a vector of length 2 defining the starting, mid and
-            upper color of the map-plot")
+      stop(paste("col needs to be a vector of length 2 defining the starting,",
+                 "mid and upper color of the map-plot"))
     }
 
     plot_real(object       = object,
@@ -158,8 +158,8 @@ plot_real <- function(object,
       if (all(is.na(matcher))) {
         stop("Domains of map_tab and Map object do not match. Check map_tab")
       } else {
-        warnings("Not all Domains of map_tab and Map object could be matched.
-                  Check map_tab")
+        warnings(paste("Not all Domains of map_tab and Map object could be",
+                       "matched. Check map_tab"))
       }
     }
 
@@ -171,8 +171,8 @@ plot_real <- function(object,
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
-        stop("Domain of saeTrafo object and Map object do not match.
-              Try using map_tab")
+        stop(paste("Domain of saeTrafo object and Map object do not match.",
+                   "Try using map_tab"))
       } else {
         warnings("Not all Domains of saeTrafo object and Map object could be
                   matched. Try using map_tab")
