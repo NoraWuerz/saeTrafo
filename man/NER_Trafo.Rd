@@ -74,7 +74,8 @@ factor but needs to be of the same class as the variable named in
 \item{threshold}{a numeric value indicating the threshold for using pooled
 domain data (for domains with sample sizes below the threshold) or non pooled
 domain data (for domains with sample sizes above the threshold) for the
-density estimation within the approach of \cite{Wuerz et al. (2022)}.}
+density estimation within the approach of \cite{Wuerz et al. (2022)}.
+Defaults to 30.}
 
 \item{B}{a number determining the number of bootstrap replications in the
 parametric bootstrap approach. The number must be greater than 1. Defaults to
@@ -131,9 +132,11 @@ simultaneously provided for the population, point estimates are produced by
 the method of \cite{Wuerz et al. (2022)}, which uses kernel density
 estimation to resolve the issue of not having access to population
 micro-data. If only population means are available and the log or log-shift
-transformation is selected, a bias-correction due to the transformation is
-added but for the lack of access to population data a correction is not
-available. Therefore, a part of the bias is disregarded.\cr \cr
+transformation is selected, a bias-correction (cf.
+\cite{Berg and Chandra (2014)} and \cite{Molina and Mart´ın (2018)}) due to
+the transformation is added but for the lack of access to population data a
+correction is not available. Therefore, a part of the bias is
+disregarded.\cr \cr
 Additionally, analytically mean squared errors (MSE) are calculated in the
 case of no transformation following \cite{Prasad and Rao (1990)}.
 For the log and log-shift transformation, a parametric bootstrap procedure
@@ -197,9 +200,16 @@ Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401,
 28-36. \cr \cr
-Gonzalez-Manteiga, W. et al. (2008). Bootstrap mean squared error of
-a small-area EBLUP. Journal of Statistical Computation and Simulation,
-78:5, 443-462. \cr \cr
+Berg, E. and Chandra, H. (2014). Small area prediction for a unit-level
+lognormal model. Computational Statistics & Data Analysis, Vol.78,
+159–175.\cr \cr
+González-Manteiga, W., Lombardía, M. J., Molina, I., Morales, D. and
+Santamaría, L. (2008). Analytic and bootstrap approximations of prediction
+errors under a multivariate Fay–Herriot model. Computational Statistics &
+Data Analysis, Vol. 52, No. 12, 5242-5252. \cr \cr
+Molina, I. and Mart´ın, N. (2018). Empirical best prediction under a nested
+error model with log transformation. The Annals of Statistics, Vol.46, No. 5,
+1961–1993. \cr \cr
 Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
 369-385. \cr \cr

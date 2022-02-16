@@ -3,18 +3,35 @@
 \docType{package}
 \name{saeTrafo}
 \alias{saeTrafo}
-\title{A package for estimating unit-level small area models with transformed
+\title{A package for estimating unit-level small area models with (transformed)
 dependent variable.}
 \description{
-The package \pkg{saeTrafo} supports estimating regional means ....
-bias correction \cite{Molina and Martin (2019)}
+The package \pkg{saeTrafo} supports estimating regional means based on the
+(transformed) nested error regression model (\cite{Battese et al., 1988}).
+Therefore, point estimation and mean squared error estimation
+(\cite{Prasad and Rao, 1990}) for the classical model is offered.
+However, the logarithmic or the data-driven log-shift transformation are also
+offered. Compared to other small area packages, these transformations are
+accessible in the absence of population micro data. Only population
+aggregates (mean values, population sizes and preferably also covariances)
+need to be supplied. The methodology for point and mean squared error
+estimates is described in \cite{Wuerz et al. (2022)}.
 }
 \details{
-The three estimation functions is called \code{\link{NER_Trafo}}.
-For all functions, several methods are avalaible ....
+The estimation functions is called \code{\link{NER_Trafo}}. For this
+function, several methods are available \code{\link{estimators.saeTrafo}} and
+\code{\link{saeTrafo_summaries}}. For a full list, please see
+\code{\link{saeTrafoObject}}.
+Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}}
+help to visualize and export results. An overview of all currently provided
+functions can be requested by \code{library(help=saeTrafo)}.
 }
 \references{
 Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
-Journal of the American Statistical Association, Vol.83, No. 401, 28-36. \cr \cr
+Journal of the American Statistical Association, Vol.83, No. 401,
+28-36. \cr \cr
+Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
+indicators under transformations and access to limited population auxiliary
+information. XXXXXXXXXXXXXXXXX
 }
