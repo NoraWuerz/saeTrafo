@@ -68,6 +68,7 @@
 #' domain data (for domains with sample sizes below the threshold) or non pooled
 #' domain data (for domains with sample sizes above the threshold) for the
 #' density estimation within the approach of \cite{Wuerz et al. (2022)}.
+#' Defaults to 30.
 #' @param transformation a character string. Three different transformation
 #' types for the dependent variable can be chosen (i) no transformation ("no");
 #' (ii) log transformation ("log"); (iii) Log-Shift transformation
@@ -187,8 +188,10 @@ NER_Trafo <- function(fixed,
                                              "socket", "multicore"),
                       cpus = 1,
                       seed = 123) {
-  # NER_check1()
-  # NER_check2()
+
+  NER_check1(fixed, pop_data, pop_domains, smp_data, smp_domains, pop_mean,
+             pop_area_size)
+  NER_check2(threshold, transformation, interval, MSE, B, cpus, seed)
 
   # Save function call ---------------------------------------------------------
   call <- match.call()

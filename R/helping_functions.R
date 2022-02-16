@@ -51,9 +51,7 @@ throw_class_error <- function(object, subclass) {
 }
 
 # Extract response and covariates from data
-
 #' @importFrom stats model.frame model.matrix model.response
-
 makeXY <- function(formula, data) {
   mf <- model.frame(formula = formula, data = data)
   x <- model.matrix(attr(mf, "terms"), data = mf)
@@ -61,4 +59,13 @@ makeXY <- function(formula, data) {
 
   list(y = y,
        x = x)
+}
+
+# Extract variable names from all domains
+all_in_domain <- function(x, mod_vars) {
+  if (is.matrix(x)) {
+    all(mod_vars %in% row.names(x)) && all(mod_vars %in% colnames(x))
+  } else {
+    all(mod_vars %in% names(x))
+  }
 }

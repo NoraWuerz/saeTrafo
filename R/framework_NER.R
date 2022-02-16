@@ -10,7 +10,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
   mod_vars <- all.vars(fixed)
   mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
   smp_vars <- c(as.character(fixed[2]), mod_vars, smp_domains)
-  smp_data <- smp_data[, smp_vars]
+
 
   # no population data available
   if (!is.null(pop_data)) {
@@ -20,6 +20,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_data = smp_data, fixed = fixed, smp_domains = smp_domains
     )
 
+    smp_data <- smp_data[, smp_vars]
     pop_area_size <- as.numeric(table(pop_data[pop_domains]))
     names(pop_area_size) <- names(table(pop_data[pop_domains]))
 
@@ -83,6 +84,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       smp_domains = smp_domains
     )
 
+    smp_data <- smp_data[, smp_vars]
     pop_mean <- lapply(X   = pop_mean,
                        FUN = only_mod_vars,
                        var = mod_vars
