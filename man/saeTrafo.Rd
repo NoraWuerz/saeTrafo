@@ -20,7 +20,7 @@ estimates is described in \cite{Wuerz et al. (2022)}.
 \details{
 The estimation functions is called \code{\link{NER_Trafo}}. For this
 function, several methods are available \code{\link{estimators.saeTrafo}} and
-\code{\link{saeTrafo_summaries}}. For a full list, please see
+\code{\link{summaries.saeTrafo}}. For a full list, please see
 \code{\link{saeTrafoObject}}.
 Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}}
 help to visualize and export results. An overview of all currently provided
@@ -31,7 +31,7 @@ Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401,
 28-36. \cr \cr
-#' Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
 small-area estimators. Journal of the American statistical association,
 Vol.85, No. 409, 163-171. \cr \cr
 Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
