@@ -111,9 +111,10 @@ plot.saeTrafo <- function(x,
         silent = TRUE)
     if (is.null(cooksdist)) {
       cooks <- FALSE
-      warning("Cook's distance could not be calculated, this is usually due to
-               exceedence of available memory. Try using cooks = FALSE to avoid
-               this message and improve computation time.")
+      warning(paste("Cook's distance could not be calculated, this is usually",
+                    "due to exceedence of available memory. Try using",
+                    "cooks = FALSE to avoid this message and improve",
+                    "computation time."))
     } else {
       cook_df <- data.frame(index = seq_along(cooksdist), cooksdist)
       indexer <- cook_df[order(cooksdist, decreasing = TRUE),][seq_len(3),]
@@ -151,9 +152,9 @@ plot.saeTrafo <- function(x,
                           transformation = x$transformation)
 
     if (any(is.na(likelihoods))) {
-      warning("For some lambda in the chosen range, the likelihood does not
-               converge. For these lambdas no likelihood is plotted. Choose a
-               different range to avoid this behaviour")
+      warning(paste("For some lambda in the chosen range, the likelihood does",
+                    "not converge. For these lambdas no likelihood is plotted.",
+                    "Choose a different range to avoid this behaviour"))
     }
   }
 
@@ -228,9 +229,9 @@ plot.saeTrafo <- function(x,
       x_lab <- label$opt_lambda["x_lab"]
     }
     if (any(is.na(likelihoods))) {
-      warning("For some lambda in the chosen range, the likelihood does not
-               converge. For these lambdas no likelihood is plotted. Choose a
-              different range to avoid this behaviour")
+      warning(paste("For some lambda in the chosen range, the likelihood does",
+                    "not converge. For these lambdas no likelihood is plotted.",
+                    "Choose a different range to avoid this behaviour"))
     }
     print((plotList[[5]] <- ggplot(data.frame(lambda = range,
                                               log_likelihood = likelihoods),
@@ -399,9 +400,10 @@ define_label <- function(x, label){
   if (any(!(names(label) %in%  c("qq_res", "qq_ran",
                                "d_res", "d_ran",
                                "cooks", "opt_lambda", "box_cox")))) {
-    warning("One or more list elements are not called qq_res, qq_ran, d_res,
-             d_ran, cooks or opt_lambda. The changes are for this/these
-             element(s) is/are not done. Instead the original labels are used.")
+    warning(paste("One or more list elements are not called qq_res, qq_ran,",
+                  "d_res, d_ran, cooks or opt_lambda. The changes are for",
+                  "this/these element(s) is/are not done. Instead the original",
+                  "labels are used."))
   }
 
   return(label)
