@@ -41,13 +41,12 @@ in both objects differ.}
 \item{color}{a \code{vector} of length 2 defining the lowest and highest
 color in the plots.}
 
-\item{scale_points}{a structure defining the lowest, the mid and the highest
-value of the colorscale. If a numeric vector of length two is given, this
-scale will be used for every plot. Alternatively, a list defining colors for
-each plot separately may be given.}
+\item{scale_points}{a numeric vector of length two. This
+scale will be used for every plot.}
 
 \item{guide}{character passed to \code{scale_fill_gradient} from
-\pkg{ggplot2}. Possible values are "none", "colourbar", and "legend".}
+\pkg{ggplot2}. Possible values are "none", "colourbar", and "legend".
+Defaults to "colourbar".}
 
 \item{return_data}{if set to \code{TRUE}, a fortified data frame including
 the map data as well as the chosen indicators is returned. Customized maps
@@ -63,6 +62,67 @@ Function \code{map_plot} creates spatial visualizations of the estimates
 obtained by small area estimation methods.
 }
 \seealso{
-\code{\link[maptools]{readShapePoly}}, \code{\link{sp}},
+\code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
 \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
+#' @examples
+
+Example for creating maps to visualize the saeTrafo estimates
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+#Load shape file
+load_shapeaustria()
+
+# Example 1: Map plots with uncertainty plots (for MSE and CV)
+map_plot(res_ls, MSE = TRUE, CV = TRUE, map_obj = shape_austria_dis,
+         map_dom_id = "PB")
+
+# Example 2: Personalize map plot for point estimates
+map_plot(res_ls, MSE = TRUE, map_obj = shape_austria_dis, map_dom_id = "PB",
+         color = c("white", "darkblue"),
+         scale_points = c(0, max(res_ls$ind$Mean)))
+
+# Example 3: More options to personalize map plot by using return_data = TRUE
+# and ggplot2
+require(ggplot2)
+library(ggplot2)
+data_plot <- map_plot(res_ls, map_obj = shape_austria_dis, map_dom_id = "PB",
+                      return_data = TRUE)
+ggplot(data_plot, aes(long, lat, group = group, fill = Mean))+
+       geom_polygon(color = "black") +
+       coord_equal() +
+       theme_void() +
+       ggtitle("Personalized map") +
+       scale_fill_gradient2(low = "red", mid = "white", high = "darkgreen",
+                            midpoint = 20000)
+
+# Example 4: Create a suitable mapping table to use numerical identifiers of
+# the shape file
+
+# First find the right order
+dom_ord <- match(shape_austria_dis@data$PB, NER_model$ind$Domain)
+
+#Create the mapping table based on the order obtained above
+map_tab <- data.frame(pop_data_id = NER_model$ind$Domain[dom_ord],
+                      shape_id = shape_austria_dis@data$BKZ)
+
+# Create map plot for mean indicator - point and CV estimates but no MSE
+# using the numerical domain identifiers of the shape file
+map_plot(object = NER_model, MSE = FALSE, CV = TRUE,
+         map_obj = shape_austria_dis,
+         map_dom_id = "BKZ", map_tab = map_tab)
 }
