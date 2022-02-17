@@ -31,7 +31,7 @@
 #' Defaults to \code{FALSE}.
 #' @return Creates the plots demanded, and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators.
-#' @seealso \code{\link[maptools]{readShapePoly}}, \code{\link{sp}},
+#' @seealso \code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
 #' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 #' @export
 #' @importFrom reshape2 melt

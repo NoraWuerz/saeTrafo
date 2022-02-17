@@ -31,6 +31,9 @@ Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401,
 28-36. \cr \cr
+#' Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+small-area estimators. Journal of the American statistical association,
+Vol.85, No. 409, 163-171. \cr \cr
 Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
 indicators under transformations and access to limited population auxiliary
 information. XXXXXXXXXXXXXXXXX

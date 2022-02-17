@@ -15,7 +15,7 @@
 #' @details
 #' The estimation functions is called \code{\link{NER_Trafo}}. For this
 #' function, several methods are available \code{\link{estimators.saeTrafo}} and
-#' \code{\link{saeTrafo_summaries}}. For a full list, please see
+#' \code{\link{summaries.saeTrafo}}. For a full list, please see
 #' \code{\link{saeTrafoObject}}.
 #' Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}}
 #' help to visualize and export results. An overview of all currently provided
