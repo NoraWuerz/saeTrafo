@@ -2,8 +2,8 @@
 % Please edit documentation in R/nlme_methods.R
 \name{ranef}
 \alias{ranef}
-\alias{ranef.NER}
 \alias{random.effects}
+\alias{ranef.NER}
 \alias{random.effects.NER}
 \title{Extract random effects of saeTrafo object}
 \usage{
@@ -29,6 +29,27 @@ The alias \code{random.effects} can also be used instead of
 \pkg{nlme} and re-exported to make the S3-methods available, even though the
 \pkg{nlme} package itself is not loaded or attached. For default
 documentation, see \code{\link[nlme]{random.effects}}.
+}
+\examples{
+# Example to extract random effects
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+ranef(NER_model)
 }
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{random.effects}}

@@ -2,8 +2,8 @@
 % Please edit documentation in R/nlme_methods.R
 \name{fixef}
 \alias{fixef}
-\alias{fixef.NER}
 \alias{fixed.effects}
+\alias{fixef.NER}
 \alias{fixed.effects.NER}
 \title{Extract fixed effects from an saeTrafo object}
 \usage{
@@ -27,8 +27,32 @@ class "NER".
 The alias \code{fixed.effects} can also be used instead of
 \code{fixef}. The generic function \code{fixef} is imported from package
 \pkg{nlme} and re-exported to make the S3-methods available, even though the
-\pkg{nlme} package itself is not loaded or attached. For default documentation,
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation,
 see \code{\link[nlme]{fixed.effects}}.
+}
+\examples{
+
+# Example to extract fixed effects
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+fixef(NER_model)
+
 }
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{fixed.effects}}

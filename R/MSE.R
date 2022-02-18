@@ -239,12 +239,7 @@ mse_bc_agg <- function(framework,
 # Prasad Rao analytical MSE estimator-------------------------------------------
 # Calculates an analytical MSE estimator for the nested error regression model.
 # The analytical MSE can be found in Prasad, Rao (1990).
-mse_prasad_rao <- function(framework,
-                           point_estim,
-                           fixed,
-                           transformation,
-                           interval,
-                           threshold) {
+mse_prasad_rao <- function(framework, point_estim, fixed) {
 
   out_g1 <- g1(sigmau2   = point_estim$model_par$sigmau2est,
                sigmae2   = point_estim$model_par$sigmae2est,

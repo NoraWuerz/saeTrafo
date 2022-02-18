@@ -9,14 +9,38 @@
 #' @details The alias \code{fixed.effects} can also be used instead of
 #' \code{fixef}. The generic function \code{fixef} is imported from package
 #' \pkg{nlme} and re-exported to make the S3-methods available, even though the
-#' \pkg{nlme} package itself is not loaded or attached. For default documentation,
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation,
 #' see \code{\link[nlme]{fixed.effects}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{fixed.effects}}
+#' @examples
+#'
+#' # Example to extract fixed effects
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' fixef(NER_model)
+#'
 #' @aliases fixed.effects
 #' @name fixef
 #' @importFrom nlme fixef fixed.effects
 #' @export fixed.effects
 #' @export fixef
+fixef
 
 #' @export fixef.NER
 #' @export
@@ -48,17 +72,40 @@ fixed.effects.NER <- function(object, ...) {
 #' \pkg{nlme} package itself is not loaded or attached. For default
 #' documentation, see \code{\link[nlme]{getData}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getData}}
+#' @examples
+#'
+#' # Example to extract object data
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' getData(NER_model)
 #' @name getData
 #' @importFrom nlme getData
 #' @export getData
+getData
 
 #' @export getData.NER
 #' @export
 #' @rdname getData
+#'
 getData.NER <- function(object, ...) {
   throw_class_error(object, "NER")
   if (object$transformation != "no") {
-    message('The untransformed sample data set of the NER object is returned. \n \n')
+    message("The untransformed sample data set of the NER object is returned.")
   }
   object$framework$smp_data
 }
@@ -76,9 +123,31 @@ getData.NER <- function(object, ...) {
 #' itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroups}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getGroups}}
+#'
+#' @examples
+#' # Example to extract grouping factors
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' getGroups(NER_model)
 #' @name getGroups
 #' @importFrom nlme getGroups
 #' @export getGroups
+getGroups
 
 #' @export getGroups.NER
 #' @export
@@ -102,9 +171,31 @@ getGroups.NER <- function(object, ...) {
 #' \pkg{nlme} package itself is not loaded or attached. For default
 #' documentation, see \code{\link[nlme]{getGroupsFormula}}.
 #' @seealso \code{\link{NER_Trafo}} \code{\link[nlme]{getGroupsFormula}}
+#'
+#' @examples
+#' # Example to extract grouping formula
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' getGroupsFormula(NER_model)
 #' @name getGroupsFormula
 #' @importFrom nlme getGroupsFormula
 #' @export getGroupsFormula
+getGroupsFormula
 
 #' @export getGroupsFormula.NER
 #' @export
@@ -128,9 +219,31 @@ getGroupsFormula.NER <- function(object, ...) {
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getResponse}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getResponse}}
+#'
+#' @examples
+#' # Example to extract the response variable
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' getResponse(NER_model)
 #' @name getResponse
 #' @importFrom nlme getResponse
 #' @export getResponse
+getResponse
 
 #' @export getResponse.NER
 #' @export
@@ -166,9 +279,31 @@ getResponse.NER <- function(object, ...) {
 #' \pkg{nlme} package itself is not loaded or attached. For default
 #' documentation, see \code{\link[nlme]{getVarCov}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getVarCov}}
+#'
+#' @examples
+#' # Example to extract variance-covariance matrix
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' getVarCov(NER_model)
 #' @name getVarCov
 #' @importFrom nlme getVarCov
 #' @export getVarCov
+getVarCov
 
 #' @export getVarCov.NER
 #' @export
@@ -209,9 +344,31 @@ getVarCov.NER <- function(obj, individuals = 1, type = "random.effects", ...) {
 #' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{intervals}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{intervals}}
+#'
+#' @examples
+#' # Example to extract confidence intervals on coefficients
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' intervals(NER_model)
 #' @name intervals
 #' @importFrom nlme intervals
 #' @export intervals
+intervals
 
 #' @export intervals.NER
 #' @export
@@ -241,11 +398,33 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 #' \pkg{nlme} package itself is not loaded or attached. For default
 #' documentation, see \code{\link[nlme]{random.effects}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{random.effects}}
+#'
+#' @examples
+#' # Example to extract random effects
+#'
+#' #Load Data
+#' data("eusilcA_smp")
+#' data("pop_area_size")
+#' data("pop_mean")
+#' data("pop_cov")
+#'
+#' # Nested error regression model
+#' NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+#'                        self_empl + unempl_ben + age_ben + surv_ben +
+#'                        sick_ben + dis_ben + rent + fam_allow + house_allow +
+#'                        cap_inv + tax_adj,
+#'                        smp_domains = "district",
+#'                        pop_area_size = pop_area_size,
+#'                        pop_mean = pop_mean, pop_cov = pop_cov,
+#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'
+#' ranef(NER_model)
 #' @name ranef
 #' @aliases random.effects
 #' @importFrom nlme ranef random.effects
 #' @export random.effects
 #' @export ranef
+ranef
 
 #' @export ranef.NER
 #' @export

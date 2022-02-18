@@ -25,6 +25,28 @@ The generic function \code{getData} is imported from package
 \pkg{nlme} package itself is not loaded or attached. For default
 documentation, see \code{\link[nlme]{getData}}.
 }
+\examples{
+
+# Example to extract object data
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+getData(NER_model)
+}
 \seealso{
 \code{\link{NER_Trafo}}, \code{\link[nlme]{getData}}
 }

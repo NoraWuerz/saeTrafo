@@ -66,7 +66,7 @@ obtained by small area estimation methods.
 \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 #' @examples
 
-Example for creating maps to visualize the saeTrafo estimates
+# Examples for creating maps to visualize the saeTrafo estimates
 
 #Load Data
 data("eusilcA_smp")

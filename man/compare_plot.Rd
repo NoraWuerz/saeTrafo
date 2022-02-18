@@ -108,7 +108,7 @@ only created for in-sample domains.
 }
 \examples{
 
-# Example for creating plots to compare the saeTrafo object with direct
+# Examples for creating plots to compare the saeTrafo object with direct
 # estimates (produced by the package emdi)
 
 #Load Data
@@ -134,12 +134,13 @@ emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
                       smp_domains = "district", weights = "weight",
                       var = TRUE, na.rm = TRUE)
 
-# Comparison plots with uncertainty assessment plots (for MSE and CV)
+# Example 1: Comparison plots with uncertainty assessment plots
+# (for MSE and CV)
 saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
                        CV = TRUE)
 
-# Personalize comparison plots using the options provided with this function
-# and ggplot themes
+# Example 2: Personalize comparison plots using the options provided with
+# this function and ggplot themes
 require(ggplot2)
 library(ggplot2)
 saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
