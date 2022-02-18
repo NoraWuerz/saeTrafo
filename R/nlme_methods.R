@@ -118,9 +118,9 @@ getData.NER <- function(object, ...) {
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the grouping factors.
-#' @details The generic function \code{getGroups} is imported from package nlme and
-#' re-exported to make the S3-methods available, even though the nlme package
-#' itself is not loaded or attached. For default documentation,
+#' @details The generic function \code{getGroups} is imported from package nlme
+#' and re-exported to make the S3-methods available, even though the nlme
+#' package itself is not loaded or attached. For default documentation,
 #' see \code{\link[nlme]{getGroups}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getGroups}}
 #'
@@ -166,9 +166,9 @@ getGroups.NER <- function(object, ...) {
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
 #' @return A one-sided formula.
-#' @details The generic function \code{getGroupsFormula} is imported from package
-#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
-#' \pkg{nlme} package itself is not loaded or attached. For default
+#' @details The generic function \code{getGroupsFormula} is imported from
+#' package \pkg{nlme} and re-exported to make the S3-methods available, even
+#' though the \pkg{nlme} package itself is not loaded or attached. For default
 #' documentation, see \code{\link[nlme]{getGroupsFormula}}.
 #' @seealso \code{\link{NER_Trafo}} \code{\link[nlme]{getGroupsFormula}}
 #'
@@ -262,18 +262,18 @@ getResponse.NER <- function(object, ...) {
 #' @param obj an object of type "NER".
 #' @param individuals vector of levels of the in-sample domains can be specified
 #' for the types "\code{conditional}" or "\code{marginal}".
-#' @param type a character that determines the type of variance-covariance matrix.
-#' Types that can be chosen
+#' @param type a character that determines the type of variance-covariance
+#' matrix. Types that can be chosen
 #' (i) random-effects variance-covariance matrix ("\code{random.effects}"),
 #' (ii) conditional variance-covariance matrix ("\code{conditional}"),
 #' (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to
 #' "\code{random.effects}".
 #' @param ... additional arguments that are not used in this method.
-#' @return A variance-covariance matrix or a list of variance-covariance matrices,
-#' if more than one individual is selected. For method \code{getVarCov.NER}, the
-#' dimensions of the matrices are 1 x 1 for type "\code{random.effects}" and
-#' number of in-sample domains x number of in-sample domains for types
-#' "\code{conditional}" and "\code{marginal}".
+#' @return A variance-covariance matrix or a list of variance-covariance
+#' matrices, if more than one individual is selected. For method
+#' \code{getVarCov.NER}, the dimensions of the matrices are 1 x 1 for type
+#' "\code{random.effects}" and number of in-sample domains x number of
+#' in-sample domains for types "\code{conditional}" and "\code{marginal}".
 #' @details The generic function \code{getVarCov} is imported from package
 #' \pkg{nlme} and re-exported to make the S3-methods available, even though the
 #' \pkg{nlme} package itself is not loaded or attached. For default
