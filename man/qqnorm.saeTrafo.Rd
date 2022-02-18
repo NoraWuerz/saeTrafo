@@ -2,12 +2,9 @@
 % Please edit documentation in R/qqnorm.R
 \name{qqnorm.saeTrafo}
 \alias{qqnorm.saeTrafo}
-\alias{qqnorm.NER}
 \title{Quantile-quantile plots for an saeTrafo object}
 \usage{
 \method{qqnorm}{saeTrafo}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
-
-\method{qqnorm}{NER}(y, color = c("blue", "lightblue3"), gg_theme = NULL, ...)
 }
 \arguments{
 \item{y}{a model object of type "saeTrafo" (see \code{\link{NER_Trafo}}).}
@@ -18,7 +15,7 @@ the Box-Cox plot. The second element defines the color for the densities.}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 For using this argument, package \pkg{ggplot2} must be loaded via
-\code{library(ggplot2)}. See also Example 4.}
+\code{library(ggplot2)}. See also Example 2.}
 
 \item{...}{optional arguments passed to generic function.}
 }
@@ -29,6 +26,38 @@ Two Q-Q plots in one grid obtained by \code{\link[ggplot2]{ggplot}}.
 Normal quantile-quantile plots of the underlying model (see
 \code{\link{NER_Trafo}}) are obtained. The plots are obtained by
 \code{\link[ggplot2]{ggplot}}.
+}
+\examples{
+
+# Example for Quantile-quantile plots
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+# Example 1: Default Quantile-quantile plots
+qqnorm(NER_model)
+
+# Example 2: Personalized plot using theme
+qqnorm(res_ls,
+       color = c("red", "darkgreen"),
+       gg_theme = theme(panel.background = element_rect(fill = NA),
+                        panel.grid.major = element_line(colour = "grey50"),
+                        panel.ontop = TRUE)
+)
+
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}}

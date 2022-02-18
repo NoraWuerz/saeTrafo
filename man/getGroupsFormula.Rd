@@ -20,9 +20,9 @@ Methods \code{getGroupsFormula.NER} extract the grouping formula from an
 saeTrafo object.
 }
 \details{
-The generic function \code{getGroupsFormula} is imported from package
-\pkg{nlme} and re-exported to make the S3-methods available, even though the
-\pkg{nlme} package itself is not loaded or attached. For default
+The generic function \code{getGroupsFormula} is imported from
+package \pkg{nlme} and re-exported to make the S3-methods available, even
+though the \pkg{nlme} package itself is not loaded or attached. For default
 documentation, see \code{\link[nlme]{getGroupsFormula}}.
 }
 \examples{

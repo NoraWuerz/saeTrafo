@@ -19,9 +19,9 @@ A vector containing the grouping factors.
 Method \code{getGroups.NER} extract grouping factors from a saeTrafo object.
 }
 \details{
-The generic function \code{getGroups} is imported from package nlme and
-re-exported to make the S3-methods available, even though the nlme package
-itself is not loaded or attached. For default documentation,
+The generic function \code{getGroups} is imported from package nlme
+and re-exported to make the S3-methods available, even though the nlme
+package itself is not loaded or attached. For default documentation,
 see \code{\link[nlme]{getGroups}}.
 }
 \examples{

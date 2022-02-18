@@ -13,8 +13,8 @@
 \item{individuals}{vector of levels of the in-sample domains can be specified
 for the types "\code{conditional}" or "\code{marginal}".}
 
-\item{type}{a character that determines the type of variance-covariance matrix.
-Types that can be chosen
+\item{type}{a character that determines the type of variance-covariance
+matrix. Types that can be chosen
 (i) random-effects variance-covariance matrix ("\code{random.effects}"),
 (ii) conditional variance-covariance matrix ("\code{conditional}"),
 (iii) marginal variance-covariance matrix ("\code{marginal}"). Defaults to
@@ -23,11 +23,11 @@ Types that can be chosen
 \item{...}{additional arguments that are not used in this method.}
 }
 \value{
-A variance-covariance matrix or a list of variance-covariance matrices,
-if more than one individual is selected. For method \code{getVarCov.NER}, the
-dimensions of the matrices are 1 x 1 for type "\code{random.effects}" and
-number of in-sample domains x number of in-sample domains for types
-"\code{conditional}" and "\code{marginal}".
+A variance-covariance matrix or a list of variance-covariance
+matrices, if more than one individual is selected. For method
+\code{getVarCov.NER}, the dimensions of the matrices are 1 x 1 for type
+"\code{random.effects}" and number of in-sample domains x number of
+in-sample domains for types "\code{conditional}" and "\code{marginal}".
 }
 \description{
 Method \code{getVarCov.NER} extract the variance-covariance matrix from a

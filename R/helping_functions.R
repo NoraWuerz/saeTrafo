@@ -69,3 +69,17 @@ all_in_domain <- function(x, mod_vars) {
     all(mod_vars %in% names(x))
   }
 }
+
+# likelihoods function for plots
+likelihoods_f <- function(lam, fixed, smp_data, smp_domains, transformation) {
+  result <- NULL
+  try(result <- -as.numeric(generic_opt(lambda         = lam,
+                                        fixed          = fixed,
+                                        smp_data       = smp_data,
+                                        smp_domains    = smp_domains,
+                                        transformation = transformation
+                 )),
+      silent = TRUE)
+  if (is.null(result)) {result <- NA}
+  result
+}
