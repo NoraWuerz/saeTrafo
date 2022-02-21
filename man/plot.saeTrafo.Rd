@@ -15,34 +15,35 @@
 )
 }
 \arguments{
-\item{x}{an object of type "emdi", either "ebp" or "fh", representing point
-and, if chosen, MSE estimates obtained by the EBP or Fay-Herriot approach
-(see also \code{\link{ebp}} and \code{\link{fh}}).}
+\item{x}{an object of type "NER", representing point
+and, if chosen, MSE estimates obtained by the (transformed) nested error
+regression model (see also \code{\link{NER_Trafo}}).}
 
 \item{label}{argument that enables to customize title and axis labels. There
-are three instant options to label the diagnostic plot: (i) original labels ("orig"),
-(ii) axis lables but no title ("no_title"), (iii) neither axis
+are three instant options to label the diagnostic plot: (i) original labels
+("orig"), (ii) axis lables but no title ("no_title"), (iii) neither axis
 labels nor title ("blank").
-(iv) individual labels by a list that needs to
-have below structure. Six elements can be defined called \code{qq_res, qq_ran,
-d_res, d_ran, cooks} and \code{opt_lambda} for the six different plots and these
-list elements need to have three elements each called \code{title, y_lab and
-x_lab}. Only the labels for the plots that should be different to the original
+(iv) individual labels by a list that needs to have below structure.
+Six elements can be defined called \code{qq_res, qq_ran, d_res, d_ran, cooks}
+and \code{opt_lambda} for the six different plots and these list elements
+need to have three elements each called \code{title, y_lab and x_lab}.
+Only the labels for the plots that should be different to the original
 need to be specified. Please see the details section for an example
 with the default labels.}
 
 \item{color}{a character vector with two elements. The first element defines
 the color for the line in the QQ-plots, for the Cook's Distance plot and for
-the Box-Cox plot. The second element defines the color for the densities.}
+the optimal parameter plot. The second element defines the color for the
+densities.}
 
 \item{gg_theme}{\code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 For using this argument, package \pkg{ggplot2} must be loaded via
-\code{library(ggplot2)}. See also Example 4.}
+\code{library(ggplot2)}.}
 
-\item{cooks}{if \code{TRUE}, a Cook's distance plot is returned when the ebp
-function is used. The used method \code{mdffits.default} from the package \pkg{HLMdiag}
-struggles when data sets get large. In these cases, \code{cooks} should be
-set to \code{FALSE}. It defaults to \code{TRUE}.}
+\item{cooks}{optional logical. If \code{TRUE}, a Cook's distance plot is
+returned. The used method \code{mdffits.default} from the package
+\pkg{HLMdiag} struggles when data sets get large. In these cases,
+\code{cooks} should be set to \code{FALSE}. It defaults to \code{TRUE}.}
 
 \item{range}{optional sequence determining the range of the x-axis for plots
 of the optimal transformation parameter that defaults to \code{NULL}. In that
@@ -56,44 +57,74 @@ interval for the estimation of the optimal parameter.}
 }
 \value{
 Two Q-Q plots in one grid, two density plots, a Cook's distance plot
-and a likelihood plot for the optimal parameter of transformations with transformation
-parameter obtained by \code{\link[ggplot2]{ggplot}}. The latter two plots are only provided
-for ebp object.
+and a likelihood plot for the optimal parameter of transformations with
+transformation parameter obtained by \code{\link[ggplot2]{ggplot}}.
 }
 \description{
 Diagnostic plots of the nested error regression model
 (see also \code{\link{NER_Trafo}}) are obtained. These include Q-Q plots and
 density plots of residuals and random effects, a Cook's distance plot for
-detecting outliers and the. The return depends on the
-transformation such that a plot for the optimal parameter is
-only returned in case a transformation with transformation parameter is chosen.
-The range of the x-axis is optional but necessary to change if there are convergence problems.
-All plots are obtained by \code{\link[ggplot2]{ggplot}}.
+detecting outliers and the log-likelihood of the estimation of the
+optimal parameter in log-shift transformations. The return depends on the
+transformation such that a plot for the optimal parameter is only returned
+in case if a transformation with transformation parameter is chosen.
+The range of the x-axis is optional but necessary to change if there are
+convergence problems. All plots are obtained by
+\code{\link[ggplot2]{ggplot}}.
 }
 \details{
-The default settings of the \code{label} argument are as follows (please
-note that the title for opt_lambda depends on the chosen transformation, for
-the example Box-Cox is shown):\cr
+The default settings of the \code{label} argument are as follows:\cr
 \describe{
 \item{list(}{}
-\item{qq_res =}{c(title="Error term", y_lab="Quantiles of pearson residuals",
-                x_lab="Theoretical quantiles"),}
+\item{qq_res =}{c(title="Error term",
+                  y_lab="Quantiles of pearson residuals",
+                  x_lab="Theoretical quantiles"),}
 \item{qq_ran =}{c(title="Random effect",
-                y_lab="Quantiles of random effects",
-                x_lab="Theoretical quantiles"),}
+                  y_lab="Quantiles of random effects",
+                  x_lab="Theoretical quantiles"),}
 \item{d_res =}{c(title="Density - Pearson residuals",
-               y_lab="Density",
-               x_lab="Pearson residuals"),}
+                 y_lab="Density",
+                 x_lab="Pearson residuals"),}
 \item{d_ran =}{c(title="Density - Standardized random effects",
-               y_lab="Density",
-               x_lab="Standardized random effects"),}
+                 y_lab="Density",
+                 x_lab="Standardized random effects"),}
 \item{cooks =}{c(title="Cook's Distance Plot",
-               y_lab="Cook's Distance",
-               x_lab="Index"),}
-\item{opt_lambda =}{c(title="Box-Cox - REML",
-               y_lab="Log-Likelihood",
-               x_lab="expression(lambda)"))}
+                 y_lab="Cook's Distance",
+                 x_lab="Index"),}
+\item{opt_lambda =}{c(title="Log-Shift - REML",
+                      y_lab="Log-Likelihood",
+                      x_lab="expression(lambda)"))}
 }
+}
+\examples{
+
+# Examples for diagnostic plots
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+# Example 1: Default diagnostic plot
+plot(NER_model)
+
+# Example 2: Creation of diagnostic plots without labels and titles,
+# different colors and without Cook's distance plot.
+plot(NER_model, label = "no_title", color = c("red", "yellow"),
+     cooks = FALSE)
+
+
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}}

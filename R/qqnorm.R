@@ -15,7 +15,7 @@
 #' @seealso \code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}}
 #' @examples
 #'
-#' # Example for Quantile-quantile plots
+#' # Examples for Quantile-quantile plots
 #'
 #' #Load Data
 #' data("eusilcA_smp")
@@ -37,7 +37,7 @@
 #' qqnorm(NER_model)
 #'
 #' # Example 2: Personalized plot using theme
-#' qqnorm(res_ls,
+#' qqnorm(NER_Trafo,
 #'        color = c("red", "darkgreen"),
 #'        gg_theme = theme(panel.background = element_rect(fill = NA),
 #'                         panel.grid.major = element_line(colour = "grey50"),

@@ -41,7 +41,7 @@ functions. See Details for more information.
 Objects of class "saeTrafo" and subclass "NER_Trafo" have following methods:
 \code{\link[saeTrafo]{compare_pred}}, \code{\link[saeTrafo]{estimators}},
 \code{\link[saeTrafo]{plot.saeTrafo}},
-\code{\link[saeTrafo]{predict.saeTrafo}},
+\code{\link[saeTrafo]{predict.NER}},
 \code{\link[saeTrafo]{qqnorm.saeTrafo}},
 \code{\link[saeTrafo]{compare_plot}},
 \code{\link[saeTrafo]{getData}},

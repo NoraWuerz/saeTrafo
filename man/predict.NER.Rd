@@ -19,3 +19,25 @@ Method \code{predict.NER} extracts the direct estimates, the empirical
 best linear unbiased or empirical best predictors for all domains from an
 saeTrafo object.
 }
+\examples{
+# Examples for Predictions from saeTrafo objects
+
+#Load Data
+data("eusilcA_smp")
+data("pop_area_size")
+data("pop_mean")
+data("pop_cov")
+
+# Nested error regression model
+NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
+                       self_empl + unempl_ben + age_ben + surv_ben +
+                       sick_ben + dis_ben + rent + fam_allow + house_allow +
+                       cap_inv + tax_adj,
+                       smp_domains = "district",
+                       pop_area_size = pop_area_size,
+                       pop_mean = pop_mean, pop_cov = pop_cov,
+                       smp_data = eusilcA_smp, MSE = TRUE)
+
+predict(NER_model)
+
+}

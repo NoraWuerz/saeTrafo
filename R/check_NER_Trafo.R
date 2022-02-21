@@ -135,10 +135,10 @@ fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
   if (any(is.na(pop_data)) || any(is.na(smp_data))) {
     stop("NER_Trafo does not work with missing values.")
   }
-  print(paste("Aggregates (means and covariances) generated from the provided",
-              "population in a first step. SAE methods for full population",
-              "data and transformations are provided in the R package emdi",
-              "which offers further functionalities"))
+  print(paste("In a first step, aggregates (means and covariances) are",
+              "generated from the provided population data. SAE methods for",
+              "full population data and transformations are offered in the R ",
+              "package emdi."))
 }
 
 # Function called in framework_NER.R and check inputs in the case of

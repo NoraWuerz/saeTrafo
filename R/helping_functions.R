@@ -29,16 +29,16 @@ only_mod_vars <- function(x, var) {
 
 # for vector or matices unobserved domains are included in the respective object
 include_dom_unobs <- function(x, obs_dom) {
-  if ((is.vector(x) | is.array(x)) && is.numeric(x)) {
-    tmp <- rep(0, length(obs_dom))
-    tmp[obs_dom] <- x
-    return(tmp)
-  }
   if (is.matrix(x)) {
     tmp <- matrix(0, length(obs_dom), ncol(x))
     tmp[obs_dom, ] <- x
     return(tmp)
+  } else {
+    tmp <- rep(0, length(obs_dom))
+    tmp[obs_dom] <- x
+    return(tmp)
   }
+
 }
 
 # check if the object is of class saeTrafo
