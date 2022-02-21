@@ -37,7 +37,9 @@
 #' qqnorm(NER_model)
 #'
 #' # Example 2: Personalized plot using theme
-#' qqnorm(NER_Trafo,
+#' require("ggplot2")
+#' library(ggplot2)
+#' qqnorm(NER_model,
 #'        color = c("red", "darkgreen"),
 #'        gg_theme = theme(panel.background = element_rect(fill = NA),
 #'                         panel.grid.major = element_line(colour = "grey50"),
