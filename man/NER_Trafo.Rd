@@ -172,11 +172,11 @@ NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no",
 
 # Example 2: Log-shift transformation and population aggregates
 # (means and covariances) with bootstrap MSE (for faster running time
-# change B to lower value)
+# change B to lower value) and changed threshold
 NER_model_2 <- NER_Trafo(fixed = formula,
                          smp_domains = "district", smp_data = eusilcA_smp,
                          pop_area_size = pop_area_size, pop_mean = pop_mean,
-                         pop_cov = pop_cov, MSE = TRUE)
+                         pop_cov = pop_cov, MSE = TRUE, threshold = 50)
 
 # Example 3: Log-shift transformation and population data
 # Despite population data availability the methodology from

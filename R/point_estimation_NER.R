@@ -212,6 +212,13 @@ syn_est <- function(framework, est_par, fixed, threshold) {
     pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
     if (sum(pos) > 1) {
       data_smp_z[pos] <- (y_est[pos] - mean(y_est[pos])) / sd(y_est[pos])
+      if (any(((y_est[pos] - mean(y_est[pos]))) == 0)) {
+        warning(paste("Generated Bootstrap-sample for area", i,
+                      "contain the following inputs for the dependent variable",
+                      paste(y_est[pos], collapse = " "),
+                      "and therefore y - mean(y) = 0 and thus",
+                      "y - mean(y) / sd(y) == Nan"))
+      }
     }
     if (sum(pos) == 1) {
       data_smp_z[pos] <- 0
@@ -223,6 +230,7 @@ syn_est <- function(framework, est_par, fixed, threshold) {
   est_synthetic <- c()
 
   for (i in 1:framework$N_dom_pop) {
+
     if (area_smp[i] > threshold) {
       pos <- framework$smp_domains_vec %in% names(framework$pop_area_size)[i]
       input <- data_smp_z[pos] * x_sd_d[i] + x_mean_d[i]
