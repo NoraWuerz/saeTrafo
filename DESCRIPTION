@@ -1,6 +1,6 @@
 Package: saeTrafo
 Title: Transformations for unit-level small area models
-Version: 1.0.0
+Version: 0.0.2
 Date: 2022-01-12
 Authors@R: 
     person("Nora", "Würz", role=c("aut", "cre"), email = "nora.wuerz@fu-berlin.de")
