@@ -163,9 +163,7 @@
 #'                          pop_cov = pop_cov, MSE = TRUE, threshold = 50)
 #'
 #' # Example 3: Log-shift transformation and population data
-#' # Despite population data availability the methodology from
-#' # Wuerz et al. (2022) is applied. Other methods like ebp() from package
-#' # emdi are applicable.
+#' # A bias-corrections which need unit-level population data are applied
 #' NER_model_3 <- NER_Trafo(fixed = formula,
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
 #'                          pop_data = eusilcA_pop, pop_domains = "district",
