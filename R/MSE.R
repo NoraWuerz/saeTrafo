@@ -306,7 +306,7 @@ g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
 
   for (i in 1:m) {
     x_areawise <- X[area == u_area[i], ]
-    V_inv <- sigmae2^ (-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
+    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
       matrix(1, n_smp[i], n_smp[i]))
 
     sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
@@ -324,7 +324,7 @@ g3 <- function(sigmau2, sigmae2, n_smp, X, area, pop_area) {
 
   t <- length(n_smp)
   k <- (ncol(X) - 1)
-  term <- (sum(n_smp) - t - k + 1)^ (-1)
+  term <- (sum(n_smp) - t - k + 1)^(-1)
 
   sum_ni2_xi_xi <- matrix(0, k + 1, k + 1)
 
@@ -343,12 +343,12 @@ g3 <- function(sigmau2, sigmae2, n_smp, X, area, pop_area) {
   n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
 
   var_sig.e <- 2 * term * sigmae2^2
-  var_sig.u <- 2 * n_star^ (-2) *
+  var_sig.u <- 2 * n_star^(-2) *
     (term * (t - 1) * (sum(n_smp) - k) * sigmae2^2 +
        2 * n_star * sigmae2 * sigmau2 + n_star_star * sigmau2^2)
-  cov_sig.e_sig.u <- - (t - 1) * n_star^ (-1) * var_sig.e
+  cov_sig.e_sig.u <- -(t - 1) * n_star^(-1) * var_sig.e
 
-  res_g3 <- n_smp^ (-2) * (sigmau2 + sigmae2 / n_smp)^ (-3) *
+  res_g3 <- n_smp^(-2) * (sigmau2 + sigmae2 / n_smp)^(-3) *
     (sigmae2^2 * var_sig.u +
        sigmau2^2 * var_sig.e -
        2 * sigmae2 * sigmau2 * cov_sig.e_sig.u)
