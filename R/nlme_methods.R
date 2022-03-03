@@ -1,6 +1,6 @@
 #' Extract fixed effects from an saeTrafo object
 #'
-#' Methods \code{fixef.NER} extract the fixed effects from an saeTrafo object of
+#' Method \code{fixef.NER} extracts the fixed effects from an saeTrafo object of
 #' class "NER".
 #'
 #' @param object an object of type "NER".
@@ -61,7 +61,7 @@ fixed.effects.NER <- function(object, ...) {
 
 #' Extract saeTrafo object data
 #'
-#' Methods \code{getData.NER} extract the data frame used to fit the model.
+#' Method \code{getData.NER} extracts the data frame used to fit the model.
 #'
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
@@ -113,7 +113,7 @@ getData.NER <- function(object, ...) {
 
 #' Extract grouping factors from an saeTrafo object
 #'
-#' Method \code{getGroups.NER} extract grouping factors from a saeTrafo object.
+#' Method \code{getGroups.NER} extracts grouping factors from a saeTrafo object.
 #'
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
@@ -160,7 +160,7 @@ getGroups.NER <- function(object, ...) {
 
 #' Extract grouping formula from a saeTrafo object
 #'
-#' Methods \code{getGroupsFormula.NER} extract the grouping formula from an
+#' Method \code{getGroupsFormula.NER} extracts the grouping formula from an
 #' saeTrafo object.
 #'
 #' @param object an object of type "NER".
@@ -208,7 +208,7 @@ getGroupsFormula.NER <- function(object, ...) {
 
 #' Extract response variable from an saeTrafo object
 #'
-#' Methods \code{getResponse.NER} extract the response variable from a saeTrafo
+#' Method \code{getResponse.NER} extracts the response variable from a saeTrafo
 #' object.
 #'
 #' @param object an object of type "NER".
@@ -256,7 +256,7 @@ getResponse.NER <- function(object, ...) {
 
 #' Extract variance-covariance matrix from an saeTrafo object
 #'
-#' Method \code{getVarCov.NER} extract the variance-covariance matrix from a
+#' Method \code{getVarCov.NER} extracts the variance-covariance matrix from a
 #' fitted model of class "NER".
 #
 #' @param obj an object of type "NER".
@@ -326,7 +326,7 @@ getVarCov.NER <- function(obj, individuals = 1, type = "random.effects", ...) {
 
 #' Confidence intervals on coefficients of an saeTrafo object
 #'
-#' Method \code{intervals.NER} provide the approximate confidence intervals on
+#' Method \code{intervals.NER} provides the approximate confidence intervals on
 #' the coefficients (fixed effects) of an saeTrafo object.
 #'
 #' @param object an object of type "NER".
@@ -386,7 +386,7 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 
 #' Extract random effects of saeTrafo object
 #'
-#' Method \code{ranef.NER} extract the fixed effects from an saeTrafo object.
+#' Method \code{ranef.NER} extracts the fixed effects from an saeTrafo object.
 #'
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
