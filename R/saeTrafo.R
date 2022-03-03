@@ -13,8 +13,9 @@
 #' estimates is described in \cite{Wuerz et al. (2022)}.
 
 #' @details
-#' The estimation functions is called \code{\link{NER_Trafo}}. For this
-#' function, several methods are available \code{\link{estimators.saeTrafo}} and
+#' The estimation function is called \code{\link{NER_Trafo}}. For this
+#' function, several methods are available such as
+#' \code{\link{estimators.saeTrafo}} and
 #' \code{\link{summaries.saeTrafo}}. For a full list, please see
 #' \code{\link{saeTrafoObject}}.
 #' Furthermore, functions \code{\link{map_plot}} and \code{\link{write.excel}}

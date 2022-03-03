@@ -2,7 +2,7 @@
 #'
 #' Additional information about the data and model in small area estimation
 #' methods and components of an saeTrafo object are extracted. The returned
-#' object is suitable for printing  with the \code{print}.
+#' object is suitable for printing  with the \code{print} function.
 #' @param object an object of type "NER", representing point and MSE estimates.
 #' @param ... additional arguments that are not used in this method.
 #' @return an object of type "summary.NER" with information about the sample and

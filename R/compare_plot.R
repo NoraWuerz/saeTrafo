@@ -49,7 +49,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' model-based estimates are compared by boxplots and scatter plots.
 #' @param model a model object of type "NER", representing point and optional
 #' MSE estimates.
-#' @param direct an object of type "direct" form "emdi", representing point
+#' @param direct an object of type "direct" from "emdi", representing point
 #' and MSE estimates. For more information on how to generate direct estimates,
 #' please see \code{\link[emdi]{direct}}.
 #' @param MSE optional logical. If \code{TRUE}, the MSE estimates of the direct
