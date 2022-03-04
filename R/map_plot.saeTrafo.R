@@ -32,7 +32,7 @@
 #' containing the mapdata and chosen indicators.
 #' @seealso \code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
 #' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
-#'  @examples
+#' @examples
 #'
 #' # Examples for creating maps to visualize the saeTrafo estimates
 #'

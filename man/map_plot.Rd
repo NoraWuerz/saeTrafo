@@ -61,10 +61,7 @@ containing the mapdata and chosen indicators.
 Function \code{map_plot} creates spatial visualizations of the estimates
 obtained by small area estimation methods.
 }
-\seealso{
-\code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
-\code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
- @examples
+\examples{
 
 # Examples for creating maps to visualize the saeTrafo estimates
 
@@ -125,4 +122,9 @@ map_tab <- data.frame(pop_data_id = NER_model$ind$Domain[dom_ord],
 map_plot(object = NER_model, MSE = FALSE, CV = TRUE,
          map_obj = shape_austria_dis,
          map_dom_id = "BKZ", map_tab = map_tab)
+
+}
+\seealso{
+\code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
+\code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 }
