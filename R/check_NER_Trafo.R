@@ -146,6 +146,11 @@ fw_check_pop <- function(pop_data, mod_vars, pop_domains, smp_data,
 fw_check_agg <- function(pop_area_size, pop_mean, pop_cov, mod_vars,
                          smp_data, fixed, smp_domains) {
 
+  if (sum(pop_area_size) == nrow(smp_data)) {
+    stop(paste("The sample size is equal to the population size. Please check",
+               "pop_area_size and smp_data."))
+  }
+
   if (is.null(pop_mean) || is.null(pop_area_size)) {
     stop(paste("Population mean and population area sizes (and optional",
                "population covariances) must be available or population data",
