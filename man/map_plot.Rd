@@ -85,11 +85,11 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
 load_shapeaustria()
 
 # Example 1: Map plots with uncertainty plots (for MSE and CV)
-map_plot(res_ls, MSE = TRUE, CV = TRUE, map_obj = shape_austria_dis,
+map_plot(NER_model, MSE = TRUE, CV = TRUE, map_obj = shape_austria_dis,
          map_dom_id = "PB")
 
 # Example 2: Personalize map plot for point estimates
-map_plot(res_ls, MSE = TRUE, map_obj = shape_austria_dis, map_dom_id = "PB",
+map_plot(NER_model, map_obj = shape_austria_dis, map_dom_id = "PB",
          color = c("white", "darkblue"),
          scale_points = c(0, max(res_ls$ind$Mean)))
 
@@ -97,7 +97,7 @@ map_plot(res_ls, MSE = TRUE, map_obj = shape_austria_dis, map_dom_id = "PB",
 # and ggplot2
 require(ggplot2)
 library(ggplot2)
-data_plot <- map_plot(res_ls, map_obj = shape_austria_dis, map_dom_id = "PB",
+data_plot <- map_plot(NER_model, map_obj = shape_austria_dis, map_dom_id = "PB",
                       return_data = TRUE)
 ggplot(data_plot, aes(long, lat, group = group, fill = Mean))+
        geom_polygon(color = "black") +
