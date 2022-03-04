@@ -134,6 +134,7 @@
 #' # Examples for (transformed) nested error regression model
 #'
 #' #Load Data
+#' data("eusilcA_pop")
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
