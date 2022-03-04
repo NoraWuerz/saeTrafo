@@ -36,7 +36,7 @@ compare_plot(
 \item{model}{a model object of type "NER", representing point and optional
 MSE estimates.}
 
-\item{direct}{an object of type "direct" form "emdi", representing point
+\item{direct}{an object of type "direct" from "emdi", representing point
 and MSE estimates. For more information on how to generate direct estimates,
 please see \code{\link[emdi]{direct}}.}
 
@@ -136,22 +136,19 @@ emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
 
 # Example 1: Comparison plots with uncertainty assessment plots
 # (for MSE and CV)
-saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
-                       CV = TRUE)
+compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE, CV = TRUE)
 
 # Example 2: Personalize comparison plots using the options provided with
 # this function and ggplot themes
 require(ggplot2)
 library(ggplot2)
-saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
-                       CV = TRUE, label = "no_title",
-                       color = c("orange", "green"),
-                       shape = c(1,2),
-                       line_type = c("dotted", "dashed"),
-                       gg_theme = theme(
-                          text = element_text(size = 20, color = "blue"),
-                          panel.border = element_rect(linetype = "dashed",
-                                                      fill = "NA")))
+compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE, CV = TRUE,
+             label = "no_title", color = c("orange", "green"),
+             shape = c(1,2), line_type = c("dotted", "dashed"),
+             gg_theme = theme(
+                 text = element_text(size = 20, color = "blue"),
+                 panel.border = element_rect(linetype = "dashed",
+                                             fill = "NA")))
 
 }
 \seealso{

@@ -16,7 +16,7 @@
 A one-sided formula.
 }
 \description{
-Methods \code{getGroupsFormula.NER} extract the grouping formula from an
+Method \code{getGroupsFormula.NER} extracts the grouping formula from an
 saeTrafo object.
 }
 \details{

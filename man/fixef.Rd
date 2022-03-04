@@ -20,7 +20,7 @@
 A vector containing the fixed effects is returned.
 }
 \description{
-Methods \code{fixef.NER} extract the fixed effects from an saeTrafo object of
+Method \code{fixef.NER} extracts the fixed effects from an saeTrafo object of
 class "NER".
 }
 \details{

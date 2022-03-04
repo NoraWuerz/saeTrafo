@@ -32,8 +32,8 @@ always filled:
       \code{NULL}.}
 }
 \description{
-An object of class saeTrafo that represents point predictions of domain-
-specific means. Optionally, it also contains corresponding MSE
+An object of class saeTrafo that represents point predictions of
+domain-specific means. Optionally, it also contains corresponding MSE
 estimates. Objects of these classes have methods for various generic
 functions. See Details for more information.
 }

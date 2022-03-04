@@ -17,7 +17,7 @@ Data frame used to fit the model. For "NER" the (untransformed)
 sample data is returned.
 }
 \description{
-Methods \code{getData.NER} extract the data frame used to fit the model.
+Method \code{getData.NER} extracts the data frame used to fit the model.
 }
 \details{
 The generic function \code{getData} is imported from package

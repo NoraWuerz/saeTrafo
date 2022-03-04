@@ -30,7 +30,7 @@ matrices, if more than one individual is selected. For method
 in-sample domains for types "\code{conditional}" and "\code{marginal}".
 }
 \description{
-Method \code{getVarCov.NER} extract the variance-covariance matrix from a
+Method \code{getVarCov.NER} extracts the variance-covariance matrix from a
 fitted model of class "NER".
 }
 \details{

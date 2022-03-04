@@ -16,7 +16,7 @@
 Vector containing the response variable.
 }
 \description{
-Methods \code{getResponse.NER} extract the response variable from a saeTrafo
+Method \code{getResponse.NER} extracts the response variable from a saeTrafo
 object.
 }
 \details{

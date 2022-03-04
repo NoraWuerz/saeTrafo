@@ -21,7 +21,7 @@ A vector containing the estimated random effects at domain level is
 returned.
 }
 \description{
-Method \code{ranef.NER} extract the fixed effects from an saeTrafo object.
+Method \code{ranef.NER} extracts the fixed effects from an saeTrafo object.
 }
 \details{
 The alias \code{random.effects} can also be used instead of

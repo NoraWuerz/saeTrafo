@@ -20,7 +20,7 @@ of the model fit.
 \description{
 Additional information about the data and model in small area estimation
 methods and components of an saeTrafo object are extracted. The returned
-object is suitable for printing  with the \code{print}.
+object is suitable for printing  with the \code{print} function.
 }
 \seealso{
 \code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}},

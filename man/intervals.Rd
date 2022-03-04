@@ -25,7 +25,7 @@ containing the lower confidence limits (lower), the
 estimated values (est.), and upper confidence limits (upper).
 }
 \description{
-Method \code{intervals.NER} provide the approximate confidence intervals on
+Method \code{intervals.NER} provides the approximate confidence intervals on
 the coefficients (fixed effects) of an saeTrafo object.
 }
 \details{

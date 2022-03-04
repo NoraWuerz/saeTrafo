@@ -16,7 +16,7 @@
 A vector containing the grouping factors.
 }
 \description{
-Method \code{getGroups.NER} extract grouping factors from a saeTrafo object.
+Method \code{getGroups.NER} extracts grouping factors from a saeTrafo object.
 }
 \details{
 The generic function \code{getGroups} is imported from package nlme
