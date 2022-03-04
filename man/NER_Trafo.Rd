@@ -169,7 +169,7 @@ formula <- eqIncome ~ gender + eqsize + cash + self_empl + unempl_ben +
 NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no",
                          smp_domains = "district", smp_data = eusilcA_smp,
                          pop_area_size = pop_area_size, pop_mean = pop_mean,
-                         pop_cov = pop_cov, MSE = TRUE)
+                         MSE = TRUE)
 
 # Example 2: Log-shift transformation and population aggregates
 # (means and covariances) with bootstrap MSE (for faster running time
