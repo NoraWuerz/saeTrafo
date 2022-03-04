@@ -119,6 +119,8 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #'                       smp_domains = "district", weights = "weight",
 #'                       var = TRUE, na.rm = TRUE)
 #'
+#' # Please detach emdi or use saeTrafo::compare_plot
+#'
 #' # Example 1: Comparison plots with uncertainty assessment plots
 #' # (for MSE and CV)
 #' saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
