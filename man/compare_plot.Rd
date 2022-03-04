@@ -136,19 +136,21 @@ emdi_direct <- direct(y = "eqIncome", smp_data = eusilcA_smp,
 
 # Example 1: Comparison plots with uncertainty assessment plots
 # (for MSE and CV)
-compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE, CV = TRUE)
+saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
+                       CV = TRUE)
 
 # Example 2: Personalize comparison plots using the options provided with
 # this function and ggplot themes
 require(ggplot2)
 library(ggplot2)
-compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE, CV = TRUE,
-             label = "no_title", color = c("orange", "green"),
-             shape = c(1,2), line_type = c("dotted", "dashed"),
-             gg_theme = theme(
-                 text = element_text(size = 20, color = "blue"),
-                 panel.border = element_rect(linetype = "dashed",
-                                             fill = "NA")))
+saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
+                       CV = TRUE, label = "no_title",
+                       color = c("orange", "green"), shape = c(1,2),
+                       line_type = c("dotted", "dashed"),
+                       gg_theme = theme(
+                          text = element_text(size = 20, color = "blue"),
+                          panel.border = element_rect(linetype = "dashed",
+                                                      fill = "NA")))
 
 }
 \seealso{
