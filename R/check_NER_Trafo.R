@@ -50,7 +50,7 @@ NER_check2 <- function(threshold, transformation, interval, MSE, B, cpus,
   if (is.null(transformation) ||
       !(transformation == "log" || transformation == "log.shift" ||
         transformation == "no")) {
-    stop(paste("The five options for transformation are ''no'', ''log'' or",
+    stop(paste("The three options for transformation are ''no'', ''log'' or",
                "''log.shift''."))
   }
 
