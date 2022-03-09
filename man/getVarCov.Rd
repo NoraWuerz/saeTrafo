@@ -42,7 +42,7 @@ documentation, see \code{\link[nlme]{getVarCov}}.
 \examples{
 # Example to extract variance-covariance matrix
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

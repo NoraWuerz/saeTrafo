@@ -28,7 +28,7 @@ documentation, see \code{\link[nlme]{getGroupsFormula}}.
 \examples{
 # Example to extract grouping formula
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

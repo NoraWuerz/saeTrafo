@@ -17,7 +17,7 @@
 #'
 #' # Example to extract fixed effects
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -76,7 +76,7 @@ fixed.effects.NER <- function(object, ...) {
 #'
 #' # Example to extract object data
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -118,16 +118,16 @@ getData.NER <- function(object, ...) {
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
 #' @return A vector containing the grouping factors.
-#' @details The generic function \code{getGroups} is imported from package nlme
-#' and re-exported to make the S3-methods available, even though the nlme
-#' package itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{getGroups}}.
+#' @details The generic function \code{getGroups} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though
+#' the \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{getGroups}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getGroups}}
 #'
 #' @examples
 #' # Example to extract grouping factors
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -175,7 +175,7 @@ getGroups.NER <- function(object, ...) {
 #' @examples
 #' # Example to extract grouping formula
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -215,15 +215,15 @@ getGroupsFormula.NER <- function(object, ...) {
 #' @param ... additional arguments that are not used in this method.
 #' @return Vector containing the response variable.
 #' @details The generic function \code{getResponse} is imported from package
-#' nlme and re-exported to make the S3-methods available, even though the nlme
-#' package itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{getResponse}}.
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though
+#' the \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{getResponse}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{getResponse}}
 #'
 #' @examples
 #' # Example to extract the response variable
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -283,7 +283,7 @@ getResponse.NER <- function(object, ...) {
 #' @examples
 #' # Example to extract variance-covariance matrix
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -339,16 +339,16 @@ getVarCov.NER <- function(obj, individuals = 1, type = "random.effects", ...) {
 #' @return A matrix with rows corresponding to the parameters and columns
 #' containing the lower confidence limits (lower), the
 #' estimated values (est.), and upper confidence limits (upper).
-#' @details The generic function \code{intervals} is imported from package nlme
-#' and re-exported to make the S3-methods available, even though the nlme
-#' package itself is not loaded or attached. For default documentation,
-#' see \code{\link[nlme]{intervals}}.
+#' @details The generic function \code{intervals} is imported from package
+#' \pkg{nlme} and re-exported to make the S3-methods available, even though the
+#' \pkg{nlme} package itself is not loaded or attached. For default
+#' documentation, see \code{\link[nlme]{intervals}}.
 #' @seealso \code{\link{NER_Trafo}}, \code{\link[nlme]{intervals}}
 #'
 #' @examples
 #' # Example to extract confidence intervals on coefficients
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -402,7 +402,7 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 #' @examples
 #' # Example to extract random effects
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")

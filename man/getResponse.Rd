@@ -21,14 +21,14 @@ object.
 }
 \details{
 The generic function \code{getResponse} is imported from package
-nlme and re-exported to make the S3-methods available, even though the nlme
-package itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{getResponse}}.
+\pkg{nlme} and re-exported to make the S3-methods available, even though
+the \pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{getResponse}}.
 }
 \examples{
 # Example to extract the response variable
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

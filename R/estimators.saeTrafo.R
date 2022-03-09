@@ -1,8 +1,8 @@
 #' Presents point, MSE and CV estimates
 #'
 #' Function \code{estimators} is a generic function used to present point and
-#' mean squared error (MSE) estimates and calculated coefficients of variation
-#' (CV).
+#' mean squared error (MSE) estimates. Furthermore, it calculates from both the
+#' coefficients of variation (CV).
 #' @param object an object for which point and/or MSE estimates and/or
 #' calculated CV's are desired.
 #' @param MSE optional logical. If \code{TRUE}, MSE estimates per domain are
@@ -47,7 +47,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 #'
 #' # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")

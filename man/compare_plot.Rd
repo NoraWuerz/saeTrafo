@@ -111,7 +111,7 @@ only created for in-sample domains.
 # Examples for creating plots to compare the saeTrafo object with direct
 # estimates (produced by the package emdi)
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

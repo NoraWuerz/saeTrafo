@@ -93,7 +93,7 @@ nobs.NER <- function(object, ...) {
 #' @examples
 #' # Examples for Predictions from saeTrafo objects
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -111,6 +111,7 @@ nobs.NER <- function(object, ...) {
 #'
 #' predict(NER_model)
 #'
+#' @seealso \code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}}
 #' @export
 #' @method predict NER
 

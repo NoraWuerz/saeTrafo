@@ -36,7 +36,7 @@ objects or a saeTrafo object and a emdi object.
 \examples{
 # Example comparing two saeTrafo objects
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

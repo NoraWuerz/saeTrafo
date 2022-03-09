@@ -5,7 +5,7 @@
 #' \code{\link[ggplot2]{ggplot}}.
 #' @param y a model object of type "saeTrafo" (see \code{\link{NER_Trafo}}).
 #' @param color a character vector with two elements. The first element defines
-#' the color for the line in the QQ-plots, for the Cook's Distance plot and for
+#' the color for the line in the Q-Q plots, for the Cook's Distance plot and for
 #' the Box-Cox plot. The second element defines the color for the densities.
 #' @param gg_theme \code{\link[ggplot2]{theme}} list from package \pkg{ggplot2}.
 #' For using this argument, package \pkg{ggplot2} must be loaded via
@@ -17,7 +17,7 @@
 #'
 #' # Examples for Quantile-quantile plots
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")

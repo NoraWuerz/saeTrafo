@@ -35,7 +35,7 @@ see \code{\link[nlme]{fixed.effects}}.
 
 # Example to extract fixed effects
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

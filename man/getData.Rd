@@ -29,7 +29,7 @@ documentation, see \code{\link[nlme]{getData}}.
 
 # Example to extract object data
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

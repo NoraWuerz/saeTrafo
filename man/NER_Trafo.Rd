@@ -153,7 +153,7 @@ argument \code{seed}. \cr \cr
 
 # Examples for (transformed) nested error regression model
 
-#Load Data
+# Load Data
 data("eusilcA_pop")
 data("eusilcA_smp")
 data("pop_area_size")
@@ -190,7 +190,7 @@ NER_model_3 <- NER_Trafo(fixed = formula,
 
 # Example 4: Log-shift transformation and population aggregates
 # (only means (!) - Therefore, no MSE estimation is available, bias is
-# disregarded )
+# disregarded)
 NER_model_4 <- NER_Trafo(fixed = formula,
                          smp_domains = "district", smp_data = eusilcA_smp,
                          pop_area_size = pop_area_size, pop_mean = pop_mean)

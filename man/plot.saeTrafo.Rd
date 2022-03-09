@@ -22,8 +22,8 @@ regression model (see also \code{\link{NER_Trafo}}).}
 \item{label}{argument that enables to customize title and axis labels. There
 are three instant options to label the diagnostic plot: (i) original labels
 ("orig"), (ii) axis lables but no title ("no_title"), (iii) neither axis
-labels nor title ("blank").
-(iv) individual labels by a list that needs to have below structure.
+labels nor title ("blank"), (iv) individual labels by a list that needs to
+have below structure.
 Six elements can be defined called \code{qq_res, qq_ran, d_res, d_ran, cooks}
 and \code{opt_lambda} for the six different plots and these list elements
 need to have three elements each called \code{title, y_lab and x_lab}.
@@ -66,7 +66,7 @@ Diagnostic plots of the nested error regression model
 density plots of residuals and random effects, a Cook's distance plot for
 detecting outliers and the log-likelihood of the estimation of the
 optimal parameter in log-shift transformations. The return depends on the
-transformation such that a plot for the optimal parameter is only returned
+transformation, such that a plot for the optimal parameter is only returned
 in case if a transformation with transformation parameter is chosen.
 The range of the x-axis is optional but necessary to change if there are
 convergence problems. All plots are obtained by
@@ -100,7 +100,7 @@ The default settings of the \code{label} argument are as follows:\cr
 
 # Examples for diagnostic plots
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

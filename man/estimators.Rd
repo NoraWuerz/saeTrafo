@@ -31,8 +31,8 @@ These objects contain two elements, one data frame
 }
 \description{
 Function \code{estimators} is a generic function used to present point and
-mean squared error (MSE) estimates and calculated coefficients of variation
-(CV).
+mean squared error (MSE) estimates. Furthermore, it calculates from both the
+coefficients of variation (CV).
 
 Method \code{estimators.saeTrafo} presents point and MSE estimates.
 Coefficients of variation are calculated using these estimators. The returned
@@ -52,7 +52,7 @@ see \code{\link[base]{subset}}).
 
 # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

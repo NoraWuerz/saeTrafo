@@ -29,15 +29,15 @@ Method \code{intervals.NER} provides the approximate confidence intervals on
 the coefficients (fixed effects) of an saeTrafo object.
 }
 \details{
-The generic function \code{intervals} is imported from package nlme
-and re-exported to make the S3-methods available, even though the nlme
-package itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{intervals}}.
+The generic function \code{intervals} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though the
+\pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{intervals}}.
 }
 \examples{
 # Example to extract confidence intervals on coefficients
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

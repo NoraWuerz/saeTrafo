@@ -33,7 +33,8 @@
 #'       \code{transformation = "no"}, \code{successful_bootstraps} is
 #'       \code{NULL}.}
 #' @details
-#' Objects of class "saeTrafo" and subclass "NER_Trafo" have following methods:
+#' Objects of class "saeTrafo" and subclass "NER_Trafo" have the following
+#' methods:
 #' \code{\link[saeTrafo]{compare_pred}}, \code{\link[saeTrafo]{estimators}},
 #' \code{\link[saeTrafo]{plot.saeTrafo}},
 #' \code{\link[saeTrafo]{predict.NER}},

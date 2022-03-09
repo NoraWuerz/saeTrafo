@@ -19,15 +19,15 @@ A vector containing the grouping factors.
 Method \code{getGroups.NER} extracts grouping factors from a saeTrafo object.
 }
 \details{
-The generic function \code{getGroups} is imported from package nlme
-and re-exported to make the S3-methods available, even though the nlme
-package itself is not loaded or attached. For default documentation,
-see \code{\link[nlme]{getGroups}}.
+The generic function \code{getGroups} is imported from package
+\pkg{nlme} and re-exported to make the S3-methods available, even though
+the \pkg{nlme} package itself is not loaded or attached. For default
+documentation, see \code{\link[nlme]{getGroups}}.
 }
 \examples{
 # Example to extract grouping factors
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

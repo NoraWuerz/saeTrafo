@@ -22,7 +22,7 @@ saeTrafo object.
 \examples{
 # Examples for Predictions from saeTrafo objects
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")
@@ -40,4 +40,7 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
 
 predict(NER_model)
 
+}
+\seealso{
+\code{\link{saeTrafoObject}}, \code{\link{NER_Trafo}}
 }

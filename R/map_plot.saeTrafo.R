@@ -28,7 +28,7 @@
 #' the map data as well as the chosen indicators is returned. Customized maps
 #' can easily be obtained from this data frame via the package \pkg{ggplot2}.
 #' Defaults to \code{FALSE}.
-#' @return Creates the plots demanded, and, if selected, a fortified data.frame
+#' @return Creates the plots demanded and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators.
 #' @seealso \code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
 #' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
@@ -36,7 +36,7 @@
 #'
 #' # Examples for creating maps to visualize the saeTrafo estimates
 #'
-#' #Load Data
+#' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
 #' data("pop_mean")
@@ -52,7 +52,7 @@
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
 #'                        smp_data = eusilcA_smp, MSE = TRUE)
 #'
-#' #Load shape file
+#' # Load shape file
 #' load_shapeaustria()
 #'
 #' # Example 1: Map plots with uncertainty plots (for MSE and CV)

@@ -54,7 +54,7 @@ can easily be obtained from this data frame via the package \pkg{ggplot2}.
 Defaults to \code{FALSE}.}
 }
 \value{
-Creates the plots demanded, and, if selected, a fortified data.frame
+Creates the plots demanded and, if selected, a fortified data.frame
 containing the mapdata and chosen indicators.
 }
 \description{
@@ -65,7 +65,7 @@ obtained by small area estimation methods.
 
 # Examples for creating maps to visualize the saeTrafo estimates
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")
@@ -81,7 +81,7 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                        pop_mean = pop_mean, pop_cov = pop_cov,
                        smp_data = eusilcA_smp, MSE = TRUE)
 
-#Load shape file
+# Load shape file
 load_shapeaustria()
 
 # Example 1: Map plots with uncertainty plots (for MSE and CV)

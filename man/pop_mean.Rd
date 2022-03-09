@@ -8,7 +8,7 @@
 A named list. Each element of the list contains the
 population means for the p covariates for a specicfic domain. The list is
 named with the respective domain name. The numeric vector within the list is
-named with the covariate names. The covarites right of the ~ operator in
+named with the covariate names. The covariates right of the ~ operator in
 \code{fixed} need to comprise.
 }
 \usage{

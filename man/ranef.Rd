@@ -33,7 +33,7 @@ documentation, see \code{\link[nlme]{random.effects}}.
 \examples{
 # Example to extract random effects
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")

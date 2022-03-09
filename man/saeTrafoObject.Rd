@@ -38,7 +38,8 @@ estimates. Objects of these classes have methods for various generic
 functions. See Details for more information.
 }
 \details{
-Objects of class "saeTrafo" and subclass "NER_Trafo" have following methods:
+Objects of class "saeTrafo" and subclass "NER_Trafo" have the following
+methods:
 \code{\link[saeTrafo]{compare_pred}}, \code{\link[saeTrafo]{estimators}},
 \code{\link[saeTrafo]{plot.saeTrafo}},
 \code{\link[saeTrafo]{predict.NER}},

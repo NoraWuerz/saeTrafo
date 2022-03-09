@@ -73,7 +73,7 @@ To check if a zip application is available they recommend the command
 # Examples for exporting saeTrafoObject to an Excel file or OpenDocument
 # Spreadsheet
 
-#Load Data
+# Load Data
 data("eusilcA_smp")
 data("pop_area_size")
 data("pop_mean")
