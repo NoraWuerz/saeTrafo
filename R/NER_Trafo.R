@@ -13,11 +13,16 @@
 #' simultaneously provided for the population, point estimates are produced by
 #' the method of \cite{Wuerz et al. (2022)}, which uses kernel density
 #' estimation to resolve the issue of not having access to population
-#' micro-data. If only population means are available and the log or log-shift
-#' transformation is selected, a bias-correction (cf.
-#' \cite{Berg and Chandra (2014)} and \cite{Molina and Martín (2018)}) due to
-#' the transformation is added but for the lack of access to population data a
-#' correction is not available. Therefore, a part of the bias is
+#' micro-data.
+#' In the case that population data are available at unit-level and the log or
+#' log-shift transformation is selected, the bias-correction of
+#' \cite{Berg and Chandra (2014)} and \cite{Molina and Martín (2018)} is
+#' applied. For this data situation, more methods and options are provided in
+#' the package \pkg{emdi}.
+#' If only population means are available and the log or log-shift
+#' transformation is selected, a bias-correction due to
+#' the transformation is added but for the lack of access to population data no
+#' correction is available. Therefore, a part of the bias is
 #' disregarded.\cr \cr
 #' Additionally, analytically mean squared errors (MSE) are calculated in the
 #' case of no transformation following \cite{Prasad and Rao (1990)}.
@@ -25,6 +30,8 @@
 #' proposed by \cite{Wuerz et al. (2022)} following
 #' \cite{Gonzalez-Manteiga et al. (2008)} is applied. Please note that this can
 #' only be determined if covariance data are also provided.
+#' If population data is available on unit-level a bootstrap procedure as
+#' described in \cite{Molina and Martín (2018)} is applied.
 #'
 #'
 #' @param fixed a two-sided linear formula object describing the
@@ -53,9 +60,6 @@
 #' variables, and \code{pop_domains}.
 #' Please note, if population data is available other methods using unit-level
 #' population data, like \code{\link[emdi]{ebp}}, could be applied.
-#' If nevertheless \code{NER_Trafo} is used, aggregates (mean, covariance, and
-#' population sizes) are automatic calculated. Therefore, no input for
-#' \code{pop_area_size}, \code{pop_mean}, and \code{pop_cov} is needed.
 #' @param pop_domains a character string containing the name of a variable that
 #' indicates domains in the population data. The variable can be numeric or
 #' a factor but needs to be of the same class as the variable named in
@@ -160,9 +164,7 @@
 #'                          pop_cov = pop_cov, MSE = TRUE, threshold = 50)
 #'
 #' # Example 3: Log-shift transformation and population data
-#' # Despite population data availability the methodology from
-#' # Wuerz et al. (2022) is applied. Other methods like ebp() from package
-#' # emdi are applicable.
+#' # A bias-corrections which need unit-level population data are applied
 #' NER_model_3 <- NER_Trafo(fixed = formula,
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
 #'                          pop_data = eusilcA_pop, pop_domains = "district",
