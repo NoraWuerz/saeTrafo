@@ -1,8 +1,15 @@
 Package: saeTrafo
 Title: Transformations for unit-level small area models
+<<<<<<< HEAD
 Version: 1.0.0
 Author: Nora Würz [aut]
 Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
+=======
+Version: 0.0.2
+Date: 2022-01-12
+Authors@R: 
+    person("Nora", "Würz", role=c("aut", "cre"), email = "nora.wuerz@fu-berlin.de")
+>>>>>>> 312b67e9775c7bee91e006b700030170ebf40053
 Description: The package saeTrafo offers new methodology for unit-level small 
     area models under transformations and limited population auxiliary 
     information. In addition to this new methodology, the widely used nested 
