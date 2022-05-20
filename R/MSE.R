@@ -51,7 +51,7 @@ mse <- function(framework,
       parallelLibrary(packages = c("base", "nlme", "emdi", "stats", "sfsmisc",
                                    "saeTrafo"))
 
-      if (!is.null(framework$pop_cov)) {
+      if (!is.null(framework$pop_cov) | !is.null(framework$pop_data)) {
         mse_out <- simplify2array(parallelLapply(
           xs             = seq_len(B),
           fun            = mse_bc_agg_wrapper,
@@ -67,7 +67,7 @@ mse <- function(framework,
         parallelStop()
       }
     } else {
-      if (!is.null(framework$pop_cov)) {
+      if (!is.null(framework$pop_cov) | !is.null(framework$pop_data)) {
         mse_out <- simplify2array(lapply(
           X              = seq_len(B),
           FUN            = mse_bc_agg_wrapper,
@@ -114,13 +114,24 @@ mse_bc_agg_wrapper <- function(i,
                                threshold,
                                start_time) {
 
-  tmp <- mse_bc_agg(framework      = framework,
-                    point_estim    = point_estim,
-                    fixed          = fixed,
-                    transformation = transformation,
-                    interval       = interval,
-                    threshold      = threshold
-  )
+  if (is.null(framework$pop_data)) {
+    tmp <- mse_bc_agg(framework      = framework,
+                      point_estim    = point_estim,
+                      fixed          = fixed,
+                      transformation = transformation,
+                      interval       = interval,
+                      threshold      = threshold
+    )
+  } else {
+    tmp <- mse_bc(framework      = framework,
+                  point_estim    = point_estim,
+                  fixed          = fixed,
+                  transformation = transformation,
+                  interval       = interval,
+                  threshold      = threshold
+    )
+  }
+
 
   if (i %% 10 == 0) {
     if (i != B) {
@@ -234,6 +245,92 @@ mse_bc_agg <- function(framework,
   )
 
   return((Y_estim_b - Y_mean_b_orig_korr)^2)
+}
+
+# function for the parametric bootstrap mse estimtion
+# The parametric bootstrap mse estimator can be found in Molina Martin 2019
+mse_bc <- function(framework,
+                   point_estim,
+                   fixed,
+                   transformation,
+                   interval = c(-1, 2),
+                   threshold) {
+
+  # generate random effects for each bootstrap replication
+  u_d_b <- rnorm(n    = framework$N_dom_pop,
+                 mean = 0,
+                 sd   = sqrt(point_estim$model_par$sigmau2est)
+  )
+
+  u_di_b_s <- unlist(mapply(FUN   = rep,
+                            x     = u_d_b,
+                            times = include_dom_unobs(
+                               x       = framework$n_smp,
+                               obs_dom = framework$dist_obs_dom
+                            )
+  ))
+  u_di_b_p <- unlist(mapply(FUN   = rep,
+                            x     = u_d_b,
+                            times = framework$n_pop
+  ))
+
+  # generate bootstrap errors
+  e_di_b_p <- rnorm(n    = framework$N_pop,
+                    mean = 0,
+                    sd   = sqrt(point_estim$model_par$sigmae2est)
+  )
+  e_di_b_s <- unlist(mapply(
+                FUN  = sample,
+                x    = split(x = e_di_b_p, f = framework$pop_domains_vec),
+                size = as.list(include_dom_unobs(
+                                 x       = framework$n_smp,
+                                 obs_dom = framework$dist_obs_dom
+                       ))
+  ))
+
+  # true means
+  mod_vars <- all.vars(fixed)
+  mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
+
+  y_di_b_pop <- (model.matrix(reformulate(mod_vars), framework$pop_data)
+                 %*% point_estim$model_par$betas)[, 1] + u_di_b_p + e_di_b_p
+
+  Y_mean_b <- back_transformation(y              = y_di_b_pop,
+                                  transformation = transformation,
+                                  shift          = point_estim$shift_par,
+                                  lambda         = point_estim$optimal_lambda
+  )
+  Y_mean_b <- tapply(X     = Y_mean_b,
+                     INDEX = framework$pop_domains_vec,
+                     FUN   = mean
+  )
+
+  # construct bootstrap sample
+  Y_smp_b <- model.matrix(fixed, framework$smp_data) %*%
+    point_estim$model_par$betas + u_di_b_s + e_di_b_s
+
+  smp_data_b <- framework$smp_data
+  smp_data_b[paste(fixed[2])] <- back_transformation(
+                                   y              = Y_smp_b,
+                                   transformation = transformation,
+                                   shift          = point_estim$shift_par,
+                                   lambda         = point_estim$optimal_lambda
+  )
+
+  framework_b <- framework
+  framework_b$smp_data <- smp_data_b
+
+  # calculate mean with proposed method
+  Y_estim_b <- rep(NA, length = framework$N_dom_pop)
+  try(Y_estim_b <- point_estim(framework      = framework_b,
+                               fixed          = fixed,
+                               transformation = transformation,
+                               threshold      = threshold,
+                               interval       = interval
+  )$ind$Mean
+  )
+
+  return((Y_estim_b - Y_mean_b)^2)
 }
 
 # Prasad Rao analytical MSE estimator-------------------------------------------

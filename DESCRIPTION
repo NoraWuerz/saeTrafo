@@ -3,16 +3,28 @@ Title: Transformations for unit-level small area models
 Version: 1.0.0
 Author: Nora Würz [aut]
 Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
-Description: The package supports methodology for the estimation of small area 
-means using unit-level models under transformations. Besides established small 
-area methods, saeTrafo supports new methods to enable the estimation of small 
-area means with unit-level models in the simultaneous presence of 
-transformations and limited auxiliary data. saeTrafo supplies the log and the 
-data-driven log-shift transformation. An automatic selection of the appropriate 
-methodology ensures user-friendliness and the respective uncertainty estimates 
-are offered. Tools for creating plots (model validation and assessment of the 
-estimators), visualisation on maps and exporting to Excel and OpenDocument 
-Spreadsheets are provided.
+Version: 0.0.2
+Date: 2022-01-12
+Description: The package saeTrafo offers new methodology for unit-level small 
+    area models under transformations and limited population auxiliary 
+    information. In addition to this new methodology, the widely used nested 
+    error regression model without transformations (see "An Error-Components 
+    Model for Prediction ofCounty Crop Areas Using Survey and Satellite Data"
+    by Battese, Harter and Fuller (1988)) and its well-known uncertainty 
+    estimate (see "The estimation of the mean squared error of small-area 
+    estimators" by Prasad and Rao (1990)) are provided. In this package, 
+    the log transformation and the data-driven log-shift transformation are 
+    provided. If a transformation is selected, an appropriate method is 
+    chosen depending on the respective input of the population data: Individual 
+    population data (see "Empirical best prediction under a nested error model 
+    with log transformation" by Molina and Martín (2018)) but also aggregated 
+    population data (see "Estimating regional income indicators under 
+    transformations and access to limited population auxiliary information" by
+    Würz, Schmid and Tzavidis) can be entered. Especially under limited data 
+    access, new methodologies are provided in saeTrafo. Several options are 
+    available to assess the used model and to judge, present and export its 
+    results. For a detailed description of the package and the methods used see 
+    the corresponding vignette.
 Depends: R (>= 3.5.0)
 License: GPL-2
 URL: https://github.com/NoraWuerz/saeTrafo

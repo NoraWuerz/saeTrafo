@@ -4,6 +4,7 @@
 # error linear regression model and calculates different estimators.
 #' @importFrom emdi data_transformation
 #' @importFrom nlme lme random.effects
+#' @importFrom stats model.matrix reformulate
 #'
 
 point_estim <- function(framework,
@@ -97,6 +98,7 @@ point_estim <- function(framework,
   # if transformation == "log" or "log.shift" and ...
   # ... pop_cov is available compute bc-agg from Wuerz et. al.
   # ... pop_cov is not available compute bc-naive-agg see Wuerz et. al.
+  # ... pop_data is available compute bc
 
   if (transformation == "log" | transformation == "log.shift") {
 
@@ -113,41 +115,98 @@ point_estim <- function(framework,
       (est_par$sigmau2est + est_par$sigmae2est / n_smp_long)
     bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est) / 2
 
-    if (!is.null(framework$pop_cov)) {
+    if(is.null(framework$pop_data)) {
 
-      synthetic <- syn_est(framework = framework,
-                           est_par   = est_par,
-                           fixed     = fixed,
-                           threshold = threshold
+      if (!is.null(framework$pop_cov)) {
+
+        synthetic <- syn_est(framework = framework,
+                             est_par   = est_par,
+                             fixed     = fixed,
+                             threshold = threshold
+        )
+
+        if (transformation == "log") {
+          ind$Mean <- 1 / framework$pop_area_size *
+            (synthetic * exp(rand_eff_long + bc_d)) - shift_par
+        }
+        if (transformation == "log.shift") {
+          ind$Mean <- 1 / framework$pop_area_size *
+            (synthetic * exp(rand_eff_long + bc_d)) - optimal_lambda
+        }
+      } else {
+        est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
+          rand_eff_long + bc_d
+        est_ds <- include_dom_unobs(
+          x      = tapply(X = framework$smp_data[as.character(fixed[2])][, 1],
+                          INDEX = framework$smp_domains_vec,
+                          FUN   = mean
+                    ),
+          obs_dom = framework$dist_obs_dom
+        )
+
+        ind$Mean <- 1 / framework$n_pop *
+          (n_smp_long * est_ds + (framework$n_pop - n_smp_long) *
+              back_transformation(y              = est_dr,
+                                  transformation = transformation,
+                                  shift          = shift_par,
+                                  lambda         = optimal_lambda
+              )
+           )
+      }
+
+    } else {
+
+      mod_vars <- all.vars(fixed)
+      mod_vars <- mod_vars[mod_vars != as.character(fixed[2])]
+
+      est_pop <- (model.matrix(reformulate(mod_vars), framework$pop_data)
+                 %*% est_par$betas)[, 1] +
+        unlist(mapply(FUN   = rep,
+                      x     = rand_eff_long + bc_d,
+                      times = table(framework$pop_domains_vec)
+        ))
+      est_pop_back <- back_transformation(y              = est_pop,
+                                          transformation = transformation,
+                                          shift          = shift_par,
+                                          lambda         = optimal_lambda
       )
 
-      if (transformation == "log") {
-        ind$Mean <- 1 / framework$pop_area_size *
-          (synthetic * exp(rand_eff_long + bc_d)) - shift_par
-      }
-      if (transformation == "log.shift") {
-        ind$Mean <- 1 / framework$pop_area_size *
-          (synthetic * exp(rand_eff_long + bc_d)) - optimal_lambda
-      }
-    } else {
-      est_dr <- (framework$pop_mean.mat %*% est_par$betas)[, 1] +
-        rand_eff_long + bc_d
       est_ds <- include_dom_unobs(
         x      = tapply(X     = framework$smp_data[as.character(fixed[2])][, 1],
                         INDEX = framework$smp_domains_vec,
                         FUN   = mean
-                  ),
+        ),
         obs_dom = framework$dist_obs_dom
       )
 
+      est_ds_est <- (model.matrix(reformulate(mod_vars), framework$smp_data)
+                  %*% est_par$betas)[, 1] +
+        unlist(mapply(FUN   = rep,
+                      x     = est_par$rand_eff[framework$dist_obs_dom] +
+                        bc_d[framework$dist_obs_dom],
+                      times = table(framework$smp_domains_vec)
+        ))
+      est_ds_est_back <- back_transformation(y              = est_ds_est,
+                                             transformation = transformation,
+                                             shift          = shift_par,
+                                             lambda         = optimal_lambda
+      )
+
       ind$Mean <- 1 / framework$n_pop *
-        (n_smp_long * est_ds + (framework$n_pop - n_smp_long) *
-            back_transformation(y              = est_dr,
-                                transformation = transformation,
-                                shift          = shift_par,
-                                lambda         = optimal_lambda
+        (n_smp_long * est_ds
+         +
+           framework$n_pop * tapply(X     = est_pop_back,
+                                    INDEX = framework$pop_domains_vec,
+                                    FUN   = mean)
+         -
+           n_smp_long *
+            include_dom_unobs(
+              x       = as.numeric(tapply(X     = est_ds_est_back,
+                                          INDEX = framework$smp_domains_vec,
+                                          FUN   = mean)),
+              obs_dom = framework$dist_obs_dom
             )
-         )
+        )
     }
   }
 
