@@ -1,26 +1,25 @@
 Package: saeTrafo
 Title: Transformations for unit-level small area models
-Version: 0.0.1
-Date: 2022-01-12
-Authors@R: 
-    person("Nora", "Würz", role=c("aut", "cre"), email = "nora.wuerz@fu-berlin.de")
-Description: Transformations for unit-level small area models (describe more). 
-    For the log and log-shift transformation methodology is made available which 
-    offer a estimation of small area means using only aggregated data.
+Version: 1.0.0
+Author: Nora Würz [aut]
+Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
+Description: The package supports methodology for the estimation of small area 
+means using unit-level models under transformations. Besides established small 
+area methods, saeTrafo supports new methods to enable the estimation of small 
+area means with unit-level models in the simultaneous presence of 
+transformations and limited auxiliary data. saeTrafo supplies the log and the 
+data-driven log-shift transformation. An automatic selection of the appropriate 
+methodology ensures user-friendliness and the respective uncertainty estimates 
+are offered. Tools for creating plots (model validation and assessment of the 
+estimators), visualisation on maps and exporting to Excel and OpenDocument 
+Spreadsheets are provided.
 Depends: R (>= 3.5.0)
 License: GPL-2
 URL: https://github.com/NoraWuerz/saeTrafo
 LazyData: true
 Encoding: UTF-8
-Copyright: inst/COPYRIGHTS
-RoxygenNote: 7.1.2
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
 Suggests: simFrame, sp
-NeedsCompilation: no
-Packaged: 2021-07-07 10:35:53 UTC; span
-Author: Nora Würz [aut]
-Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
-Repository: CRAN
-Date/Publication: 2021-07-07 16:20:05 UTC
+
 

@@ -30,9 +30,9 @@
 #' Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
 #' small-area estimators. Journal of the American statistical association,
 #' Vol.85, No. 409, 163-171. \cr \cr
-#' Wuerz, N., Schmid, T., Tzavidis, N. (forthcoming). Estimating regional income
+#' Wuerz, N., Schmid, T., Tzavidis, N. (2022). Estimating regional income
 #' indicators under transformations and access to limited population auxiliary
-#' information. XXXXXXXXXXXXXXXXX
+#' information. Unpublished.
 #' @docType package
 #' @name saeTrafo
 NULL
