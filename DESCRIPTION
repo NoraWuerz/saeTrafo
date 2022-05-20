@@ -1,4 +1,5 @@
 Package: saeTrafo
+Type: Package
 Title: Transformations for unit-level small area models
 Version: 1.0.0
 Author: Nora Würz [aut]
@@ -23,7 +24,6 @@ Description: The package saeTrafo offers new methodology for unit-level small
     available to assess the used model and to judge, present and export its 
     results. For a detailed description of the package and the methods used see 
     the corresponding vignette.
-Depends: R (>= 3.5.0)
 License: GPL-2
 URL: https://github.com/NoraWuerz/saeTrafo
 LazyData: true
@@ -31,3 +31,5 @@ Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
 Suggests: simFrame, sp
+RoxygenNote: 7.2.0
+Depends: R (>= 3.5.0)
