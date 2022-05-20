@@ -115,11 +115,7 @@ point_estim <- function(framework,
       (est_par$sigmau2est + est_par$sigmae2est / n_smp_long)
     bc_d <- (est_par$sigmau2est * (1 - gamma_est_d) + est_par$sigmae2est) / 2
 
-<<<<<<< HEAD
     if (is.null(framework$pop_data)) {
-=======
-    if(is.null(framework$pop_data)) {
->>>>>>> 312b67e9775c7bee91e006b700030170ebf40053
 
       if (!is.null(framework$pop_cov)) {
 
