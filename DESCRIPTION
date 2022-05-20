@@ -3,8 +3,6 @@ Title: Transformations for unit-level small area models
 Version: 1.0.0
 Author: Nora Würz [aut]
 Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
-Version: 0.0.2
-Date: 2022-01-12
 Description: The package saeTrafo offers new methodology for unit-level small 
     area models under transformations and limited population auxiliary 
     information. In addition to this new methodology, the widely used nested 
@@ -33,5 +31,4 @@ Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
 Suggests: simFrame, sp
-
-
+RoxygenNote: 7.2.0
