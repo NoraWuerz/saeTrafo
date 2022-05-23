@@ -1,14 +1,14 @@
 Package: saeTrafo
 Type: Package
-Title: Transformations for unit-level small area models
+Title: Transformations for Unit-Level Small Area Models
 Version: 1.0.0
 Author: Nora Würz [aut]
 Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
-Description: The package saeTrafo offers new methodology for unit-level small 
+Description: This package offers new methodology for unit-level small 
     area models under transformations and limited population auxiliary 
     information. In addition to this new methodology, the widely used nested 
     error regression model without transformations (see "An Error-Components 
-    Model for Prediction ofCounty Crop Areas Using Survey and Satellite Data"
+    Model for Prediction of County Crop Areas Using Survey and Satellite Data"
     by Battese, Harter and Fuller (1988)) and its well-known uncertainty 
     estimate (see "The estimation of the mean squared error of small-area 
     estimators" by Prasad and Rao (1990)) are provided. In this package, 
