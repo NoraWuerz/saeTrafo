@@ -125,7 +125,7 @@ map_plot <- function(object,
                MSE       = MSE,
                CV        = CV
     )
-  } else if (class(map_obj) != "SpatialPolygonsDataFrame" ||
+  } else if (!inherits(map_obj, "SpatialPolygonsDataFrame") ||
              attr(class(map_obj), "package") != "sp") {
 
     stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
@@ -323,7 +323,7 @@ get_scale_points <- function(y, ind, scale_points) {
   result <- NULL
 
   if (!is.null(scale_points)) {
-    if (class(scale_points) == "numeric" && length(scale_points) == 2) {
+    if (inherits(scale_points, "numeric") && length(scale_points) == 2) {
       result <- scale_points
     }
   }
