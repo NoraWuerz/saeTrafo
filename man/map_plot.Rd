@@ -91,7 +91,7 @@ map_plot(NER_model, MSE = TRUE, CV = TRUE, map_obj = shape_austria_dis,
 # Example 2: Personalize map plot for point estimates
 map_plot(NER_model, map_obj = shape_austria_dis, map_dom_id = "PB",
          color = c("white", "darkblue"),
-         scale_points = c(0, max(res_ls$ind$Mean)))
+         scale_points = c(0, max(NER_model$ind$Mean)))
 
 # Example 3: More options to personalize map plot by using return_data = TRUE
 # and ggplot2
