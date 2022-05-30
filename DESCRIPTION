@@ -29,7 +29,7 @@ URL: https://github.com/NoraWuerz/saeTrafo
 LazyData: true
 Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
-    openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS, maptools
+    openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS, maptools, gpclip
 Suggests: simFrame, sp
 RoxygenNote: 7.2.0
 Depends: R (>= 3.5.0)
