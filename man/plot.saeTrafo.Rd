@@ -4,7 +4,7 @@
 \alias{plot.saeTrafo}
 \title{Plots for an saeTrafo object}
 \usage{
-plot.saeTrafo(
+\method{plot}{saeTrafo}(
   x,
   label = "orig",
   color = c("blue", "lightblue3"),
