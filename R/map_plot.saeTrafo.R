@@ -98,7 +98,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom ggplot2 aes geom_polygon facet_wrap fortify coord_equal labs
 #' @importFrom ggplot2 theme element_blank scale_fill_gradient ggplot ggtitle
-#' @import gpclib
+#' @import rgeos
 #' @importFrom maptools readShapePoly unionSpatialPolygons
 
 map_plot <- function(object,
