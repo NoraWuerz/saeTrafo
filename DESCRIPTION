@@ -30,6 +30,7 @@ LazyData: true
 Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
-Suggests: simFrame, sp, maptools, rgeos, graphics
+Suggests: simFrame, sp, maptools, rgeos, graphics, R.rsp
 RoxygenNote: 7.2.0
 Depends: R (>= 3.5.0)
+VignetteBuilder: R.rsp
