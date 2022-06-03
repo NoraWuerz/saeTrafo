@@ -38,10 +38,10 @@ Battese, G.E., Harter, R.M. and Fuller, W.A. (1988). An Error-Components
 Model for Predictions of County Crop Areas Using Survey and Satellite Data.
 Journal of the American Statistical Association, Vol.83, No. 401,
 28-36. \cr \cr
-#' Molina, I. and Martín, N. (2018). Empirical best prediction under a nested
+Molina, I. and Martín, N. (2018). Empirical best prediction under a nested
 error model with log transformation. The Annals of Statistics, Vol.46, No. 5,
 1961–1993. \cr \cr
-Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+Prasad, N.N., Rao, J.N.K. (1990). The estimation of the mean squared error of
 small-area estimators. Journal of the American statistical association,
 Vol.85, No. 409, 163-171. \cr \cr
 Wuerz, N., Schmid, T., Tzavidis, N. (2022). Estimating regional income
