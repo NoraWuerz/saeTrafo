@@ -127,7 +127,7 @@
 #' Molina, I. and Rao, J.N.K. (2010). Small area estimation of poverty
 #' indicators. The Canadian Journal of Statistics, Vol. 38, No.3,
 #' 369-385. \cr \cr
-#' Prasad, N.N., Rao, J.N. (1990). The estimation of the mean squared error of
+#' Prasad, N.N., Rao, J.N.K. (1990). The estimation of the mean squared error of
 #' small-area estimators. Journal of the American statistical association,
 #' Vol.85, No. 409, 163-171. \cr \cr
 #' Wuerz, N., Schmid, T., Tzavidis, N. (2022). Estimating regional income
