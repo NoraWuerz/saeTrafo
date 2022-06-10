@@ -42,6 +42,7 @@
 #' # Examples for exporting saeTrafoObject to an Excel file or OpenDocument
 #' # Spreadsheet
 #'
+#' \dontrun{
 #' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")
@@ -68,6 +69,7 @@
 #'
 #' # Example 3: Same as example 1 but for an ODS output
 #' write.ods(NER_model, file = "ods_output_all.ods", MSE = TRUE, CV = TRUE)
+#' }
 #'
 #' @export
 #' @importFrom openxlsx createWorkbook createStyle freezePane

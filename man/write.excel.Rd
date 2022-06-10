@@ -73,6 +73,7 @@ To check if a zip application is available they recommend the command
 # Examples for exporting saeTrafoObject to an Excel file or OpenDocument
 # Spreadsheet
 
+\dontrun{
 # Load Data
 data("eusilcA_smp")
 data("pop_area_size")
@@ -99,6 +100,7 @@ write.excel(NER_model, file = "excel_output_split.xlsx", MSE = TRUE,
 
 # Example 3: Same as example 1 but for an ODS output
 write.ods(NER_model, file = "ods_output_all.ods", MSE = TRUE, CV = TRUE)
+}
 
 }
 \seealso{

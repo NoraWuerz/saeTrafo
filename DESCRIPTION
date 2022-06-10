@@ -34,3 +34,5 @@ Suggests: simFrame, sp, maptools, rgeos, graphics, R.rsp
 RoxygenNote: 7.2.0
 Depends: R (>= 3.5.0)
 VignetteBuilder: R.rsp
+NeedsCompilation: no
+Copyright: inst/COPYRIGHTS

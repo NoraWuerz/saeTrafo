@@ -1,5 +1,5 @@
-#' A package for estimating unit-level small area models with (transformed)
-#' dependent variables.
+#' The R Package saeTrafo for Estimating unit-level Small Area Models under
+#' Transformations
 #'
 #' The package \pkg{saeTrafo} supports estimating regional means based on the
 #' nested error regression model (\cite{Battese et al., 1988}).
