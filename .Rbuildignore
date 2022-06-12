@@ -1,5 +1,8 @@
 ^saeTrafo\.Rproj$
 ^\.Rproj\.user$
 
+cran-comments.md
 News.md
 README.md
+
+^CRAN-RELEASE$

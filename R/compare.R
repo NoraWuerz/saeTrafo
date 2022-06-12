@@ -66,7 +66,6 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #'
 #' @export
 #' @rdname compare_pred
-#' @method compare_pred saeTrafo
 
 compare_pred.saeTrafo <- function(object1, object2, MSE = FALSE, ...) {
 
