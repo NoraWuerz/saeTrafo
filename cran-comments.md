@@ -1,3 +1,6 @@
+## Resubmission
+This is a resubmission. In this version I have reduce each example to less than 5 sec.
+
 ## Test environments
 * Ubuntu 20.04.4 LTS, R 4.2.0
 * Windows 10 x64, R 4.3.0, local development environment
