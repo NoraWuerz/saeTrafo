@@ -107,7 +107,7 @@ nobs.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' predict(NER_model)
 #'

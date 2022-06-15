@@ -149,26 +149,28 @@
 #'                       age_ben + surv_ben + sick_ben + dis_ben + rent +
 #'                       fam_allow + house_allow + cap_inv + tax_adj
 #'
+#' # For all four examples, no MSEs/variances are determined in order to avoid
+#' # long run times. These can be obtained with MSE = TRUE.
+#'
 #' # Example 1: No transformation - classical NER
 #' NER_model_1 <- NER_Trafo(fixed = formula, transformation = "no",
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
-#'                          pop_area_size = pop_area_size, pop_mean = pop_mean,
-#'                          MSE = TRUE)
+#'                          pop_area_size = pop_area_size, pop_mean = pop_mean)
 #'
 #' # Example 2: Log-shift transformation and population aggregates
-#' # (means and covariances) with bootstrap MSE (for faster running time
-#' # change B to lower value) and changed threshold
+#' # (means and covariances) with changed threshold
 #' NER_model_2 <- NER_Trafo(fixed = formula,
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
 #'                          pop_area_size = pop_area_size, pop_mean = pop_mean,
-#'                          pop_cov = pop_cov, MSE = TRUE, threshold = 50)
+#'                          pop_cov = pop_cov, threshold = 50)
 #'
 #' # Example 3: Log-shift transformation and population data
 #' # A bias-corrections which need unit-level population data are applied
+#' \dontrun{
 #' NER_model_3 <- NER_Trafo(fixed = formula,
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
-#'                          pop_data = eusilcA_pop, pop_domains = "district",
-#'                          MSE = TRUE)
+#'                          pop_data = eusilcA_pop, pop_domains = "district")
+#'}
 #'
 #' # Example 4: Log-shift transformation and population aggregates
 #' # (only means (!) - Therefore, no MSE estimation is available, bias is

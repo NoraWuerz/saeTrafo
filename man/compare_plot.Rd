@@ -108,6 +108,7 @@ only created for in-sample domains.
 }
 \examples{
 
+\dontrun{
 # Examples for creating plots to compare the saeTrafo object with direct
 # estimates (produced by the package emdi)
 
@@ -153,6 +154,7 @@ saeTrafo::compare_plot(model = NER_model, direct = emdi_direct, MSE = TRUE,
                           text = element_text(size = 20, color = "blue"),
                           panel.border = element_rect(linetype = "dashed",
                                                       fill = "NA")))
+}
 
 }
 \seealso{

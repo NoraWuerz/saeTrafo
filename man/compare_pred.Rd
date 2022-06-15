@@ -50,7 +50,7 @@ NER_model_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                          smp_domains = "district",
                          pop_area_size = pop_area_size,
                          pop_mean = pop_mean, pop_cov = pop_cov,
-                         smp_data = eusilcA_smp, MSE = TRUE)
+                         smp_data = eusilcA_smp)
 
 # Nested error regression model 2
 NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
@@ -58,13 +58,15 @@ NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                          smp_domains = "district",
                          pop_area_size = pop_area_size,
                          pop_mean = pop_mean, pop_cov = pop_cov,
-                         smp_data = eusilcA_smp, MSE = TRUE)
+                         smp_data = eusilcA_smp)
 
 # Generate a data frame for the comparison of point estimates
 compare_pred(NER_model_1, NER_model_2)
 
-# Generate a data frame for the comparison of MSE estimates
+# To compare the MSEs, MSE = True must be specified for both models
+\dontrun{
 compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
+}
 
 }
 \seealso{

@@ -31,7 +31,7 @@
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' fixef(NER_model)
 #'
@@ -90,7 +90,7 @@ fixed.effects.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' getData(NER_model)
 #' @name getData
@@ -141,7 +141,7 @@ getData.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' getGroups(NER_model)
 #' @name getGroups
@@ -189,7 +189,7 @@ getGroups.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' getGroupsFormula(NER_model)
 #' @name getGroupsFormula
@@ -237,7 +237,7 @@ getGroupsFormula.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' getResponse(NER_model)
 #' @name getResponse
@@ -297,7 +297,7 @@ getResponse.NER <- function(object, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' getVarCov(NER_model)
 #' @name getVarCov
@@ -362,7 +362,7 @@ getVarCov.NER <- function(obj, individuals = 1, type = "random.effects", ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' intervals(NER_model)
 #' @name intervals
@@ -386,7 +386,7 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 
 #' Extract random effects of saeTrafo object
 #'
-#' Method \code{ranef.NER} extracts the fixed effects from an saeTrafo object.
+#' Method \code{ranef.NER} extracts the random effects from an saeTrafo object.
 #'
 #' @param object an object of type "NER".
 #' @param ... additional arguments that are not used in this method.
@@ -416,7 +416,7 @@ intervals.NER <- function(object, level = 0.95, parm = NULL, ...) {
 #'                        smp_domains = "district",
 #'                        pop_area_size = pop_area_size,
 #'                        pop_mean = pop_mean, pop_cov = pop_cov,
-#'                        smp_data = eusilcA_smp, MSE = TRUE)
+#'                        smp_data = eusilcA_smp)
 #'
 #' ranef(NER_model)
 #' @name ranef

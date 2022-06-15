@@ -98,6 +98,7 @@ The default settings of the \code{label} argument are as follows:\cr
 }
 \examples{
 
+\dontrun{
 # Examples for diagnostic plots
 
 # Load Data
@@ -114,15 +115,17 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                        smp_domains = "district",
                        pop_area_size = pop_area_size,
                        pop_mean = pop_mean, pop_cov = pop_cov,
-                       smp_data = eusilcA_smp, MSE = TRUE)
+                       smp_data = eusilcA_smp)
 
 # Example 1: Default diagnostic plot
 plot(NER_model)
 
 # Example 2: Creation of diagnostic plots without labels and titles,
 # different colors and without Cook's distance plot.
+
 plot(NER_model, label = "no_title", color = c("red", "yellow"),
      cooks = FALSE)
+}
 
 
 }

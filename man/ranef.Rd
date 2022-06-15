@@ -21,7 +21,7 @@ A vector containing the estimated random effects at domain level is
 returned.
 }
 \description{
-Method \code{ranef.NER} extracts the fixed effects from an saeTrafo object.
+Method \code{ranef.NER} extracts the random effects from an saeTrafo object.
 }
 \details{
 The alias \code{random.effects} can also be used instead of
@@ -47,7 +47,7 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                        smp_domains = "district",
                        pop_area_size = pop_area_size,
                        pop_mean = pop_mean, pop_cov = pop_cov,
-                       smp_data = eusilcA_smp, MSE = TRUE)
+                       smp_data = eusilcA_smp)
 
 ranef(NER_model)
 }

@@ -45,6 +45,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 #' @seealso \code{\link{saeTrafoObject}},  \code{\link{NER_Trafo}}
 #' @examples
 #'
+#' \dontrun{
 #' # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 #'
 #' # Load Data
@@ -73,6 +74,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 #' as.matrix(sae_mean)
 #' as.data.frame(sae_mean)
 #' subset(sae_mean)
+#' }
 #'
 #' @rdname estimators
 #' @export

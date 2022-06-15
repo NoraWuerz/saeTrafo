@@ -50,6 +50,7 @@ see \code{\link[base]{subset}}).
 }
 \examples{
 
+\dontrun{
 # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 
 # Load Data
@@ -78,6 +79,7 @@ tail(sae_mean)
 as.matrix(sae_mean)
 as.data.frame(sae_mean)
 subset(sae_mean)
+}
 
 }
 \seealso{

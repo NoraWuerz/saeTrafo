@@ -93,6 +93,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #' only created for in-sample domains.
 #' @examples
 #'
+#' \dontrun{
 #' # Examples for creating plots to compare the saeTrafo object with direct
 #' # estimates (produced by the package emdi)
 #'
@@ -138,6 +139,7 @@ compare_plot <- function(model, direct, MSE = FALSE,
 #'                           text = element_text(size = 20, color = "blue"),
 #'                           panel.border = element_rect(linetype = "dashed",
 #'                                                       fill = "NA")))
+#' }
 #'
 #' @seealso \code{\link{saeTrafoObject}}, \code{\link[emdi]{direct}},
 #' \code{\link{NER_Trafo}}

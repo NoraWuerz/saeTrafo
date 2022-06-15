@@ -34,6 +34,7 @@
 #' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 #' @examples
 #'
+#' \dontrun{
 #' # Examples for creating maps to visualize the saeTrafo estimates
 #'
 #' # Load Data
@@ -93,6 +94,7 @@
 #' map_plot(object = NER_model, MSE = FALSE, CV = TRUE,
 #'          map_obj = shape_austria_dis,
 #'          map_dom_id = "BKZ", map_tab = map_tab)
+#' }
 #'
 #' @export
 #' @importFrom reshape2 melt

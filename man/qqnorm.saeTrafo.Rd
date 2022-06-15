@@ -45,7 +45,7 @@ NER_model <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                        smp_domains = "district",
                        pop_area_size = pop_area_size,
                        pop_mean = pop_mean, pop_cov = pop_cov,
-                       smp_data = eusilcA_smp, MSE = TRUE)
+                       smp_data = eusilcA_smp)
 
 # Example 1: Default Quantile-quantile plots
 qqnorm(NER_model)

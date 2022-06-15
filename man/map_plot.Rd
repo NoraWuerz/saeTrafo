@@ -63,6 +63,7 @@ obtained by small area estimation methods.
 }
 \examples{
 
+\dontrun{
 # Examples for creating maps to visualize the saeTrafo estimates
 
 # Load Data
@@ -122,6 +123,7 @@ map_tab <- data.frame(pop_data_id = NER_model$ind$Domain[dom_ord],
 map_plot(object = NER_model, MSE = FALSE, CV = TRUE,
          map_obj = shape_austria_dis,
          map_dom_id = "BKZ", map_tab = map_tab)
+}
 
 }
 \seealso{
