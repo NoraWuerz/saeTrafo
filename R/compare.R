@@ -62,7 +62,7 @@ compare_pred <- function(object1, object2, MSE = FALSE, ...)
 #' compare_pred(NER_model_1, NER_model_2)
 #'
 #' # To compare the MSEs, MSE = True must be specified for both models
-#' \dontrun{
+#' \donttest{
 #' compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
 #' }
 #'

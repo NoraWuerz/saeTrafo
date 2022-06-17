@@ -64,7 +64,7 @@ NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
 compare_pred(NER_model_1, NER_model_2)
 
 # To compare the MSEs, MSE = True must be specified for both models
-\dontrun{
+\donttest{
 compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
 }
 

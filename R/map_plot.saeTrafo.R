@@ -34,7 +34,7 @@
 #' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # Examples for creating maps to visualize the saeTrafo estimates
 #'
 #' # Load Data

@@ -63,7 +63,7 @@ obtained by small area estimation methods.
 }
 \examples{
 
-\dontrun{
+\donttest{
 # Examples for creating maps to visualize the saeTrafo estimates
 
 # Load Data

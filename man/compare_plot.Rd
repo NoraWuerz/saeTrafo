@@ -108,7 +108,7 @@ only created for in-sample domains.
 }
 \examples{
 
-\dontrun{
+\donttest{
 # Examples for creating plots to compare the saeTrafo object with direct
 # estimates (produced by the package emdi)
 

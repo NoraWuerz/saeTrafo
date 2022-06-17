@@ -45,7 +45,7 @@ estimators <- function(object, MSE, CV, ...) UseMethod("estimators")
 #' @seealso \code{\link{saeTrafoObject}},  \code{\link{NER_Trafo}}
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 #'
 #' # Load Data

@@ -50,7 +50,7 @@ see \code{\link[base]{subset}}).
 }
 \examples{
 
-\dontrun{
+\donttest{
 # Example for presenting point, MSE, and CV estimates for a saeTrafo object
 
 # Load Data

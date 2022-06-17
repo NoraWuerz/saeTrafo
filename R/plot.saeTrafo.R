@@ -71,7 +71,7 @@
 ##'
 #' @examples
 #'
-#' \dontrun{
+#' \donttest{
 #' # Examples for diagnostic plots
 #'
 #' # Load Data

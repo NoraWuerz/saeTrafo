@@ -98,7 +98,7 @@ The default settings of the \code{label} argument are as follows:\cr
 }
 \examples{
 
-\dontrun{
+\donttest{
 # Examples for diagnostic plots
 
 # Load Data

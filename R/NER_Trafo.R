@@ -166,7 +166,7 @@
 #'
 #' # Example 3: Log-shift transformation and population data
 #' # A bias-corrections which need unit-level population data are applied
-#' \dontrun{
+#' \donttest{
 #' NER_model_3 <- NER_Trafo(fixed = formula,
 #'                          smp_domains = "district", smp_data = eusilcA_smp,
 #'                          pop_data = eusilcA_pop, pop_domains = "district")
