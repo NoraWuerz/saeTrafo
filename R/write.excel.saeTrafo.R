@@ -42,7 +42,7 @@
 #' # Examples for exporting saeTrafoObject to an Excel file or OpenDocument
 #' # Spreadsheet
 #'
-#' \donttest{
+#' \dontrun{
 #' # Load Data
 #' data("eusilcA_smp")
 #' data("pop_area_size")

@@ -36,6 +36,7 @@ objects or a saeTrafo object and a emdi object.
 \examples{
 # Example comparing two saeTrafo objects
 
+\donttest{
 # Load Data
 data("eusilcA_smp")
 data("pop_area_size")
@@ -50,7 +51,7 @@ NER_model_1 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                          smp_domains = "district",
                          pop_area_size = pop_area_size,
                          pop_mean = pop_mean, pop_cov = pop_cov,
-                         smp_data = eusilcA_smp)
+                         smp_data = eusilcA_smp, MSE = TRUE)
 
 # Nested error regression model 2
 NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
@@ -58,13 +59,12 @@ NER_model_2 <- NER_Trafo(fixed = eqIncome ~ gender + eqsize + cash +
                          smp_domains = "district",
                          pop_area_size = pop_area_size,
                          pop_mean = pop_mean, pop_cov = pop_cov,
-                         smp_data = eusilcA_smp)
+                         smp_data = eusilcA_smp, MSE = TRUE)
 
 # Generate a data frame for the comparison of point estimates
 compare_pred(NER_model_1, NER_model_2)
 
-# To compare the MSEs, MSE = True must be specified for both models
-\donttest{
+# Generate a data frame for the comparison of MSE estimates
 compare_pred(NER_model_1, NER_model_2, MSE = TRUE)
 }
 
