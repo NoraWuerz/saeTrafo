@@ -1,7 +1,7 @@
 Package: saeTrafo
 Type: Package
 Title: Transformations for Unit-Level Small Area Models
-Version: 1.0.0
+Version: 1.0.1
 Author: Nora Würz [aut]
 Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
 Description: The aim of this package is to offer new methodology for unit-level 
@@ -33,7 +33,7 @@ Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
     openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
 Suggests: simFrame, sp, maptools, rgeos, graphics, R.rsp
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.2
 Depends: R (>= 3.5.0)
 VignetteBuilder: R.rsp
 NeedsCompilation: no

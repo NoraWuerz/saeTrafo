@@ -129,10 +129,11 @@
 #' 369-385. \cr \cr
 #' Prasad, N.N., Rao, J.N.K. (1990). The estimation of the mean squared error of
 #' small-area estimators. Journal of the American statistical association,
-#' Vol.85, No. 409, 163-171. \cr \cr
-#' Wuerz, N., Schmid, T., Tzavidis, N. (2022). Estimating regional income
+#' Vol. 85, No. 409, 163-171. \cr \cr
+#' Wuerz, N., Schmid, T., and Tzavidis, N. (2022) Estimating regional income
 #' indicators under transformations and access to limited population auxiliary
-#' information. Unpublished.
+#' information. Journal of the Royal Statistical Society: Series A
+#' (Statistics in Society), Vol. 185, No. 4, 1679-1706.
 #' @examples
 #'
 #' # Examples for (transformed) nested error regression model
