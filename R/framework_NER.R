@@ -38,14 +38,21 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
                           dimnames = list(names(pop_area_size),
                                           cov_names(c("intercept", mod_vars)))
     )
+    browser()
     for (i in 1:N_dom_pop) {
       pos <- pop_data[pop_domains] == names(pop_area_size)[i]
-      pop_mean.mat[i, ] <- apply(X      = model.matrix(fixed, pop_data[pos, ]),
+      pop_mean.mat[i, ] <- apply(X      = model.matrix(as.formula(
+          paste("~", deparse(fixed[[3]]))
+        ), pop_data[pos, ]),
                                  MARGIN = 2,
                                  FUN    = mean
       )
-      pop_cov.mat[i, ] <- c(cov(model.matrix(fixed, pop_data[pos, ]),
-                                model.matrix(fixed, pop_data[pos, ]))
+      pop_cov.mat[i, ] <- c(cov(model.matrix(as.formula(
+          paste("~", deparse(fixed[[3]]))),
+        pop_data[pos, ]),
+        model.matrix(as.formula(
+          paste("~", deparse(fixed[[3]]))
+        ), pop_data[pos, ]))
       )
     }
 
