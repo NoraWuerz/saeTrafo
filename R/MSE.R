@@ -439,6 +439,10 @@ g3 <- function(sigmau2, sigmae2, n_smp, X, area, pop_area) {
   M <- diag(nrow(X)) - X %*% solve(t(X) %*% X) %*% t(X)
   n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
 
+  #Q <- qr.Q(qr(X))
+  #M_ <- diag(nrow(X)) - crossprod(Q) %*% Q
+  #n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
+
   var_sig.e <- 2 * term * sigmae2^2
   var_sig.u <- 2 * n_star^(-2) *
     (term * (t - 1) * (sum(n_smp) - k) * sigmae2^2 +

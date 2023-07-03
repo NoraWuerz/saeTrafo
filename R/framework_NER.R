@@ -43,16 +43,16 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       pos <- pop_data[pop_domains] == names(pop_area_size)[i]
       pop_mean.mat[i, ] <- apply(X      = model.matrix(as.formula(
           paste("~", deparse(fixed[[3]]))
-        ), pop_data[pos, ]),
+        ), pop_data[which(pos), ]),
                                  MARGIN = 2,
                                  FUN    = mean
       )
       pop_cov.mat[i, ] <- c(cov(model.matrix(as.formula(
           paste("~", deparse(fixed[[3]]))),
-        pop_data[pos, ]),
+        pop_data[which(pos), ]),
         model.matrix(as.formula(
           paste("~", deparse(fixed[[3]]))
-        ), pop_data[pos, ]))
+        ), pop_data[which(pos), ]))
       )
     }
 
