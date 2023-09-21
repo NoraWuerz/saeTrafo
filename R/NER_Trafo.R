@@ -241,7 +241,6 @@ NER_Trafo <- function(fixed,
                              keep_data      = TRUE
   )
 
-
   # MSE Estimation -------------------------------------------------------------
 
   if (MSE == TRUE) {

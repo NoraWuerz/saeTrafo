@@ -365,7 +365,7 @@ mse_prasad_rao <- function(framework, point_estim, fixed) {
                pop_area = row.names(framework$pop_mean.mat)
   )
 
-  mse1 <- out_g1 + out_g2 + 2 * out_g3
+  mse1 <- out_g1 + out_g2 + out_g3
   return(mse1)
 }
 
@@ -379,9 +379,10 @@ g1 <- function(sigmau2, sigmae2, n_smp) {
 
 g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
 
+
   gamma_d <- sigmau2 / (sigmau2 + (sigmae2 / n_smp))
 
-  u_area <- row.names(Xmean)
+  u_area <- row.names(Xmean)[order(row.names(Xmean))]
   p <- ncol(X)
   m <- nrow(Xmean)
   m_in <- length(unique(area))
@@ -408,6 +409,22 @@ g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
 
     sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
   }
+
+  # # Ueberprufen Implementation, identisches Ergebnis, allerdings langsamer
+  # V_inv <- matrix(0, nrow = sum(n_smp), ncol = sum(n_smp))
+  # index <- cumsum(n_smp)
+  # l <- 1
+  # for (i in 1:m) {
+  #   if (n_smp[i] > 0) {
+  #         V_inv[l:index[i], l:index[i]] <- 1/sigmae2 * (diag(x = 1, nrow = n_smp[i]) -
+  #                  sigmau2 / (sigmae2 + sigmau2 * n_smp[i]) *
+  #                  matrix(1, nrow = n_smp[i], ncol = n_smp[i]))
+  #   }
+  #
+  #   l <- index[i] + 1
+  # }
+  #
+  # t(X) %*% V_inv %*%  X
 
   g2_res <- rep(NA, m)
 
@@ -437,11 +454,8 @@ g3 <- function(sigmau2, sigmae2, n_smp, X, area, pop_area) {
   n_star <- sum(n_smp) - sum(diag(solve(t(X) %*% X) %*% sum_ni2_xi_xi))
 
   M <- diag(nrow(X)) - X %*% solve(t(X) %*% X) %*% t(X)
-  n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
-
-  #Q <- qr.Q(qr(X))
-  #M_ <- diag(nrow(X)) - crossprod(Q) %*% Q
-  #n_star_star <- sum(diag((M %*% diag(nrow(X)) %*% t(diag(nrow(X))))^2))
+  Z <- model.matrix(~ area - 1)
+  n_star_star <- sum(diag((M %*% Z %*% t(Z))^2))
 
   var_sig.e <- 2 * term * sigmae2^2
   var_sig.u <- 2 * n_star^(-2) *

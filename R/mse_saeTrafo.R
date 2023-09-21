@@ -21,7 +21,7 @@ mse_saeTrafo <- function(object, indicator = "all", CV = FALSE) {
     ind_name <- "Fay-Herriot estimates"
   } else if (any(class(object) == "NER")) {
     ind <- object$MSE[, c("Domain", "Mean")]
-    ind_cv <- data.frame(Domain = object$MSE[, 1], Mean = all_cv)
+    ind_cv <- data.frame(Domain = object$MSE[, 1], Mean = c(all_cv))
     ind_name <- "Nested error regression model estimates"
   } else if (any(indicator == "Direct") || any(indicator == "direct")) {
     ind <- object$MSE[, c("Domain", "Direct")]

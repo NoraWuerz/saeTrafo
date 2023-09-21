@@ -241,7 +241,6 @@ compare_plots <- function(object, type, MSE, CV, label, color,
     data_shaped <- melt(data_tmp, id.vars = "ID")
     names(data_shaped) <- c("ID", "Method", "value")
 
-
     print((plotList[[paste("scatter", ind, sep = "_")]] <-
              ggplot(data_tmp, aes(x = Direct, y = Model_based)) +
              geom_point(shape = shape[1]) +
