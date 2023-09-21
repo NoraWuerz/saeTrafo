@@ -3,6 +3,7 @@
 \docType{package}
 \name{saeTrafo}
 \alias{saeTrafo}
+\alias{saeTrafo-package}
 \title{The R Package saeTrafo for Estimating unit-level Small Area Models under
 Transformations}
 \description{

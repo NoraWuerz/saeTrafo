@@ -44,4 +44,5 @@
 #' information. Unpublished.
 #' @docType package
 #' @name saeTrafo
+#' @aliases saeTrafo-package
 NULL
