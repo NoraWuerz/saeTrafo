@@ -30,8 +30,8 @@
 #' Defaults to \code{FALSE}.
 #' @return Creates the plots demanded and, if selected, a fortified data.frame
 #' containing the mapdata and chosen indicators.
-#' @seealso \code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
-#' \code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
+#' @seealso \code{\link[sf]{sf}}, \code{\link{NER_Trafo}},
+#' \code{\link{saeTrafoObject}}
 #' @examples
 #'
 #' \donttest{
@@ -71,9 +71,9 @@
 #' library(ggplot2)
 #' data_plot <- map_plot(NER_model, map_obj = shape_austria_dis, map_dom_id = "PB",
 #'                       return_data = TRUE)
-#' ggplot(data_plot, aes(long, lat, group = group, fill = Mean))+
-#'        geom_polygon(color = "black") +
-#'        coord_equal() +
+#' ggplot(data_plot, aes(long = NULL, lat = NULL,
+#'                       group = "PB", fill = Mean))+
+#'        geom_sf(color = "black") +
 #'        theme_void() +
 #'        ggtitle("Personalized map") +
 #'        scale_fill_gradient2(low = "red", mid = "white", high = "darkgreen",
@@ -83,11 +83,11 @@
 #' # the shape file
 #'
 #' # First find the right order
-#' dom_ord <- match(shape_austria_dis@data$PB, NER_model$ind$Domain)
+#' dom_ord <- match(shape_austria_dis$PB, NER_model$ind$Domain)
 #'
 #' #Create the mapping table based on the order obtained above
 #' map_tab <- data.frame(pop_data_id = NER_model$ind$Domain[dom_ord],
-#'                       shape_id = shape_austria_dis@data$BKZ)
+#'                       shape_id = shape_austria_dis$BKZ)
 #'
 #' # Create map plot for mean indicator - point and CV estimates but no MSE
 #' # using the numerical domain identifiers of the shape file
@@ -98,8 +98,9 @@
 #'
 #' @export
 #' @importFrom reshape2 melt
-#' @importFrom ggplot2 aes geom_polygon facet_wrap fortify coord_equal labs
+#' @importFrom ggplot2 aes geom_sf facet_wrap coord_equal labs
 #' @importFrom ggplot2 theme element_blank scale_fill_gradient ggplot ggtitle
+#' @importFrom rlang .data
 
 map_plot <- function(object,
                      MSE = FALSE,
@@ -126,10 +127,9 @@ map_plot <- function(object,
                MSE       = MSE,
                CV        = CV
     )
-  } else if (!inherits(map_obj, "SpatialPolygonsDataFrame") ||
-             attr(class(map_obj), "package") != "sp") {
+  } else if (!inherits(map_obj, "sf")) {
 
-    stop("map_obj is not of class SpatialPolygonsDataFrame from the sp package")
+    stop("map_obj is not of class sf from the sf package")
 
   } else {
 
@@ -169,7 +169,7 @@ map_pseudo <- function(object, indicator, panelplot, MSE, CV) {
 
   if (panelplot) {
     ggplot(tplot, aes(x = x, y = y)) +
-      geom_polygon(aes(group = id, fill = value)) +
+      geom_sf(aes(group = id, fill = value)) +
       facet_wrap(facets = ~ variable,
                  ncol   = ceiling(sqrt(length(unique(tplot$variable))))
       )
@@ -177,7 +177,7 @@ map_pseudo <- function(object, indicator, panelplot, MSE, CV) {
     for (ind in indicator) {
       print(ggplot(tplot[tplot$variable == ind, ], aes(x = x, y = y)) +
               ggtitle(paste0(ind)) +
-              geom_polygon(aes(group = id, fill = value)))
+              geom_sf(aes(group = id, fill = value)))
       cat("Press [enter] to continue")
       line <- readline()
     }
@@ -195,6 +195,7 @@ plot_real <- function(object,
                       scale_points = NULL,
                       return_data = FALSE,
                       guide = NULL) {
+
 
   if (!is.null(map_obj) && is.null(map_dom_id)) {
     stop("No Domain ID for the map object is given")
@@ -214,7 +215,7 @@ plot_real <- function(object,
                       by.x = "Domain",
                       by.y = names(map_tab)[1]
     )
-    matcher <- match(map_obj@data[map_dom_id][, 1],
+    matcher <- match(map_obj[[map_dom_id]],
                      map_data[, names(map_tab)[2]])
 
     if (any(is.na(matcher))) {
@@ -228,9 +229,10 @@ plot_real <- function(object,
 
     map_data <- map_data[matcher, ]
     map_data <- map_data[, !colnames(map_data) %in%
-                           c("Domain", map_dom_id, names(map_tab)), drop = F]
+                           c("Domain", map_dom_id), drop = F]
+    map_data$Domain <- map_data[, colnames(map_data) %in% names(map_tab)]
   } else {
-    matcher <- match(map_obj@data[map_dom_id][, 1], map_data[, "Domain"])
+    matcher <- match(map_obj[[map_dom_id]], map_data[, "Domain"])
 
     if (any(is.na(matcher))) {
       if (all(is.na(matcher))) {
@@ -244,31 +246,23 @@ plot_real <- function(object,
     map_data <- map_data[matcher, ]
   }
 
-  map_obj@data[colnames(map_data)] <- map_data
-
-  map_obj.fort <- fortify(map_obj, region = map_dom_id)
-  map_obj.fort <- merge(x    = map_obj.fort,
-                        y    = map_obj@data,
-                        by.x = "id",
-                        by.y = map_dom_id
-  )
+  map_obj.merged <- merge(map_obj, map_data, by.x = map_dom_id, by.y = "Domain")
 
   indicator <- colnames(map_data)
   indicator <- indicator[!(indicator %in% "Domain")]
 
   for (ind in indicator) {
 
-    map_obj.fort[ind][, 1][!is.finite(map_obj.fort[ind][, 1])] <- NA
+    map_obj.merged[[ind]][!is.finite(map_obj.merged[[ind]])] <- NA
 
-    scale_point <- get_scale_points(y            = map_obj.fort[ind][, 1],
+    scale_point <- get_scale_points(y            = map_obj.merged[[ind]],
                                     ind          = ind,
                                     scale_points = scale_points
     )
 
-    print(ggplot(data = map_obj.fort,
-                 aes(long, lat, group = group, fill = map_obj.fort[ind][, 1])) +
-            geom_polygon(color = "azure3") +
-            coord_equal() +
+    print(ggplot(data = map_obj.merged,
+                 aes(long, lat, group = group, fill = .data[[ind]])) +
+            geom_sf(color = "azure3") +
             labs(x = "", y = "", fill = ind) +
             ggtitle(gsub(pattern = "_", replacement = " ", x = ind)) +
             scale_fill_gradient(low    = col[1],
@@ -288,7 +282,7 @@ plot_real <- function(object,
     }
   }
   if (return_data) {
-    return(map_obj.fort)
+    return(map_obj.merged)
   }
 }
 

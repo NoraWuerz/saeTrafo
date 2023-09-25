@@ -3,7 +3,7 @@ Type: Package
 Title: Transformations for Unit-Level Small Area Models
 Version: 1.0.1
 Author: Nora Würz [aut]
-Maintainer: Nora Würz <nora.wuerz@fu-berlin.de>
+Maintainer: Nora Würz <nora.wuerz@uni-bamberg.de>
 Description: The aim of this package is to offer new methodology for unit-level 
     small area models under transformations and limited population auxiliary 
     information. In addition to this new methodology, the widely used nested 
@@ -31,8 +31,8 @@ URL: https://github.com/NoraWuerz/saeTrafo
 LazyData: true
 Encoding: UTF-8
 Imports: nlme, emdi, stats, sfsmisc, parallelMap, MuMIn, ggplot2, moments, 
-    openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS
-Suggests: simFrame, sp, maptools, rgeos, graphics, R.rsp
+    openxlsx, reshape2, HLMdiag, gridExtra, stringr, readODS, rlang
+Suggests: simFrame, sf, graphics, R.rsp
 RoxygenNote: 7.2.3
 Depends: R (>= 3.5.0)
 VignetteBuilder: R.rsp

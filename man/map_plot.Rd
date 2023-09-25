@@ -100,9 +100,9 @@ require(ggplot2)
 library(ggplot2)
 data_plot <- map_plot(NER_model, map_obj = shape_austria_dis, map_dom_id = "PB",
                       return_data = TRUE)
-ggplot(data_plot, aes(long, lat, group = group, fill = Mean))+
-       geom_polygon(color = "black") +
-       coord_equal() +
+ggplot(data_plot, aes(long = NULL, lat = NULL,
+                      group = "PB", fill = Mean))+
+       geom_sf(color = "black") +
        theme_void() +
        ggtitle("Personalized map") +
        scale_fill_gradient2(low = "red", mid = "white", high = "darkgreen",
@@ -112,11 +112,11 @@ ggplot(data_plot, aes(long, lat, group = group, fill = Mean))+
 # the shape file
 
 # First find the right order
-dom_ord <- match(shape_austria_dis@data$PB, NER_model$ind$Domain)
+dom_ord <- match(shape_austria_dis$PB, NER_model$ind$Domain)
 
 #Create the mapping table based on the order obtained above
 map_tab <- data.frame(pop_data_id = NER_model$ind$Domain[dom_ord],
-                      shape_id = shape_austria_dis@data$BKZ)
+                      shape_id = shape_austria_dis$BKZ)
 
 # Create map plot for mean indicator - point and CV estimates but no MSE
 # using the numerical domain identifiers of the shape file
@@ -127,6 +127,6 @@ map_plot(object = NER_model, MSE = FALSE, CV = TRUE,
 
 }
 \seealso{
-\code{\link[maptools]{readShapePoly}}, \code{\link[sp]{sp}},
-\code{\link{NER_Trafo}}, \code{\link{saeTrafoObject}}
+\code{\link[sf]{sf}}, \code{\link{NER_Trafo}},
+\code{\link{saeTrafoObject}}
 }
