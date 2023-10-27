@@ -9,8 +9,8 @@
 #' Defaults to \code{FALSE}.
 #' @param CV optional logical. If \code{TRUE}, the CV is also visualized.
 #' Defaults to \code{FALSE}.
-#' @param map_obj an \code{SpatialPolygonsDataFrame} object as defined by the
-#' \pkg{sp} package on which the data should be visualized.
+#' @param map_obj an \code{sf} object (map object) as defined by the
+#' \pkg{sf} package on which the data should be visualized.
 #' @param map_dom_id a character string containing the name of a variable in
 #' \code{map_obj} that indicates the domains.
 #' @param map_tab a \code{data.frame} object with two columns that match the

@@ -2,7 +2,7 @@
 #'
 #' The function simplifies to load the shape file for Austrian districts.
 #'
-#' @return A shape file of class \code{SpatialPolygonsDataFrame}.
+#' @return A shape file of class \code{sf}.
 #' @details The shape file contains the borders of Austrian districts. Thus, it
 #' can be used for the visualization of estimation results for Austrian
 #' districts.

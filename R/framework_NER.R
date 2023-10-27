@@ -103,7 +103,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
     )
     row.names(pop_mean.mat) <- names(pop_mean)
     colnames(pop_mean.mat) <- c("intercept", mod_vars)
-    pop_mean.mat <- pop_mean.mat[order(rownames(pop_mean.mat)),]
+    #pop_mean.mat <- pop_mean.mat[order(rownames(pop_mean.mat)),]
 
     if (!is.null(pop_cov)) {
 
@@ -128,8 +128,6 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
       factor(smp_data[[smp_domains]], levels = names(pop_area_size))
     smp_domains_vec <- smp_data[[smp_domains]]
     smp_domains_vec <- droplevels(smp_domains_vec)
-
-
 
 
     # Number of households in population
