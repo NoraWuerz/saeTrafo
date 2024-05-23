@@ -350,6 +350,7 @@ mse_prasad_rao <- function(framework, point_estim, fixed) {
                n_smp   = include_dom_unobs(x       = framework$n_smp,
                                            obs_dom = framework$dist_obs_dom
                ),
+               n_dom = unique(framework$smp_domains_vec),
                Xmean = framework$pop_mean.mat,
                X     = model.matrix(fixed, framework$smp_data),
                area  = framework$smp_domains_vec
@@ -362,7 +363,7 @@ mse_prasad_rao <- function(framework, point_estim, fixed) {
                ),
                X       = model.matrix(fixed, framework$smp_data),
                area     = framework$smp_domains_vec,
-               pop_area = row.names(framework$pop_mean.mat)
+               pop_area = unique(framework$smp_domains_vec)
   )
 
   mse1 <- out_g1 + out_g2 + out_g3
@@ -377,12 +378,10 @@ g1 <- function(sigmau2, sigmae2, n_smp) {
   return(tmp)
 }
 
-g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
-
+g2 <- function(sigmau2, sigmae2, n_smp, n_dom, Xmean, X, area) {
 
   gamma_d <- sigmau2 / (sigmau2 + (sigmae2 / n_smp))
 
-  u_area <- row.names(Xmean)[order(row.names(Xmean))]
   p <- ncol(X)
   m <- nrow(Xmean)
   m_in <- length(unique(area))
@@ -402,12 +401,19 @@ g2 <- function(sigmau2, sigmae2, n_smp, Xmean, X, area) {
 
   sum_Mitte <- matrix(0, p, p)
 
+  l <- 1
+  k <- 1
   for (i in 1:m) {
-    x_areawise <- X[area == u_area[i], ]
-    V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
-      matrix(1, n_smp[i], n_smp[i]))
-
-    sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
+    if (n_smp[l] > 0) {
+      x_areawise <- X[area == n_dom[k], ]
+      V_inv <- sigmae2^(-1) * (diag(n_smp[i]) - (gamma_d[i] / n_smp[i]) *
+        matrix(1, n_smp[i], n_smp[i]))
+      sum_Mitte <- sum_Mitte + t(x_areawise) %*% V_inv %*% x_areawise
+      l <- l + 1
+      k <- k + 1
+    } else {
+      l <- l + 1
+    }
   }
 
   # # Ueberprufen Implementation, identisches Ergebnis, allerdings langsamer

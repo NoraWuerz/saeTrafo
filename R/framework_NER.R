@@ -111,6 +111,7 @@ framework_NER <- function(fixed, pop_area_size, pop_mean, pop_cov, pop_data,
                         FUN = only_mod_vars,
                         var = mod_vars
       )
+
       pop_cov.mat <- matrix(data  = unlist(lapply(X   = pop_cov,
                                                   FUN = crbind_0)),
                             ncol  = (length(mod_vars) + 1)^2,

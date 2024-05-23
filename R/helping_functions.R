@@ -20,7 +20,7 @@ cov_names <- function(x) {
 
 # returns matrix or vector only with entries which match to the names in var
 only_mod_vars <- function(x, var) {
-  if (!is.matrix(x)) {
+  if (!(is.matrix(x) | is.data.frame(x))) {
     return(x[var])
   } else {
     (return(x[var, var]))
